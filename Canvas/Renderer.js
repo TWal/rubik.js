@@ -1,4 +1,4 @@
-Rubikjs.Canvas.Renderer {
+Rubikjs.Canvas.Renderer = function() {
 }
 
 Rubikjs.Canvas.Renderer.prototype = new Rubikjs.Renderer();
