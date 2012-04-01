@@ -1,0 +1,2 @@
+Rubikjs.WebGL.Buffer = function() {
+}
