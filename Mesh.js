@@ -1,13 +1,13 @@
+"use strict";
 Rubikjs.Mesh = function() {
 	this.beautifulLevel = 1;
-	this.position;
-	this.rotation;
+	this.transform = mat4.create();
+	mat4.identity(this.transform);
 
 	//Buffers
-	this.vertexBuffer;
-	this.indexBuffer;
-	this.colorBuffer;
+	this.vertexBuffer = new Rubikjs.Buffer();
+	this.colorBuffer = new Rubikjs.Buffer();
+	this.indexBuffer = new Rubikjs.Buffer();
 }
-
 
 

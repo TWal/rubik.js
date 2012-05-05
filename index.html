@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<title>rubik.js</title>
+		<script type="text/javascript" src="libs/gl-matrix-min.js"></script>
 		<script type="text/javascript" src="main.js"></script>
 		<script type="text/javascript" src="Buffer.js"></script>
 		<script type="text/javascript" src="Renderer.js"></script>
@@ -11,9 +12,16 @@
 		<script type="text/javascript" src="SVG/Renderer.js"></script>
 		<script type="text/javascript" src="WebGL/Buffer.js"></script>
 		<script type="text/javascript" src="WebGL/Renderer.js"></script>
+		<script type="text/javascript" src="WebGL/Shader.js"></script>
 	</head>
 	<body>
-		<div id="cube"><!--Canvas or SVG inserted here by JS--></div>
+		<canvas id="cube" width="500" height="500"></canvas>
+		<script>window.onload = function() {
+			var cube = new Rubikjs.Cube();
+			//cube.render();
+			window.setInterval(function() {cube.render();}, 25);
+		}
+		</script>
 	</body>
 </html>
 

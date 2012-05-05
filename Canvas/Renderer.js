@@ -1,7 +1,9 @@
+"use strict";
 Rubikjs.Canvas.Renderer = function() {
+	Rubikjs.Renderer.call(this, element);
 }
 
-Rubikjs.Canvas.Renderer.prototype = new Rubikjs.Renderer();
+Rubikjs.Canvas.Renderer.prototype = Rubikjs.Renderer;
 Rubikjs.Canvas.Renderer.prototype.constructor = Rubikjs.Canvas.Renderer
 
 Rubikjs.Canvas.Renderer.prototype.render = function(mesh) {
