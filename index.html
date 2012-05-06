@@ -2,19 +2,18 @@
 <html>
 	<head>
 		<title>rubik.js</title>
-		<!--<script type="text/javascript" src="main.js"></script>
-		<script type="text/javascript">Rubikjs.init();</script>-->
-		<script type="text/javascript" src="packed/RubikjsCore.js"></script>
-		<script type="text/javascript" src="packed/RubikjsWebGL.js"></script>
+		<script type="text/javascript" src="release/RubikjsCore.js"></script>
+		<script type="text/javascript" src="release/RubikjsWebGL.js"></script>
 
 	</head>
 	<body>
 		<canvas id="cube" width="500" height="500"></canvas>
-		<script>window.onload = function() {
-			var cube = new Rubikjs.Cube();
-			//cube.render();
-			window.setInterval(function() {cube.render();}, 25);
-		}
+		<script>
+			window.onload = function() {
+				var cube = new Rubikjs.Cube();
+				//cube.render();
+				window.setInterval(function() {cube.render();}, 25);
+			}
 		</script>
 	</body>
 </html>
