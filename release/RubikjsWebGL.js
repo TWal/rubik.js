@@ -7,7 +7,7 @@ Rubikjs.WebGL.Buffer = function(gl, data, type) {
 	}
 }
 
-Rubikjs.WebGL.Buffer.prototype = Rubikjs.Buffer;
+Rubikjs.WebGL.Buffer.prototype = new Rubikjs.Buffer;
 Rubikjs.WebGL.Buffer.prototype.constructor = Rubikjs.WebGL.Buffer;
 
 Rubikjs.WebGL.Buffer.prototype.feed = function(data) {
@@ -38,7 +38,7 @@ Rubikjs.WebGL.Renderer = function(element) {
 			this.gl = canvas.getContext("webgl");
 		}
 		if(this.gl == undefined) {
-			alert("No WebGL :(");
+			alert("No WebGL :("); //To be removed in the future
 		}
 	} catch(e) {}
 	this.gl.enable(this.gl.DEPTH_TEST);
@@ -51,7 +51,7 @@ Rubikjs.WebGL.Renderer = function(element) {
 	).uniform("uPMatrix", this.perspectiveMat, "mat4");
 }
 
-Rubikjs.WebGL.Renderer.prototype = Rubikjs.Renderer;
+Rubikjs.WebGL.Renderer.prototype = new Rubikjs.Renderer;
 Rubikjs.WebGL.Renderer.prototype.constructor = Rubikjs.WebGL.Renderer;
 
 Rubikjs.WebGL.Renderer.prototype.startFrame = function() {

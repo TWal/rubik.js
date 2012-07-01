@@ -8,7 +8,7 @@ Rubikjs.WebGL.Buffer = function(gl, data, type) {
 	}
 }
 
-Rubikjs.WebGL.Buffer.prototype = Rubikjs.Buffer;
+Rubikjs.WebGL.Buffer.prototype = new Rubikjs.Buffer;
 Rubikjs.WebGL.Buffer.prototype.constructor = Rubikjs.WebGL.Buffer;
 
 Rubikjs.WebGL.Buffer.prototype.feed = function(data) {

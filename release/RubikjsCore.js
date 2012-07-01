@@ -45,7 +45,9 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 })((typeof(exports) != 'undefined') ? global : this); //Taken from glMatrix
 
 Rubikjs.Buffer = function(data) {
-	this.data = data;
+	if(data) {
+		this.data = data;
+	}
 }
 
 Rubikjs.Buffer.prototype.feed = function(data) {
@@ -53,10 +55,12 @@ Rubikjs.Buffer.prototype.feed = function(data) {
 }
 
 Rubikjs.Renderer = function(element) {
-	this.perspectiveMat = mat4.create();
-	mat4.perspective(70, element.offsetWidth/element.offsetHeight, 0.1, 100, this.perspectiveMat);
-	//mat4.ortho(-2, 2, -2, 2, -10, 10, this.perspectiveMat);
-	this.element = element;
+	if(element) {
+		this.perspectiveMat = mat4.create();
+		mat4.perspective(70, element.offsetWidth/element.offsetHeight, 0.1, 100, this.perspectiveMat);
+		//mat4.ortho(-2, 2, -2, 2, -10, 10, this.perspectiveMat);
+		this.element = element;
+	}
 }
 
 Rubikjs.Renderer.prototype.startFrame = function() {}
@@ -80,10 +84,14 @@ Rubikjs.Mesh = function() {
 }
 
 
-Rubikjs.Cube = function() {
+Rubikjs.Cube = function(renderer) {
 	this.meshs = [];
 	//this.definition;
-	this.renderer = new Rubikjs.WebGL.Renderer(document.getElementById("cube"));
+	if(renderer) {
+		this.renderer = new renderer(document.getElementById("cube"));
+	} else {
+		this.renderer = new Rubikjs.WebGL.Renderer(document.getElementById("cube"));
+	}
 
 	this.meshs.push(this.renderer.createMesh());
 	this.meshs[0].vertexBuffer.feed([

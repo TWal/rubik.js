@@ -4,15 +4,17 @@
 		<title>rubik.js</title>
 		<script type="text/javascript" src="release/RubikjsCore.js"></script>
 		<script type="text/javascript" src="release/RubikjsWebGL.js"></script>
+		<script type="text/javascript" src="release/RubikjsCanvas.js"></script>
 
 	</head>
 	<body>
 		<canvas id="cube" width="500" height="500"></canvas>
+		<p id="log"></p>
 		<script>
 			window.onload = function() {
-				var cube = new Rubikjs.Cube();
-				//cube.render();
-				window.setInterval(function() {cube.render();}, 25);
+				var cube = new Rubikjs.Cube(Rubikjs.Canvas.Renderer);
+				cube.render();
+				window.setInterval(function() {cube.render();}, 50);
 			}
 		</script>
 	</body>

@@ -1,8 +1,12 @@
 "use strict";
-Rubikjs.Cube = function() {
+Rubikjs.Cube = function(renderer) {
 	this.meshs = [];
 	//this.definition;
-	this.renderer = new Rubikjs.WebGL.Renderer(document.getElementById("cube"));
+	if(renderer) {
+		this.renderer = new renderer(document.getElementById("cube"));
+	} else {
+		this.renderer = new Rubikjs.WebGL.Renderer(document.getElementById("cube"));
+	}
 
 	this.meshs.push(this.renderer.createMesh());
 	this.meshs[0].vertexBuffer.feed([
