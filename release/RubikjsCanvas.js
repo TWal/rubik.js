@@ -86,9 +86,6 @@ Rubikjs.Canvas.Renderer.prototype.endFrame = function() {
 	this.triangles.forEach(function(tri) {
 		self.ctx.fillStyle = "rgba("+tri.color[0]+", "+tri.color[1]+", "+tri.color[2]+", "+tri.color[3]+")";
 		self.ctx.strokeStyle = self.ctx.fillStyle;
-		if(self.ctx.fillStyle == "#ff8000" || self.ctx.fillStyle == "#e6e6e6") {
-			console.log(self.ctx.fillStyle + " " + tri.sortz);
-		}
 		self.ctx.beginPath();
 		self.ctx.moveTo(tri.pt0[0], tri.pt0[1]);
 		self.ctx.lineTo(tri.pt1[0], tri.pt1[1]);
