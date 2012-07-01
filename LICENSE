@@ -1,6 +1,3 @@
-/*
-Rubik.js
-
 Copyright (c) 2012 Théophile Wallez
 
 This software is provided 'as-is', without any express or implied
@@ -21,15 +18,4 @@ freely, subject to the following restrictions:
 
     3. This notice may not be removed or altered from any source
     distribution.
-*/
-
-"use strict";
-//Define namespaces
-
-(function(_global) {
-	_global.Rubikjs = {};
-	_global.Rubikjs.SVG = {};
-	_global.Rubikjs.Canvas = {};
-	_global.Rubikjs.WebGL = {};
-})((typeof(exports) != 'undefined') ? global : this); //Taken from glMatrix
 

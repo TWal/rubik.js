@@ -23,3 +23,8 @@ Wanted features
 * An ergonomic user interface
 * An optional rear view
 
+How to use pack.sh
+------------------
+
+Do `./pack.sh` to create one file per module, in the release directory, with "use strict";
+Do `./pack.sh --release` to do the same thing as `./pack.sh`, and minify the source code with closure.
