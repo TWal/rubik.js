@@ -24,7 +24,7 @@ freely, subject to the following restrictions:
 */
 
 "use strict";
-Rubikjs.Cube = function(renderer) {
+Rubikjs.Render.RenderManager = function(renderer) {
 	this.meshs = [];
 	//this.definition;
 	if(renderer) {
@@ -103,7 +103,7 @@ Rubikjs.Cube = function(renderer) {
 	mat4.rotate(this.meshs[0].transform, 0.5, [1, 0, 0]);
 }
 
-Rubikjs.Cube.prototype.render = function() {
+Rubikjs.Render.RenderManager.prototype.render = function() {
 	mat4.rotate(this.meshs[0].transform, 0.03, [0, 1, 0]);
 	this.renderer.startFrame();
 	var self = this;

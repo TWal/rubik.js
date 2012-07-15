@@ -24,15 +24,15 @@ freely, subject to the following restrictions:
 */
 
 "use strict";
-Rubikjs.Mesh = function() {
+Rubikjs.Render.Mesh = function() {
 	this.beautifulLevel = 1;
 	this.transform = mat4.create();
 	mat4.identity(this.transform);
 
 	//Buffers
-	this.vertexBuffer = new Rubikjs.Buffer();
-	this.colorBuffer = new Rubikjs.Buffer();
-	this.indexBuffer = new Rubikjs.Buffer();
+	this.vertexBuffer = new Rubikjs.Render.Buffer();
+	this.colorBuffer = new Rubikjs.Render.Buffer();
+	this.indexBuffer = new Rubikjs.Render.Buffer();
 }
 
 

@@ -12,7 +12,7 @@
 		<p id="log"></p>
 		<script>
 			window.onload = function() {
-				var cube = new Rubikjs.Cube(Rubikjs.Canvas.Renderer);
+				var cube = new Rubikjs.Render.RenderManager(Rubikjs.Render.Canvas.Renderer);
 				cube.render();
 				window.setInterval(function() {cube.render();}, 50);
 			}

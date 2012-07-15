@@ -25,8 +25,8 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-Rubikjs.Canvas.Renderer = function(element) {
-	Rubikjs.Renderer.call(this, element);
+Rubikjs.Render.Canvas.Renderer = function(element) {
+	Rubikjs.Render.Renderer.call(this, element);
 	var canvas = element.localName == "canvas" ? element : undefined;
 	if(canvas != undefined) {
 		try {
@@ -39,15 +39,15 @@ Rubikjs.Canvas.Renderer = function(element) {
 	this.triangles = [];
 }
 
-Rubikjs.Canvas.Renderer.prototype = new Rubikjs.Renderer;
-Rubikjs.Canvas.Renderer.prototype.constructor = Rubikjs.Canvas.Renderer
+Rubikjs.Render.Canvas.Renderer.prototype = new Rubikjs.Render.Renderer;
+Rubikjs.Render.Canvas.Renderer.prototype.constructor = Rubikjs.Render.Canvas.Renderer
 
-Rubikjs.Canvas.Renderer.prototype.startFrame = function() {
+Rubikjs.Render.Canvas.Renderer.prototype.startFrame = function() {
 	this.triangles = [];
 	this.ctx.clearRect(0, 0, 500, 500);
 }
 
-Rubikjs.Canvas.Renderer.prototype.render = function(mesh) {
+Rubikjs.Render.Canvas.Renderer.prototype.render = function(mesh) {
 	var mvproj = mat4.create();
 	mat4.multiply(this.perspectiveMat, mesh.transform, mvproj);
 
@@ -95,7 +95,7 @@ Rubikjs.Canvas.Renderer.prototype.render = function(mesh) {
 	}
 }
 
-Rubikjs.Canvas.Renderer.prototype.endFrame = function() {
+Rubikjs.Render.Canvas.Renderer.prototype.endFrame = function() {
 	this.triangles.sort(function(tri0, tri1) {
 		//return tri1.zmean - tri0.zmean;
 		if(tri0.sortz[0] != tri1.sortz[0]) {
@@ -123,7 +123,7 @@ Rubikjs.Canvas.Renderer.prototype.endFrame = function() {
 	});
 }
 
-Rubikjs.Canvas.Renderer.prototype.createMesh = function() {
-	return new Rubikjs.Mesh();
+Rubikjs.Render.Canvas.Renderer.prototype.createMesh = function() {
+	return new Rubikjs.Render.Mesh();
 }
 

@@ -24,14 +24,14 @@ freely, subject to the following restrictions:
 */
 
 "use strict";
-Rubikjs.WebGL.Shader = function(gl) {
+Rubikjs.Render.WebGL.Shader = function(gl) {
 	this.gl = gl;
 	this.vertexShader = this.gl.createShader(this.gl.VERTEX_SHADER);
 	this.fragmentShader = this.gl.createShader(this.gl.FRAGMENT_SHADER);
 	this.program = this.gl.createProgram();
 }
 
-Rubikjs.WebGL.Shader.prototype.compile = function(vertSource, fragSource) {
+Rubikjs.Render.WebGL.Shader.prototype.compile = function(vertSource, fragSource) {
 	this.gl.shaderSource(this.vertexShader, vertSource);
 	this.gl.compileShader(this.vertexShader);
 	if(!this.gl.getShaderParameter(this.vertexShader, this.gl.COMPILE_STATUS)) {
@@ -54,7 +54,7 @@ Rubikjs.WebGL.Shader.prototype.compile = function(vertSource, fragSource) {
 	return this;
 }
 
-Rubikjs.WebGL.Shader.prototype.attrib = function(name, buffer, dimension) {
+Rubikjs.Render.WebGL.Shader.prototype.attrib = function(name, buffer, dimension) {
 	this.use();
 	buffer.bind();
 	var attrLoc = this.gl.getAttribLocation(this.program, name);
@@ -64,7 +64,7 @@ Rubikjs.WebGL.Shader.prototype.attrib = function(name, buffer, dimension) {
 	return this;
 }
 
-Rubikjs.WebGL.Shader.prototype.uniform = function(name, uniform, type) {
+Rubikjs.Render.WebGL.Shader.prototype.uniform = function(name, uniform, type) {
 	this.use();
 	var uniformLocation = this.gl.getUniformLocation(this.program, name);
 	switch(type) {
@@ -97,7 +97,7 @@ Rubikjs.WebGL.Shader.prototype.uniform = function(name, uniform, type) {
 	return this;
 }
 
-Rubikjs.WebGL.Shader.prototype.use = function() {
+Rubikjs.Render.WebGL.Shader.prototype.use = function() {
 	//Don't re-use a program that is already used, because it is a really expansive operation
 	if(this.gl.usedProgram != this.program) {
 		this.gl.useProgram(this.program);

@@ -21,10 +21,10 @@ else
 	exit
 fi
 
-cat src/libs/gl-matrix-min.js src/main.js src/Buffer.js src/Renderer.js src/Mesh.js src/Cube.js | grep -vE '^"use strict";$' > $core_path
-cat src/WebGL/Buffer.js src/WebGL/Renderer.js src/WebGL/Shader.js | grep -vE '^"use strict";$' > $webgl_path
-cat src/Canvas/Renderer.js | grep -vE '^"use strict";$' > $canvas_path
-cat src/SVG/Renderer.js | grep -vE '^"use strict";$' > $svg_path
+cat src/libs/gl-matrix-min.js src/main.js src/Render/Buffer.js src/Render/Renderer.js src/Render/Mesh.js src/Render/RenderManager.js | grep -vE '^"use strict";$' > $core_path
+cat src/Render/WebGL/Buffer.js src/Render/WebGL/Renderer.js src/Render/WebGL/Shader.js | grep -vE '^"use strict";$' > $webgl_path
+cat src/Render/Canvas/Renderer.js | grep -vE '^"use strict";$' > $canvas_path
+cat src/Render/SVG/Renderer.js | grep -vE '^"use strict";$' > $svg_path
 
 if [ $REL -eq 1 ]; then
 	java -jar closure/compiler.jar --js $core_path --js_output_file $coremin_path --compilation_level SIMPLE_OPTIMIZATIONS

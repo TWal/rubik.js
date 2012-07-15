@@ -25,7 +25,7 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-Rubikjs.WebGL.Buffer = function(gl, data, type) {
+Rubikjs.Render.WebGL.Buffer = function(gl, data, type) {
 	this.gl = gl;
 	this.type = type || this.gl.ARRAY_BUFFER;
 	this.buffer = this.gl.createBuffer();
@@ -34,17 +34,17 @@ Rubikjs.WebGL.Buffer = function(gl, data, type) {
 	}
 }
 
-Rubikjs.WebGL.Buffer.prototype = new Rubikjs.Buffer;
-Rubikjs.WebGL.Buffer.prototype.constructor = Rubikjs.WebGL.Buffer;
+Rubikjs.Render.WebGL.Buffer.prototype = new Rubikjs.Render.Buffer;
+Rubikjs.Render.WebGL.Buffer.prototype.constructor = Rubikjs.Render.WebGL.Buffer;
 
-Rubikjs.WebGL.Buffer.prototype.feed = function(data) {
+Rubikjs.Render.WebGL.Buffer.prototype.feed = function(data) {
 	this.data = data;
 	this.bind();
 	var arrayType = this.type == this.gl.ARRAY_BUFFER ? Float32Array : Uint16Array;
 	this.gl.bufferData(this.type, new arrayType(this.data), this.gl.STATIC_DRAW);
 }
 
-Rubikjs.WebGL.Buffer.prototype.bind = function() {
+Rubikjs.Render.WebGL.Buffer.prototype.bind = function() {
 	//Don't re-bind a buffer that is already bounded, because it is a really expansive operation
 	if(this.gl.boundBuffer != this.buffer) {
 		//console.log("Bound")
@@ -81,8 +81,8 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-Rubikjs.WebGL.Renderer = function(element) {
-	Rubikjs.Renderer.call(this, element);
+Rubikjs.Render.WebGL.Renderer = function(element) {
+	Rubikjs.Render.Renderer.call(this, element);
 	var canvas = element.localName == "canvas" ? element : null; // : element.appendChild(document.createElement("canvas").setAttribute("width", "300").setAttribute(");
 	try {
 		this.gl = canvas.getContext("experimental-webgl");
@@ -95,7 +95,7 @@ Rubikjs.WebGL.Renderer = function(element) {
 	} catch(e) {}
 	this.gl.enable(this.gl.DEPTH_TEST);
 
-	this.shader = new Rubikjs.WebGL.Shader(this.gl);
+	this.shader = new Rubikjs.Render.WebGL.Shader(this.gl);
 	//Some basic shaders
 	this.shader.compile(
 		"#ifdef GL_ES\nprecision highp float;\n#endif\nattribute vec3 aVertexPosition;attribute vec4 aVertexColor;uniform mat4 uMVMatrix;uniform mat4 uPMatrix;varying vec4 vColor;void main(void) {gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);vColor = aVertexColor;}",
@@ -103,14 +103,14 @@ Rubikjs.WebGL.Renderer = function(element) {
 	).uniform("uPMatrix", this.perspectiveMat, "mat4");
 }
 
-Rubikjs.WebGL.Renderer.prototype = new Rubikjs.Renderer;
-Rubikjs.WebGL.Renderer.prototype.constructor = Rubikjs.WebGL.Renderer;
+Rubikjs.Render.WebGL.Renderer.prototype = new Rubikjs.Render.Renderer;
+Rubikjs.Render.WebGL.Renderer.prototype.constructor = Rubikjs.Render.WebGL.Renderer;
 
-Rubikjs.WebGL.Renderer.prototype.startFrame = function() {
+Rubikjs.Render.WebGL.Renderer.prototype.startFrame = function() {
 	this.gl.clearColor(0, 0, 0, 0);
 	this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 }
-Rubikjs.WebGL.Renderer.prototype.render = function(mesh) {
+Rubikjs.Render.WebGL.Renderer.prototype.render = function(mesh) {
 	this.shader.uniform("uPMatrix", this.perspectiveMat, "mat4");
 	this.shader.attrib("aVertexPosition", mesh.vertexBuffer, 3).attrib("aVertexColor", mesh.colorBuffer, 4).uniform("uMVMatrix", mesh.transform, "mat4");
 	this.shader.use();
@@ -118,13 +118,13 @@ Rubikjs.WebGL.Renderer.prototype.render = function(mesh) {
 	this.gl.drawElements(this.gl.TRIANGLES, mesh.indexBuffer.data.length, this.gl.UNSIGNED_SHORT, 0);
 }
 
-Rubikjs.WebGL.Renderer.prototype.endFrame = function() {}
+Rubikjs.Render.WebGL.Renderer.prototype.endFrame = function() {}
 
-Rubikjs.WebGL.Renderer.prototype.createMesh = function() {
-	var mesh = new Rubikjs.Mesh();
-	mesh.vertexBuffer = new Rubikjs.WebGL.Buffer(this.gl, [], this.gl.ARRAY_BUFFER);
-	mesh.colorBuffer = new Rubikjs.WebGL.Buffer(this.gl, [], this.gl.ARRAY_BUFFER);
-	mesh.indexBuffer = new Rubikjs.WebGL.Buffer(this.gl, [], this.gl.ELEMENT_ARRAY_BUFFER);
+Rubikjs.Render.WebGL.Renderer.prototype.createMesh = function() {
+	var mesh = new Rubikjs.Render.Mesh();
+	mesh.vertexBuffer = new Rubikjs.Render.WebGL.Buffer(this.gl, [], this.gl.ARRAY_BUFFER);
+	mesh.colorBuffer = new Rubikjs.Render.WebGL.Buffer(this.gl, [], this.gl.ARRAY_BUFFER);
+	mesh.indexBuffer = new Rubikjs.Render.WebGL.Buffer(this.gl, [], this.gl.ELEMENT_ARRAY_BUFFER);
 	return mesh;
 }
 
@@ -153,14 +153,14 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-Rubikjs.WebGL.Shader = function(gl) {
+Rubikjs.Render.WebGL.Shader = function(gl) {
 	this.gl = gl;
 	this.vertexShader = this.gl.createShader(this.gl.VERTEX_SHADER);
 	this.fragmentShader = this.gl.createShader(this.gl.FRAGMENT_SHADER);
 	this.program = this.gl.createProgram();
 }
 
-Rubikjs.WebGL.Shader.prototype.compile = function(vertSource, fragSource) {
+Rubikjs.Render.WebGL.Shader.prototype.compile = function(vertSource, fragSource) {
 	this.gl.shaderSource(this.vertexShader, vertSource);
 	this.gl.compileShader(this.vertexShader);
 	if(!this.gl.getShaderParameter(this.vertexShader, this.gl.COMPILE_STATUS)) {
@@ -183,7 +183,7 @@ Rubikjs.WebGL.Shader.prototype.compile = function(vertSource, fragSource) {
 	return this;
 }
 
-Rubikjs.WebGL.Shader.prototype.attrib = function(name, buffer, dimension) {
+Rubikjs.Render.WebGL.Shader.prototype.attrib = function(name, buffer, dimension) {
 	this.use();
 	buffer.bind();
 	var attrLoc = this.gl.getAttribLocation(this.program, name);
@@ -193,7 +193,7 @@ Rubikjs.WebGL.Shader.prototype.attrib = function(name, buffer, dimension) {
 	return this;
 }
 
-Rubikjs.WebGL.Shader.prototype.uniform = function(name, uniform, type) {
+Rubikjs.Render.WebGL.Shader.prototype.uniform = function(name, uniform, type) {
 	this.use();
 	var uniformLocation = this.gl.getUniformLocation(this.program, name);
 	switch(type) {
@@ -226,7 +226,7 @@ Rubikjs.WebGL.Shader.prototype.uniform = function(name, uniform, type) {
 	return this;
 }
 
-Rubikjs.WebGL.Shader.prototype.use = function() {
+Rubikjs.Render.WebGL.Shader.prototype.use = function() {
 	//Don't re-use a program that is already used, because it is a really expansive operation
 	if(this.gl.usedProgram != this.program) {
 		this.gl.useProgram(this.program);

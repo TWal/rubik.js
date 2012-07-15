@@ -28,8 +28,9 @@ freely, subject to the following restrictions:
 
 (function(_global) {
 	_global.Rubikjs = {};
-	_global.Rubikjs.SVG = {};
-	_global.Rubikjs.Canvas = {};
-	_global.Rubikjs.WebGL = {};
+	_global.Rubikjs.Render = {};
+	_global.Rubikjs.Render.SVG = {};
+	_global.Rubikjs.Render.Canvas = {};
+	_global.Rubikjs.Render.WebGL = {};
 })((typeof(exports) != 'undefined') ? global : this); //Taken from glMatrix
 

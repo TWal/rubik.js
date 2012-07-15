@@ -24,13 +24,13 @@ freely, subject to the following restrictions:
 */
 
 "use strict";
-Rubikjs.Buffer = function(data) {
+Rubikjs.Render.Buffer = function(data) {
 	if(data) {
 		this.data = data;
 	}
 }
 
-Rubikjs.Buffer.prototype.feed = function(data) {
+Rubikjs.Render.Buffer.prototype.feed = function(data) {
 	this.data = data;
 }
 

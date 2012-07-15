@@ -66,9 +66,10 @@ freely, subject to the following restrictions:
 
 (function(_global) {
 	_global.Rubikjs = {};
-	_global.Rubikjs.SVG = {};
-	_global.Rubikjs.Canvas = {};
-	_global.Rubikjs.WebGL = {};
+	_global.Rubikjs.Render = {};
+	_global.Rubikjs.Render.SVG = {};
+	_global.Rubikjs.Render.Canvas = {};
+	_global.Rubikjs.Render.WebGL = {};
 })((typeof(exports) != 'undefined') ? global : this); //Taken from glMatrix
 
 /*
@@ -96,13 +97,13 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-Rubikjs.Buffer = function(data) {
+Rubikjs.Render.Buffer = function(data) {
 	if(data) {
 		this.data = data;
 	}
 }
 
-Rubikjs.Buffer.prototype.feed = function(data) {
+Rubikjs.Render.Buffer.prototype.feed = function(data) {
 	this.data = data;
 }
 
@@ -131,7 +132,7 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-Rubikjs.Renderer = function(element) {
+Rubikjs.Render.Renderer = function(element) {
 	if(element) {
 		this.perspectiveMat = mat4.create();
 		mat4.perspective(70, element.offsetWidth/element.offsetHeight, 0.1, 100, this.perspectiveMat);
@@ -140,10 +141,10 @@ Rubikjs.Renderer = function(element) {
 	}
 }
 
-Rubikjs.Renderer.prototype.startFrame = function() {}
-Rubikjs.Renderer.prototype.render = function(mesh) {}
-Rubikjs.Renderer.prototype.endFrame = function() {}
-Rubikjs.Renderer.prototype.createMesh = function() {
+Rubikjs.Render.Renderer.prototype.startFrame = function() {}
+Rubikjs.Render.Renderer.prototype.render = function(mesh) {}
+Rubikjs.Render.Renderer.prototype.endFrame = function() {}
+Rubikjs.Render.Renderer.prototype.createMesh = function() {
 	return new Rubikjs.Mesh();
 }
 
@@ -174,15 +175,15 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-Rubikjs.Mesh = function() {
+Rubikjs.Render.Mesh = function() {
 	this.beautifulLevel = 1;
 	this.transform = mat4.create();
 	mat4.identity(this.transform);
 
 	//Buffers
-	this.vertexBuffer = new Rubikjs.Buffer();
-	this.colorBuffer = new Rubikjs.Buffer();
-	this.indexBuffer = new Rubikjs.Buffer();
+	this.vertexBuffer = new Rubikjs.Render.Buffer();
+	this.colorBuffer = new Rubikjs.Render.Buffer();
+	this.indexBuffer = new Rubikjs.Render.Buffer();
 }
 
 
@@ -211,7 +212,7 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-Rubikjs.Cube = function(renderer) {
+Rubikjs.Render.RenderManager = function(renderer) {
 	this.meshs = [];
 	//this.definition;
 	if(renderer) {
@@ -290,7 +291,7 @@ Rubikjs.Cube = function(renderer) {
 	mat4.rotate(this.meshs[0].transform, 0.5, [1, 0, 0]);
 }
 
-Rubikjs.Cube.prototype.render = function() {
+Rubikjs.Render.RenderManager.prototype.render = function() {
 	mat4.rotate(this.meshs[0].transform, 0.03, [0, 1, 0]);
 	this.renderer.startFrame();
 	var self = this;
