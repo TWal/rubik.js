@@ -1,0 +1,89 @@
+/*
+Rubik.js
+
+Copyright (c) 2012 Théophile Wallez
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+    1. The origin of this software must not be misrepresented; you must not
+    claim that you wrote the original software. If you use this software
+    in a product, an acknowledgment in the product documentation would be
+    appreciated but is not required.
+
+    2. Altered source versions must be plainly marked as such, and must not be
+    misrepresented as being the original software.
+
+    3. This notice may not be removed or altered from any source
+    distribution.
+*/
+
+"use strict";
+
+//Use this class if you want to simulate a doctrinaire puzzle, or a shape-mod of a doctrinaire puzzle.
+//A doctrinaire puzzle is a puzzle that keep its shape identical after each turn
+
+//For example: The classic Rubik's cube is doctrinaire, and the fisher cube is a shape-mod of the classic Rubik's cube, so you should use this class for both.
+//Some puzzles like the mixup cube can be considered as a shape-mod of a doctrinaire puzzle, you should use this class for them.
+
+//There is a common thing for each of these puzzle: Each piece has a place, and each place of the puzzle has a piece in it.
+
+//Examples: Should go here: N*N*N, fisher cube, X*Y*Z (half turn only), Mixup Cube, Megaminx, Skewb, Pyraminx, Square-2
+//          Should NOT go here: Curvy-copter, TomZ's 3*4*5, TomZ's 4*4*6
+//          Bandaged puzzles should NOT go here too: Square-1 (it's a square-2 bandaged), bandaged cube
+Rubikjs.Twisty.FixedPiecePlace = function() {
+    //These variables are here only to understand easilier the rest of the code. You must override them
+    this.pieces = [];
+    this.groups = [];
+    this.turnDegree = 90;
+    
+    this.ready = true; //You should NOT change this
+}
+
+Rubikjs.Twisty.FixedPiecePlace.prototype.Group = function(twisty) {
+    this.twisty = twisty; //You should NOT change this
+    this.pieces = []; //This is an array of array of pieces
+    this.rotationAxis = [0, 1, 0];
+}
+
+Rubikjs.Twisty.FixedPiecePlace.prototype.Group.prototype.cycle = function(count) {
+    for(var i = 0; i < this.pieces.length; ++i) {
+        var piecesCopy = this.pieces[i].slice(0); //.slice(0) make a real copy. Simply do = this.pieces; would share the values, and that's not what we want.
+        var piecesNb = this.pieces[i].length;
+        realCount = (count % piecesNb) + piecesNb; //When count is negative, the index we give won't be negative
+        for(var j = 0; j < piecesNb; ++j) {
+            this.pieces[i][j].movable = this.piecesCopy[(j + realCount) % piecesNb].movable;
+        }
+    }
+}
+
+Rubikjs.Twisty.FixedPiecePlace.prototype.Group.prototype.makeTurn = function(count, time, timeResolution) {
+    //TODO: Better fps management, so slow computers won't have to wait a long time
+    this.twisty.ready = false;
+    var stepNumber = time / timeResolution;
+    var stepAngle = (twisty.turnDegree * count) / stepNumber;
+    var self = this;
+
+    //This a loop
+    var i = 0;
+    var turnStepFonc = function() {
+        this.pieces.forEach(function(pieces) {
+            pieces.forEach(function(piece) {
+                mat4.rotate(piece.mesh.transform, angle, self.rotationAxis);
+            });
+        });
+        if(i < time) {
+            i += timeResolution;
+            setTimeout(turnStepFonc, timeResolution);
+        } else {
+            self.twisty.ready = true; //TODO: Implement something better, like a queue
+        }
+    }
+
+    turnStepFonc();
+}

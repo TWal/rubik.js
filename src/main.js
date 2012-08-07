@@ -32,5 +32,6 @@ freely, subject to the following restrictions:
     _global.Rubikjs.Render.SVG = {};
     _global.Rubikjs.Render.Canvas = {};
     _global.Rubikjs.Render.WebGL = {};
+    _global.Rubikjs.Twisty = {};
 })((typeof(exports) != 'undefined') ? global : this); //Taken from glMatrix
 
