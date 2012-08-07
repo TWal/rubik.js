@@ -6,7 +6,7 @@ Rubik.js is a javascript library to render and simulate twisty puzzles (commonly
 Renderers
 ---------
 
-Rubik.js has only a WebGL renderer for the moment (see todo-list for more).
+Rubik.js only support WebGL and Canvas for the moment (see todo-list for more).
 
 Puzzle support
 --------------
