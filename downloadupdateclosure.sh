@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ ! -d "closure" ]; then
-	mkdir closure
+    mkdir closure
 fi
 
 wget http://closure-compiler.googlecode.com/files/compiler-latest.zip

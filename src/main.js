@@ -27,10 +27,10 @@ freely, subject to the following restrictions:
 //Define namespaces
 
 (function(_global) {
-	_global.Rubikjs = {};
-	_global.Rubikjs.Render = {};
-	_global.Rubikjs.Render.SVG = {};
-	_global.Rubikjs.Render.Canvas = {};
-	_global.Rubikjs.Render.WebGL = {};
+    _global.Rubikjs = {};
+    _global.Rubikjs.Render = {};
+    _global.Rubikjs.Render.SVG = {};
+    _global.Rubikjs.Render.Canvas = {};
+    _global.Rubikjs.Render.WebGL = {};
 })((typeof(exports) != 'undefined') ? global : this); //Taken from glMatrix
 

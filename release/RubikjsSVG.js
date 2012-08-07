@@ -26,13 +26,13 @@ freely, subject to the following restrictions:
 */
 
 Rubikjs.SVG.Renderer = function(element) {
-	Rubikjs.Renderer.call(this, element);
+    Rubikjs.Renderer.call(this, element);
 }
 
 Rubikjs.Render.SVG.Renderer.prototype = new Rubikjs.Renderer;
 Rubikjs.Render.SVG.Renderer.prototype.constructor = Rubikjs.SVG.Renderer;
 
 Rubikjs.Render.SVG.Renderer.prototype.render = function(mesh) {
-	//TODO: Render in SVG
+    //TODO: Render in SVG
 }
 

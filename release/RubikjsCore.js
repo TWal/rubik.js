@@ -65,11 +65,11 @@ freely, subject to the following restrictions:
 //Define namespaces
 
 (function(_global) {
-	_global.Rubikjs = {};
-	_global.Rubikjs.Render = {};
-	_global.Rubikjs.Render.SVG = {};
-	_global.Rubikjs.Render.Canvas = {};
-	_global.Rubikjs.Render.WebGL = {};
+    _global.Rubikjs = {};
+    _global.Rubikjs.Render = {};
+    _global.Rubikjs.Render.SVG = {};
+    _global.Rubikjs.Render.Canvas = {};
+    _global.Rubikjs.Render.WebGL = {};
 })((typeof(exports) != 'undefined') ? global : this); //Taken from glMatrix
 
 /*
@@ -98,13 +98,13 @@ freely, subject to the following restrictions:
 */
 
 Rubikjs.Render.Buffer = function(data) {
-	if(data) {
-		this.data = data;
-	}
+    if(data) {
+        this.data = data;
+    }
 }
 
 Rubikjs.Render.Buffer.prototype.feed = function(data) {
-	this.data = data;
+    this.data = data;
 }
 
 /*
@@ -133,19 +133,19 @@ freely, subject to the following restrictions:
 */
 
 Rubikjs.Render.Renderer = function(element) {
-	if(element) {
-		this.perspectiveMat = mat4.create();
-		mat4.perspective(70, element.offsetWidth/element.offsetHeight, 0.1, 100, this.perspectiveMat);
-		//mat4.ortho(-2, 2, -2, 2, -10, 10, this.perspectiveMat);
-		this.element = element;
-	}
+    if(element) {
+        this.perspectiveMat = mat4.create();
+        mat4.perspective(70, element.offsetWidth/element.offsetHeight, 0.1, 100, this.perspectiveMat);
+        //mat4.ortho(-2, 2, -2, 2, -10, 10, this.perspectiveMat);
+        this.element = element;
+    }
 }
 
 Rubikjs.Render.Renderer.prototype.startFrame = function() {}
 Rubikjs.Render.Renderer.prototype.render = function(mesh) {}
 Rubikjs.Render.Renderer.prototype.endFrame = function() {}
 Rubikjs.Render.Renderer.prototype.createMesh = function() {
-	return new Rubikjs.Mesh();
+    return new Rubikjs.Mesh();
 }
 
 
@@ -176,14 +176,14 @@ freely, subject to the following restrictions:
 */
 
 Rubikjs.Render.Mesh = function() {
-	this.beautifulLevel = 1;
-	this.transform = mat4.create();
-	mat4.identity(this.transform);
+    this.beautifulLevel = 1;
+    this.transform = mat4.create();
+    mat4.identity(this.transform);
 
-	//Buffers
-	this.vertexBuffer = new Rubikjs.Render.Buffer();
-	this.colorBuffer = new Rubikjs.Render.Buffer();
-	this.indexBuffer = new Rubikjs.Render.Buffer();
+    //Buffers
+    this.vertexBuffer = new Rubikjs.Render.Buffer();
+    this.colorBuffer = new Rubikjs.Render.Buffer();
+    this.indexBuffer = new Rubikjs.Render.Buffer();
 }
 
 
@@ -213,91 +213,91 @@ freely, subject to the following restrictions:
 */
 
 Rubikjs.Render.RenderManager = function(renderer) {
-	this.meshs = [];
-	//this.definition;
-	if(renderer) {
-		this.renderer = new renderer(document.getElementById("cube"));
-	} else {
-		this.renderer = new Rubikjs.WebGL.Renderer(document.getElementById("cube"));
-	}
+    this.meshs = [];
+    //this.definition;
+    if(renderer) {
+        this.renderer = new renderer(document.getElementById("cube"));
+    } else {
+        this.renderer = new Rubikjs.WebGL.Renderer(document.getElementById("cube"));
+    }
 
-	this.meshs.push(this.renderer.createMesh());
-	this.meshs[0].vertexBuffer.feed([
-		// Front face
-		-1.0, -1.0,  1.0,
-		1.0, -1.0,  1.0,
-		1.0,  1.0,  1.0,
-		-1.0,  1.0,  1.0,
+    this.meshs.push(this.renderer.createMesh());
+    this.meshs[0].vertexBuffer.feed([
+        // Front face
+        -1.0, -1.0,  1.0,
+        1.0, -1.0,  1.0,
+        1.0,  1.0,  1.0,
+        -1.0,  1.0,  1.0,
 
-		// Back face
-		-1.0, -1.0, -1.0,
-		-1.0,  1.0, -1.0,
-		1.0,  1.0, -1.0,
-		1.0, -1.0, -1.0,
+        // Back face
+        -1.0, -1.0, -1.0,
+        -1.0,  1.0, -1.0,
+        1.0,  1.0, -1.0,
+        1.0, -1.0, -1.0,
 
-		// Top face
-		-1.0,  1.0, -1.0,
-		-1.0,  1.0,  1.0,
-		1.0,  1.0,  1.0,
-		1.0,  1.0, -1.0,
+        // Top face
+        -1.0,  1.0, -1.0,
+        -1.0,  1.0,  1.0,
+        1.0,  1.0,  1.0,
+        1.0,  1.0, -1.0,
 
-		// Bottom face
-		-1.0, -1.0, -1.0,
-		1.0, -1.0, -1.0,
-		1.0, -1.0,  1.0,
-		-1.0, -1.0,  1.0,
+        // Bottom face
+        -1.0, -1.0, -1.0,
+        1.0, -1.0, -1.0,
+        1.0, -1.0,  1.0,
+        -1.0, -1.0,  1.0,
 
-		// Right face
-		1.0, -1.0, -1.0,
-		1.0,  1.0, -1.0,
-		1.0,  1.0,  1.0,
-		1.0, -1.0,  1.0,
+        // Right face
+        1.0, -1.0, -1.0,
+        1.0,  1.0, -1.0,
+        1.0,  1.0,  1.0,
+        1.0, -1.0,  1.0,
 
-		// Left face
-		-1.0, -1.0, -1.0,
-		-1.0, -1.0,  1.0,
-		-1.0,  1.0,  1.0,
-		-1.0,  1.0, -1.0
-	]);
-	var colors = [
-		[1.0, 0.0, 0.0, 1.0],     // Front face
-		[1.0, 0.5, 0.0, 1.0],     // Back face
-		[0.9, 0.9, 0.9, 1.0],     // Top face
-		[1.0, 1.0, 1.0, 1.0],     // Bottom face
-		[0.0, 0.0, 1.0, 1.0],     // Right face
-		[0.0, 1.0, 0.0, 1.0]     // Left face
-	];
+        // Left face
+        -1.0, -1.0, -1.0,
+        -1.0, -1.0,  1.0,
+        -1.0,  1.0,  1.0,
+        -1.0,  1.0, -1.0
+    ]);
+    var colors = [
+        [1.0, 0.0, 0.0, 1.0],     // Front face
+        [1.0, 0.5, 0.0, 1.0],     // Back face
+        [0.9, 0.9, 0.9, 1.0],     // Top face
+        [1.0, 1.0, 1.0, 1.0],     // Bottom face
+        [0.0, 0.0, 1.0, 1.0],     // Right face
+        [0.0, 1.0, 0.0, 1.0]     // Left face
+    ];
 
-	var unpackedColors = [];
-	for (var i = 0; i < colors.length; ++i) {
-		var color = colors[i];
-		for (var j = 0; j < 4; ++j) {
-			unpackedColors = unpackedColors.concat(color);
-		}
-	}
+    var unpackedColors = [];
+    for (var i = 0; i < colors.length; ++i) {
+        var color = colors[i];
+        for (var j = 0; j < 4; ++j) {
+            unpackedColors = unpackedColors.concat(color);
+        }
+    }
 
-	this.meshs[0].colorBuffer.feed(unpackedColors);
+    this.meshs[0].colorBuffer.feed(unpackedColors);
 
 
-	this.meshs[0].indexBuffer.feed([
-		0, 1, 2,      0, 2, 3,    // Front face
-		4, 5, 6,      4, 6, 7,    // Back face
-		8, 9, 10,     8, 10, 11,  // Top face
-		12, 13, 14,   12, 14, 15, // Bottom face
-		16, 17, 18,   16, 18, 19, // Right face
-		20, 21, 22,   20, 22, 23  // Left face
-	]);
-	mat4.translate(this.meshs[0].transform, [0, 0, -3]);
-	mat4.rotate(this.meshs[0].transform, 0.5, [1, 0, 0]);
+    this.meshs[0].indexBuffer.feed([
+        0, 1, 2,      0, 2, 3,    // Front face
+        4, 5, 6,      4, 6, 7,    // Back face
+        8, 9, 10,     8, 10, 11,  // Top face
+        12, 13, 14,   12, 14, 15, // Bottom face
+        16, 17, 18,   16, 18, 19, // Right face
+        20, 21, 22,   20, 22, 23  // Left face
+    ]);
+    mat4.translate(this.meshs[0].transform, [0, 0, -3]);
+    mat4.rotate(this.meshs[0].transform, 0.5, [1, 0, 0]);
 }
 
 Rubikjs.Render.RenderManager.prototype.render = function() {
-	mat4.rotate(this.meshs[0].transform, 0.03, [0, 1, 0]);
-	this.renderer.startFrame();
-	var self = this;
-	this.meshs.forEach(function(mesh) {
-		self.renderer.render(mesh);
-	});
-	this.renderer.endFrame();
+    mat4.rotate(this.meshs[0].transform, 0.03, [0, 1, 0]);
+    this.renderer.startFrame();
+    var self = this;
+    this.meshs.forEach(function(mesh) {
+        self.renderer.render(mesh);
+    });
+    this.renderer.endFrame();
 }
 

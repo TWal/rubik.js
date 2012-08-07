@@ -25,19 +25,19 @@ freely, subject to the following restrictions:
 
 "use strict";
 Rubikjs.Render.Renderer = function(element) {
-	if(element) {
-		this.perspectiveMat = mat4.create();
-		mat4.perspective(70, element.offsetWidth/element.offsetHeight, 0.1, 100, this.perspectiveMat);
-		//mat4.ortho(-2, 2, -2, 2, -10, 10, this.perspectiveMat);
-		this.element = element;
-	}
+    if(element) {
+        this.perspectiveMat = mat4.create();
+        mat4.perspective(70, element.offsetWidth/element.offsetHeight, 0.1, 100, this.perspectiveMat);
+        //mat4.ortho(-2, 2, -2, 2, -10, 10, this.perspectiveMat);
+        this.element = element;
+    }
 }
 
 Rubikjs.Render.Renderer.prototype.startFrame = function() {}
 Rubikjs.Render.Renderer.prototype.render = function(mesh) {}
 Rubikjs.Render.Renderer.prototype.endFrame = function() {}
 Rubikjs.Render.Renderer.prototype.createMesh = function() {
-	return new Rubikjs.Mesh();
+    return new Rubikjs.Mesh();
 }
 
 
