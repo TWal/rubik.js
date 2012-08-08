@@ -4,6 +4,6 @@ if [ ! -d "closure" ]; then
 fi
 
 wget http://closure-compiler.googlecode.com/files/compiler-latest.zip
-unzip -d closure compiler-latest.zip
+yes | unzip -d closure compiler-latest.zip > /dev/null 2>&1
 rm compiler-latest.zip
 
