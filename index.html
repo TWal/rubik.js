@@ -6,6 +6,8 @@
         <script type="text/javascript" src="release/RubikjsRenderCore.js"></script>
         <script type="text/javascript" src="release/RubikjsWebGL.js"></script>
         <script type="text/javascript" src="release/RubikjsCanvas.js"></script>
+        <script type="text/javascript" src="release/RubikjsTwisty.js"></script>
+        <script type="text/javascript" src="puzzles/ClassicRubiksCube.js"></script>
 
     </head>
     <body>
@@ -13,9 +15,28 @@
         <p id="log"></p>
         <script>
             window.onload = function() {
-                var cube = new Rubikjs.Render.RenderManager(Rubikjs.Render.Canvas.Renderer);
-                cube.render();
-                window.setInterval(function() {cube.render();}, 50);
+                var rendermgr = new Rubikjs.Render.RenderManager(Rubikjs.Render.WebGL.Renderer);
+                var cube = new Rubikjs.Puzzle.ClassicRubiksCube(rendermgr);
+
+                //Do the sexy move!
+                var lastFace = "R";
+                var lastCount = 1;
+                window.setInterval(function() {
+                    if(cube.ready) {
+                        cube.faces[lastFace].makeTurn(lastCount, 0.5, 0.05);
+                        if(lastFace == "U") {
+                            lastFace = "R";
+                            if(lastCount == 1) {
+                                lastCount = -1;
+                            } else {
+                                lastCount = 1;
+                            }
+                        } else {
+                            lastFace = "U";
+                        }
+                    }
+                    rendermgr.render();
+                }, 1000);
             }
         </script>
     </body>

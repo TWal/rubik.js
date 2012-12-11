@@ -45,43 +45,57 @@ Rubikjs.Twisty.FixedPiecePlace = function() {
     this.ready = true; //You should NOT change this
 }
 
-Rubikjs.Twisty.FixedPiecePlace.prototype.Group = function(twisty) {
+Rubikjs.Twisty.FixedPiecePlace.Group = function(twisty) {
     this.twisty = twisty; //You should NOT change this
     this.pieces = []; //This is an array of array of pieces
     this.rotationAxis = [0, 1, 0];
+    this.rotationCenter = [0, 0, 0];
 }
 
-Rubikjs.Twisty.FixedPiecePlace.prototype.Group.prototype.cycle = function(count) {
+Rubikjs.Twisty.FixedPiecePlace.Group.prototype.cycle = function(count) {
     for(var i = 0; i < this.pieces.length; ++i) {
-        var piecesCopy = this.pieces[i].slice(0); //.slice(0) make a real copy. Simply do = this.pieces; would share the values, and that's not what we want.
+        //Why this? Check out this example:
+        /* var toto = this.pieces[0];
+         * var tata = toto;
+         * tata.movable = this.pieces[1].movable;
+         */
+        //Attention, you changed toto.movable!
+        //That's why we do this
+        var movableCopy = this.pieces[i].map(function(x) {
+            return x.movable;
+        });
         var piecesNb = this.pieces[i].length;
-        realCount = (count % piecesNb) + piecesNb; //When count is negative, the index we give won't be negative
+        var positiveCount = (count % piecesNb) + piecesNb; //When count is negative, the index we give won't be negative
         for(var j = 0; j < piecesNb; ++j) {
-            this.pieces[i][j].movable = this.piecesCopy[(j + realCount) % piecesNb].movable;
+            this.pieces[i][j].movable = movableCopy[(j + positiveCount) % piecesNb];
         }
     }
 }
 
-Rubikjs.Twisty.FixedPiecePlace.prototype.Group.prototype.makeTurn = function(count, time, timeResolution) {
+Rubikjs.Twisty.FixedPiecePlace.Group.prototype.makeTurn = function(count, time, timeResolution) {
+    count = -count; //Clockwise -> trigonometric
     //TODO: Better fps management, so slow computers won't have to wait a long time
     this.twisty.ready = false;
     var stepNumber = time / timeResolution;
-    var stepAngle = (twisty.turnDegree * count) / stepNumber;
+    var stepAngle = ((this.twisty.turnDegree * Math.PI / 180) * count) / stepNumber;
     var self = this;
+    var rotationMat = mat4.rotate(mat4.identity(), stepAngle, self.rotationAxis);
 
     //This a loop
     var i = 0;
     var turnStepFonc = function() {
-        this.pieces.forEach(function(pieces) {
-            pieces.forEach(function(piece) {
-                mat4.rotate(piece.mesh.transform, angle, self.rotationAxis);
+        if(i * timeResolution < time) {
+            self.pieces.forEach(function(pieces) {
+                pieces.forEach(function(piece) {
+                    mat4.multiply(rotationMat, piece.movable.mesh.transform, piece.movable.mesh.transform);
+                });
             });
-        });
-        if(i < time) {
-            i += timeResolution;
-            setTimeout(turnStepFonc, timeResolution);
+            self.twisty.rendermgr.render();
+            i += 1;
+            setTimeout(turnStepFonc, timeResolution*1000);
         } else {
             self.twisty.ready = true; //TODO: Implement something better, like a queue
+            self.cycle(count);
         }
     }
 
