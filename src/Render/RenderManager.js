@@ -33,8 +33,8 @@ Rubikjs.Render.RenderManager = function(renderer) {
         this.renderer = new Rubikjs.WebGL.Renderer(document.getElementById("cube"));
     }
     mat4.translate(this.renderer.perspectiveMat, [0, 0, -15]);
-    mat4.rotateX(this.renderer.perspectiveMat, Math.PI/4);
-    mat4.rotateY(this.renderer.perspectiveMat, Math.PI/4);
+    mat4.rotateX(this.renderer.perspectiveMat, Math.PI/6);
+    mat4.rotateY(this.renderer.perspectiveMat, -Math.PI/6);
 
     /*this.meshs.push(this.renderer.createMesh());
     this.meshs[0].vertexBuffer.feed([
