@@ -31,14 +31,14 @@ Rubikjs.Render.Renderer = function(element) {
         //mat4.ortho(-2, 2, -2, 2, -10, 10, this.perspectiveMat);
         this.element = element;
     }
-}
+};
 
-Rubikjs.Render.Renderer.prototype.startFrame = function() {}
-Rubikjs.Render.Renderer.prototype.render = function(mesh) {}
-Rubikjs.Render.Renderer.prototype.endFrame = function() {}
+Rubikjs.Render.Renderer.prototype.startFrame = function() {};
+Rubikjs.Render.Renderer.prototype.render = function(mesh) {};
+Rubikjs.Render.Renderer.prototype.endFrame = function() {};
 Rubikjs.Render.Renderer.prototype.createMesh = function() {
     return new Rubikjs.Mesh();
-}
+};
 
 
 

@@ -29,7 +29,7 @@ Rubikjs.Render.WebGL.Shader = function(gl) {
     this.vertexShader = this.gl.createShader(this.gl.VERTEX_SHADER);
     this.fragmentShader = this.gl.createShader(this.gl.FRAGMENT_SHADER);
     this.program = this.gl.createProgram();
-}
+};
 
 Rubikjs.Render.WebGL.Shader.prototype.compile = function(vertSource, fragSource) {
     this.gl.shaderSource(this.vertexShader, vertSource);
@@ -52,7 +52,7 @@ Rubikjs.Render.WebGL.Shader.prototype.compile = function(vertSource, fragSource)
     }
 
     return this;
-}
+};
 
 Rubikjs.Render.WebGL.Shader.prototype.attrib = function(name, buffer, dimension) {
     this.use();
@@ -62,7 +62,7 @@ Rubikjs.Render.WebGL.Shader.prototype.attrib = function(name, buffer, dimension)
     this.gl.vertexAttribPointer(attrLoc, dimension, this.gl.FLOAT, false, 0, 0);
 
     return this;
-}
+};
 
 Rubikjs.Render.WebGL.Shader.prototype.uniform = function(name, uniform, type) {
     this.use();
@@ -95,7 +95,7 @@ Rubikjs.Render.WebGL.Shader.prototype.uniform = function(name, uniform, type) {
     }
 
     return this;
-}
+};
 
 Rubikjs.Render.WebGL.Shader.prototype.use = function() {
     //Don't re-use a program that is already used, because it is a really expansive operation
@@ -103,5 +103,5 @@ Rubikjs.Render.WebGL.Shader.prototype.use = function() {
         this.gl.useProgram(this.program);
         this.gl.usedProgram = this.program;
     }
-}
+};
 

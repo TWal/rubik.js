@@ -104,7 +104,7 @@ Rubikjs.Render.RenderManager = function(renderer) {
     ]);
     mat4.translate(this.meshs[0].transform, [0, 0, -3]);
     mat4.rotate(this.meshs[0].transform, 0.5, [1, 0, 0]);*/
-}
+};
 
 Rubikjs.Render.RenderManager.prototype.render = function() {
     //mat4.rotate(this.meshs[0].transform, 0.03, [0, 1, 0]);
@@ -114,5 +114,5 @@ Rubikjs.Render.RenderManager.prototype.render = function() {
         self.renderer.render(mesh);
     });
     this.renderer.endFrame();
-}
+};
 

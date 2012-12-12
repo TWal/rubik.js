@@ -43,7 +43,7 @@ Rubikjs.Twisty.FixedPiecePlace = function() {
     this.turnDegree = 90;
     this.moveQueue = [];
     this.isProcessingQueue = false;
-}
+};
 
 Rubikjs.Twisty.FixedPiecePlace.prototype.endInit = function() {
     var self = this;
@@ -54,7 +54,7 @@ Rubikjs.Twisty.FixedPiecePlace.prototype.endInit = function() {
             })
         });
     }
-}
+};
 
 Rubikjs.Twisty.FixedPiecePlace.prototype.makeMove = function(groupName, count) {
     this.moveQueue.push({
@@ -62,7 +62,7 @@ Rubikjs.Twisty.FixedPiecePlace.prototype.makeMove = function(groupName, count) {
         count: count
     });
     this.processQueue();
-}
+};
 
 Rubikjs.Twisty.FixedPiecePlace.prototype.processQueue = function() {
     if(this.isProcessingQueue) {
@@ -86,7 +86,7 @@ Rubikjs.Twisty.FixedPiecePlace.Group = function(twisty) {
     this.pieces = []; //This is an array of array of pieces
     this.rotationAxis = [0, 1, 0];
     this.rotationCenter = [0, 0, 0];
-}
+};
 
 Rubikjs.Twisty.FixedPiecePlace.Group.prototype.cycle = function(count) {
     for(var i = 0; i < this.pieces.length; ++i) {
@@ -106,7 +106,7 @@ Rubikjs.Twisty.FixedPiecePlace.Group.prototype.cycle = function(count) {
             this.pieces[i][j].movable = movableCopy[(j + positiveCount) % piecesNb];
         }
     }
-}
+};
 
 Rubikjs.Twisty.FixedPiecePlace.Group.prototype.makeTurn = function(count, time, timeResolution, callback) {
     count = -count; //Clockwise -> trigonometric
@@ -135,4 +135,4 @@ Rubikjs.Twisty.FixedPiecePlace.Group.prototype.makeTurn = function(count, time, 
     }
 
     turnStepFonc();
-}
+};

@@ -32,7 +32,7 @@ Rubikjs.Render.WebGL.Buffer = function(gl, data, type) {
     if(data != undefined && data.length != 0) {
         this.feed(data);
     }
-}
+};
 
 Rubikjs.Render.WebGL.Buffer.prototype = new Rubikjs.Render.Buffer;
 Rubikjs.Render.WebGL.Buffer.prototype.constructor = Rubikjs.Render.WebGL.Buffer;
@@ -42,7 +42,7 @@ Rubikjs.Render.WebGL.Buffer.prototype.feed = function(data) {
     this.bind();
     var arrayType = this.type == this.gl.ARRAY_BUFFER ? Float32Array : Uint16Array;
     this.gl.bufferData(this.type, new arrayType(this.data), this.gl.STATIC_DRAW);
-}
+};
 
 Rubikjs.Render.WebGL.Buffer.prototype.bind = function() {
     //Don't re-bind a buffer that is already bounded, because it is a really expansive operation
@@ -53,8 +53,7 @@ Rubikjs.Render.WebGL.Buffer.prototype.bind = function() {
     } else {
         //console.log("Rebound");
     }
-}
-
+};
 
 /*
 Rubik.js
@@ -101,7 +100,7 @@ Rubikjs.Render.WebGL.Renderer = function(element) {
         "#ifdef GL_ES\nprecision highp float;\n#endif\nattribute vec3 aVertexPosition;attribute vec4 aVertexColor;uniform mat4 uMVMatrix;uniform mat4 uPMatrix;varying vec4 vColor;void main(void) {gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);vColor = aVertexColor;}",
         "#ifdef GL_ES\nprecision highp float;\n#endif\nvarying vec4 vColor;void main(void) {gl_FragColor = vColor;}"
     ).uniform("uPMatrix", this.perspectiveMat, "mat4");
-}
+};
 
 Rubikjs.Render.WebGL.Renderer.prototype = new Rubikjs.Render.Renderer;
 Rubikjs.Render.WebGL.Renderer.prototype.constructor = Rubikjs.Render.WebGL.Renderer;
@@ -109,16 +108,17 @@ Rubikjs.Render.WebGL.Renderer.prototype.constructor = Rubikjs.Render.WebGL.Rende
 Rubikjs.Render.WebGL.Renderer.prototype.startFrame = function() {
     this.gl.clearColor(0, 0, 0, 0);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-}
+};
+
 Rubikjs.Render.WebGL.Renderer.prototype.render = function(mesh) {
     this.shader.uniform("uPMatrix", this.perspectiveMat, "mat4");
     this.shader.attrib("aVertexPosition", mesh.vertexBuffer, 3).attrib("aVertexColor", mesh.colorBuffer, 4).uniform("uMVMatrix", mesh.transform, "mat4");
     this.shader.use();
     mesh.indexBuffer.bind();
     this.gl.drawElements(this.gl.TRIANGLES, mesh.indexBuffer.data.length, this.gl.UNSIGNED_SHORT, 0);
-}
+};
 
-Rubikjs.Render.WebGL.Renderer.prototype.endFrame = function() {}
+Rubikjs.Render.WebGL.Renderer.prototype.endFrame = function() {};
 
 Rubikjs.Render.WebGL.Renderer.prototype.createMesh = function() {
     var mesh = new Rubikjs.Render.Mesh();
@@ -126,7 +126,7 @@ Rubikjs.Render.WebGL.Renderer.prototype.createMesh = function() {
     mesh.colorBuffer = new Rubikjs.Render.WebGL.Buffer(this.gl, [], this.gl.ARRAY_BUFFER);
     mesh.indexBuffer = new Rubikjs.Render.WebGL.Buffer(this.gl, [], this.gl.ELEMENT_ARRAY_BUFFER);
     return mesh;
-}
+};
 
 /*
 Rubik.js
@@ -158,7 +158,7 @@ Rubikjs.Render.WebGL.Shader = function(gl) {
     this.vertexShader = this.gl.createShader(this.gl.VERTEX_SHADER);
     this.fragmentShader = this.gl.createShader(this.gl.FRAGMENT_SHADER);
     this.program = this.gl.createProgram();
-}
+};
 
 Rubikjs.Render.WebGL.Shader.prototype.compile = function(vertSource, fragSource) {
     this.gl.shaderSource(this.vertexShader, vertSource);
@@ -181,7 +181,7 @@ Rubikjs.Render.WebGL.Shader.prototype.compile = function(vertSource, fragSource)
     }
 
     return this;
-}
+};
 
 Rubikjs.Render.WebGL.Shader.prototype.attrib = function(name, buffer, dimension) {
     this.use();
@@ -191,7 +191,7 @@ Rubikjs.Render.WebGL.Shader.prototype.attrib = function(name, buffer, dimension)
     this.gl.vertexAttribPointer(attrLoc, dimension, this.gl.FLOAT, false, 0, 0);
 
     return this;
-}
+};
 
 Rubikjs.Render.WebGL.Shader.prototype.uniform = function(name, uniform, type) {
     this.use();
@@ -224,7 +224,7 @@ Rubikjs.Render.WebGL.Shader.prototype.uniform = function(name, uniform, type) {
     }
 
     return this;
-}
+};
 
 Rubikjs.Render.WebGL.Shader.prototype.use = function() {
     //Don't re-use a program that is already used, because it is a really expansive operation
@@ -232,5 +232,5 @@ Rubikjs.Render.WebGL.Shader.prototype.use = function() {
         this.gl.useProgram(this.program);
         this.gl.usedProgram = this.program;
     }
-}
+};
 

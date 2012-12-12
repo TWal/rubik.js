@@ -31,7 +31,7 @@ Rubikjs.Render.WebGL.Buffer = function(gl, data, type) {
     if(data != undefined && data.length != 0) {
         this.feed(data);
     }
-}
+};
 
 Rubikjs.Render.WebGL.Buffer.prototype = new Rubikjs.Render.Buffer;
 Rubikjs.Render.WebGL.Buffer.prototype.constructor = Rubikjs.Render.WebGL.Buffer;
@@ -41,7 +41,7 @@ Rubikjs.Render.WebGL.Buffer.prototype.feed = function(data) {
     this.bind();
     var arrayType = this.type == this.gl.ARRAY_BUFFER ? Float32Array : Uint16Array;
     this.gl.bufferData(this.type, new arrayType(this.data), this.gl.STATIC_DRAW);
-}
+};
 
 Rubikjs.Render.WebGL.Buffer.prototype.bind = function() {
     //Don't re-bind a buffer that is already bounded, because it is a really expansive operation
@@ -52,6 +52,5 @@ Rubikjs.Render.WebGL.Buffer.prototype.bind = function() {
     } else {
         //console.log("Rebound");
     }
-}
-
+};
 

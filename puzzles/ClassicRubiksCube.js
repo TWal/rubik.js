@@ -200,7 +200,7 @@ Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager) {
     this.groups.D.rotationCenter = [0, -2, 0];
 
     this.endInit();
-}
+};
 
 Rubikjs.Puzzle.ClassicRubiksCube.prototype = new Rubikjs.Twisty.FixedPiecePlace;
 Rubikjs.Puzzle.ClassicRubiksCube.prototype.constructor = new Rubikjs.Puzzle.ClassicRubiksCube;

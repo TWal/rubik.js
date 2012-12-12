@@ -36,7 +36,7 @@ Rubikjs.Render.Canvas.Renderer = function(element) {
         } catch(e) {}
     }
     this.triangles = [];
-}
+};
 
 Rubikjs.Render.Canvas.Renderer.prototype = new Rubikjs.Render.Renderer;
 Rubikjs.Render.Canvas.Renderer.prototype.constructor = Rubikjs.Render.Canvas.Renderer
@@ -44,7 +44,7 @@ Rubikjs.Render.Canvas.Renderer.prototype.constructor = Rubikjs.Render.Canvas.Ren
 Rubikjs.Render.Canvas.Renderer.prototype.startFrame = function() {
     this.triangles = [];
     this.ctx.clearRect(0, 0, 500, 500);
-}
+};
 
 Rubikjs.Render.Canvas.Renderer.prototype.render = function(mesh) {
     var mvproj = mat4.create();
@@ -92,7 +92,7 @@ Rubikjs.Render.Canvas.Renderer.prototype.render = function(mesh) {
 
         this.triangles.push(tri);
     }
-}
+};
 
 Rubikjs.Render.Canvas.Renderer.prototype.endFrame = function() {
     this.triangles.sort(function(tri0, tri1) {
@@ -120,9 +120,9 @@ Rubikjs.Render.Canvas.Renderer.prototype.endFrame = function() {
         self.ctx.fill();
         self.ctx.stroke();
     });
-}
+};
 
 Rubikjs.Render.Canvas.Renderer.prototype.createMesh = function() {
     return new Rubikjs.Render.Mesh();
-}
+};
 

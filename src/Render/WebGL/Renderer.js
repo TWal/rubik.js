@@ -44,7 +44,7 @@ Rubikjs.Render.WebGL.Renderer = function(element) {
         "#ifdef GL_ES\nprecision highp float;\n#endif\nattribute vec3 aVertexPosition;attribute vec4 aVertexColor;uniform mat4 uMVMatrix;uniform mat4 uPMatrix;varying vec4 vColor;void main(void) {gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);vColor = aVertexColor;}",
         "#ifdef GL_ES\nprecision highp float;\n#endif\nvarying vec4 vColor;void main(void) {gl_FragColor = vColor;}"
     ).uniform("uPMatrix", this.perspectiveMat, "mat4");
-}
+};
 
 Rubikjs.Render.WebGL.Renderer.prototype = new Rubikjs.Render.Renderer;
 Rubikjs.Render.WebGL.Renderer.prototype.constructor = Rubikjs.Render.WebGL.Renderer;
@@ -52,16 +52,17 @@ Rubikjs.Render.WebGL.Renderer.prototype.constructor = Rubikjs.Render.WebGL.Rende
 Rubikjs.Render.WebGL.Renderer.prototype.startFrame = function() {
     this.gl.clearColor(0, 0, 0, 0);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-}
+};
+
 Rubikjs.Render.WebGL.Renderer.prototype.render = function(mesh) {
     this.shader.uniform("uPMatrix", this.perspectiveMat, "mat4");
     this.shader.attrib("aVertexPosition", mesh.vertexBuffer, 3).attrib("aVertexColor", mesh.colorBuffer, 4).uniform("uMVMatrix", mesh.transform, "mat4");
     this.shader.use();
     mesh.indexBuffer.bind();
     this.gl.drawElements(this.gl.TRIANGLES, mesh.indexBuffer.data.length, this.gl.UNSIGNED_SHORT, 0);
-}
+};
 
-Rubikjs.Render.WebGL.Renderer.prototype.endFrame = function() {}
+Rubikjs.Render.WebGL.Renderer.prototype.endFrame = function() {};
 
 Rubikjs.Render.WebGL.Renderer.prototype.createMesh = function() {
     var mesh = new Rubikjs.Render.Mesh();
@@ -69,5 +70,5 @@ Rubikjs.Render.WebGL.Renderer.prototype.createMesh = function() {
     mesh.colorBuffer = new Rubikjs.Render.WebGL.Buffer(this.gl, [], this.gl.ARRAY_BUFFER);
     mesh.indexBuffer = new Rubikjs.Render.WebGL.Buffer(this.gl, [], this.gl.ELEMENT_ARRAY_BUFFER);
     return mesh;
-}
+};
 

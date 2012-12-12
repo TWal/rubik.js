@@ -103,11 +103,11 @@ Rubikjs.Render.Buffer = function(data) {
     if(data) {
         this.data = data;
     }
-}
+};
 
 Rubikjs.Render.Buffer.prototype.feed = function(data) {
     this.data = data;
-}
+};
 
 /*
 Rubik.js
@@ -141,14 +141,14 @@ Rubikjs.Render.Renderer = function(element) {
         //mat4.ortho(-2, 2, -2, 2, -10, 10, this.perspectiveMat);
         this.element = element;
     }
-}
+};
 
-Rubikjs.Render.Renderer.prototype.startFrame = function() {}
-Rubikjs.Render.Renderer.prototype.render = function(mesh) {}
-Rubikjs.Render.Renderer.prototype.endFrame = function() {}
+Rubikjs.Render.Renderer.prototype.startFrame = function() {};
+Rubikjs.Render.Renderer.prototype.render = function(mesh) {};
+Rubikjs.Render.Renderer.prototype.endFrame = function() {};
 Rubikjs.Render.Renderer.prototype.createMesh = function() {
     return new Rubikjs.Mesh();
-}
+};
 
 
 
@@ -186,7 +186,7 @@ Rubikjs.Render.Mesh = function() {
     this.vertexBuffer = new Rubikjs.Render.Buffer();
     this.colorBuffer = new Rubikjs.Render.Buffer();
     this.indexBuffer = new Rubikjs.Render.Buffer();
-}
+};
 
 
 /*
@@ -294,7 +294,7 @@ Rubikjs.Render.RenderManager = function(renderer) {
     ]);
     mat4.translate(this.meshs[0].transform, [0, 0, -3]);
     mat4.rotate(this.meshs[0].transform, 0.5, [1, 0, 0]);*/
-}
+};
 
 Rubikjs.Render.RenderManager.prototype.render = function() {
     //mat4.rotate(this.meshs[0].transform, 0.03, [0, 1, 0]);
@@ -304,5 +304,5 @@ Rubikjs.Render.RenderManager.prototype.render = function() {
         self.renderer.render(mesh);
     });
     this.renderer.endFrame();
-}
+};
 

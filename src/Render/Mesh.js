@@ -33,6 +33,6 @@ Rubikjs.Render.Mesh = function() {
     this.vertexBuffer = new Rubikjs.Render.Buffer();
     this.colorBuffer = new Rubikjs.Render.Buffer();
     this.indexBuffer = new Rubikjs.Render.Buffer();
-}
+};
 
 

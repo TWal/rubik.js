@@ -28,9 +28,9 @@ Rubikjs.Render.Buffer = function(data) {
     if(data) {
         this.data = data;
     }
-}
+};
 
 Rubikjs.Render.Buffer.prototype.feed = function(data) {
     this.data = data;
-}
+};
 
