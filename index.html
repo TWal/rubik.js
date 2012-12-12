@@ -7,7 +7,8 @@
         <script type="text/javascript" src="release/RubikjsWebGL.js"></script>
         <script type="text/javascript" src="release/RubikjsCanvas.js"></script>
         <script type="text/javascript" src="release/RubikjsTwisty.js"></script>
-        <script type="text/javascript" src="puzzles/ClassicRubiksCube.js"></script>
+        <script type="text/javascript" src="release/RubikjsNotation.js"></script>
+        <script type="text/javascript" src="Puzzles/ClassicRubiksCube.js"></script>
 
     </head>
     <body>
@@ -20,10 +21,10 @@
 
                 //Do the sexy move!
                 function dosexy() {
-                    cube.makeMove("R", 1);
-                    cube.makeMove("U", 1);
-                    cube.makeMove("R", -1);
-                    cube.makeMove("U", -1);
+                    cube.sendInstruction(new Rubikjs.Notation.Move("R", 1));
+                    cube.sendInstruction(new Rubikjs.Notation.Move("U", 1));
+                    cube.sendInstruction(new Rubikjs.Notation.Move("R", -1));
+                    cube.sendInstruction(new Rubikjs.Notation.Move("U", -1));
                 }
 
                 window.setInterval(dosexy, 3000);

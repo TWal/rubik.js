@@ -41,7 +41,7 @@ Rubikjs.Twisty.FixedPiecePlace = function() {
     this.pieces = {};
     this.groups = {};
     this.turnDegree = 90;
-    this.moveQueue = [];
+    this.instructionQueue = [];
     this.isProcessingQueue = false;
 };
 
@@ -51,34 +51,35 @@ Rubikjs.Twisty.FixedPiecePlace.prototype.endInit = function() {
         this.groups[i].pieces = this.groups[i].pieces.map(function(piecesId) {
             return piecesId.map(function(pieceId) {
                 return self.pieces[pieceId];
-            })
+            });
         });
     }
 };
 
-Rubikjs.Twisty.FixedPiecePlace.prototype.makeMove = function(groupName, count) {
-    this.moveQueue.push({
-        groupName: groupName,
-        count: count
-    });
+Rubikjs.Twisty.FixedPiecePlace.prototype.sendInstruction = function(instruction) {
+    this.instructionQueue.push(instruction);
     this.processQueue();
 };
 
 Rubikjs.Twisty.FixedPiecePlace.prototype.processQueue = function() {
     if(this.isProcessingQueue) {
         return;
-    } else if(this.moveQueue.length == 0) {
+    } else if(this.instructionQueue.length == 0) {
         this.isProcessingQueue = false;
         return;
     }
     this.isProcessingQueue = true;
 
-    var self = this;
-    this.groups[this.moveQueue[0].groupName].makeTurn(this.moveQueue[0].count, 0.5, 0.05, function() {
-        self.moveQueue = self.moveQueue.slice(1); //Remove the first element
-        self.isProcessingQueue = false;
-        self.processQueue();
-    });
+    var instruction = this.instructionQueue[0];
+
+    if(instruction.name == "move") {
+        var self = this;
+        this.groups[instruction.groupName].makeTurn(instruction.count, 0.5, 0.05, function() {
+            self.instructionQueue = self.instructionQueue.slice(1); //Remove the first element
+            self.isProcessingQueue = false;
+            self.processQueue();
+        });
+    }
 };
 
 Rubikjs.Twisty.FixedPiecePlace.Group = function(twisty) {
@@ -132,7 +133,7 @@ Rubikjs.Twisty.FixedPiecePlace.Group.prototype.makeTurn = function(count, time, 
             self.cycle(count);
             callback();
         }
-    }
+    };
 
     turnStepFonc();
 };

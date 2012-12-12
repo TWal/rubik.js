@@ -23,17 +23,6 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-"use strict";
-//Define namespaces
-
-(function(_global) {
-    _global.Rubikjs = {};
-    _global.Rubikjs.Render = {};
-    _global.Rubikjs.Render.SVG = {};
-    _global.Rubikjs.Render.Canvas = {};
-    _global.Rubikjs.Render.WebGL = {};
-    _global.Rubikjs.Twisty = {};
-    _global.Rubikjs.Notation = {};
-    _global.Rubikjs.Puzzle = {};
-})((typeof(exports) != 'undefined') ? global : this); //Taken from glMatrix
-
+Rubikjs.Notation.Instruction = function() {
+    this.name = "null";
+};
