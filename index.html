@@ -21,10 +21,12 @@
 
                 //Do the sexy move!
                 function dosexy() {
-                    cube.sendInstruction(new Rubikjs.Notation.Move("R", 1));
-                    cube.sendInstruction(new Rubikjs.Notation.Move("U", 1));
-                    cube.sendInstruction(new Rubikjs.Notation.Move("R", -1));
-                    cube.sendInstruction(new Rubikjs.Notation.Move("U", -1));
+                    cube.sendMultipleInstructions([
+                        new Rubikjs.Notation.Move("R", 1),
+                        new Rubikjs.Notation.Move("U", 1),
+                        new Rubikjs.Notation.Move("R", -1),
+                        new Rubikjs.Notation.Move("U", -1)
+                    ]);
                 }
 
                 window.setInterval(dosexy, 3000);
