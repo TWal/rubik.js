@@ -38,7 +38,7 @@ freely, subject to the following restrictions:
 //          Bandaged puzzles should NOT go here too: Square-1 (it's a square-2 bandaged), bandaged cube
 Rubikjs.Twisty.FixedPiecePlace = function() {
     //These variables are here only to understand easilier the rest of the code. You must override them
-    this.pieces = [];
+    this.pieces = {};
     this.groups = [];
     this.turnDegree = 90;
     
