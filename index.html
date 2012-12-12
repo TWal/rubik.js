@@ -19,24 +19,14 @@
                 var cube = new Rubikjs.Puzzle.ClassicRubiksCube(rendermgr);
 
                 //Do the sexy move!
-                var lastFace = "R";
-                var lastCount = 1;
-                window.setInterval(function() {
-                    if(cube.ready) {
-                        cube.groups[lastFace].makeTurn(lastCount, 0.5, 0.05);
-                        if(lastFace == "U") {
-                            lastFace = "R";
-                            if(lastCount == 1) {
-                                lastCount = -1;
-                            } else {
-                                lastCount = 1;
-                            }
-                        } else {
-                            lastFace = "U";
-                        }
-                    }
-                    rendermgr.render();
-                }, 1000);
+                function dosexy() {
+                    cube.makeMove("R", 1);
+                    cube.makeMove("U", 1);
+                    cube.makeMove("R", -1);
+                    cube.makeMove("U", -1);
+                }
+
+                window.setInterval(dosexy, 3000);
             }
         </script>
     </body>

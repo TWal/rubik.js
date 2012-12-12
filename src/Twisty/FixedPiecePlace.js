@@ -41,8 +41,8 @@ Rubikjs.Twisty.FixedPiecePlace = function() {
     this.pieces = {};
     this.groups = {};
     this.turnDegree = 90;
-    
-    this.ready = true; //You should NOT change this
+    this.moveQueue = [];
+    this.isProcessingQueue = false;
 }
 
 Rubikjs.Twisty.FixedPiecePlace.prototype.endInit = function() {
@@ -55,6 +55,31 @@ Rubikjs.Twisty.FixedPiecePlace.prototype.endInit = function() {
         });
     }
 }
+
+Rubikjs.Twisty.FixedPiecePlace.prototype.makeMove = function(groupName, count) {
+    this.moveQueue.push({
+        groupName: groupName,
+        count: count
+    });
+    this.processQueue();
+}
+
+Rubikjs.Twisty.FixedPiecePlace.prototype.processQueue = function() {
+    if(this.isProcessingQueue) {
+        return;
+    } else if(this.moveQueue.length == 0) {
+        this.isProcessingQueue = false;
+        return;
+    }
+    this.isProcessingQueue = true;
+
+    var self = this;
+    this.groups[this.moveQueue[0].groupName].makeTurn(this.moveQueue[0].count, 0.5, 0.05, function() {
+        self.moveQueue = self.moveQueue.slice(1); //Remove the first element
+        self.isProcessingQueue = false;
+        self.processQueue();
+    });
+};
 
 Rubikjs.Twisty.FixedPiecePlace.Group = function(twisty) {
     this.twisty = twisty; //You should NOT change this
@@ -83,10 +108,9 @@ Rubikjs.Twisty.FixedPiecePlace.Group.prototype.cycle = function(count) {
     }
 }
 
-Rubikjs.Twisty.FixedPiecePlace.Group.prototype.makeTurn = function(count, time, timeResolution) {
+Rubikjs.Twisty.FixedPiecePlace.Group.prototype.makeTurn = function(count, time, timeResolution, callback) {
     count = -count; //Clockwise -> trigonometric
     //TODO: Better fps management, so slow computers won't have to wait a long time
-    this.twisty.ready = false;
     var stepNumber = time / timeResolution;
     var stepAngle = ((this.twisty.turnDegree * Math.PI / 180) * count) / stepNumber;
     var self = this;
@@ -105,8 +129,8 @@ Rubikjs.Twisty.FixedPiecePlace.Group.prototype.makeTurn = function(count, time, 
             i += 1;
             setTimeout(turnStepFonc, timeResolution*1000);
         } else {
-            self.twisty.ready = true; //TODO: Implement something better, like a queue
             self.cycle(count);
+            callback();
         }
     }
 

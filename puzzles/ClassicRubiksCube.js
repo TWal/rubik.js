@@ -54,6 +54,8 @@ Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager) {
     this.rendermgr = renderManager;
     this.turnDegree = 90;
 
+    //      Graphic init
+
     var cubeMesh = this.rendermgr.renderer.createMesh();
     cubeMesh.vertexBuffer.feed([
         // Front face
@@ -120,6 +122,8 @@ Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager) {
         16, 17, 18,   16, 18, 19, // Right face
         20, 21, 22,   20, 22, 23  // Left face
     ]);
+
+    //      Groups init
 
     var translations = {
         UBL: [-2,  2, -2],
