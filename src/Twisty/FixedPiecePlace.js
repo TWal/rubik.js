@@ -39,10 +39,21 @@ freely, subject to the following restrictions:
 Rubikjs.Twisty.FixedPiecePlace = function() {
     //These variables are here only to understand easilier the rest of the code. You must override them
     this.pieces = {};
-    this.groups = [];
+    this.groups = {};
     this.turnDegree = 90;
     
     this.ready = true; //You should NOT change this
+}
+
+Rubikjs.Twisty.FixedPiecePlace.prototype.endInit = function() {
+    var self = this;
+    for(var i in this.groups) {
+        this.groups[i].pieces = this.groups[i].pieces.map(function(piecesId) {
+            return piecesId.map(function(pieceId) {
+                return self.pieces[pieceId];
+            })
+        });
+    }
 }
 
 Rubikjs.Twisty.FixedPiecePlace.Group = function(twisty) {

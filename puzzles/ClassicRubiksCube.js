@@ -152,7 +152,7 @@ Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager) {
         D: [ 0, -2,  0]
     };
 
-    for(i in translations) {
+    for(var i in translations) {
         var piece = new Object;
         piece.movable = new Object;
         piece.movable.mesh = new Rubikjs.Render.Mesh;
@@ -164,48 +164,38 @@ Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager) {
         this.pieces[i] = piece;
     }
 
-    var self = this;
 
-    var transformPieces = function(piecesId) {
-        return piecesId.map(function(piecesId2) {
-            return piecesId2.map(function(pieceId) {
-                return self.pieces[pieceId];
-            })
-        })
-    };
+    this.groups.U = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
+    this.groups.U.pieces = [["UBL", "UBR", "UFR", "UFL"], ["UB", "UR", "UF", "UL"], ["U"]];
+    this.groups.U.rotationAxis = [0, 1, 0];
+    this.groups.U.rotationCenter = [0, 2, 0];
+    
+    this.groups.L = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
+    this.groups.L.pieces = [["UBL", "UFL", "DFL", "DBL"], ["UL", "FL", "DL", "BL"], ["L"]];
+    this.groups.L.rotationAxis = [1, 0, 0];
+    this.groups.L.rotationCenter = [-2, 0, 0];
+    
+    this.groups.F = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
+    this.groups.F.pieces = [["UFR", "DBR", "DFL", "UFL"], ["UF", "FR", "DF", "FL"], ["F"]];
+    this.groups.F.rotationAxis = [0, 0, 1];
+    this.groups.F.rotationCenter = [0, 0, 2];
+    
+    this.groups.R = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
+    this.groups.R.pieces = [["UBR", "DBR", "DFR", "UFR"], ["UR", "BR", "DR", "FR"], ["R"]];
+    this.groups.R.rotationAxis = [1, 0, 0];
+    this.groups.R.rotationCenter = [2, 0, 0];
+    
+    this.groups.B = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
+    this.groups.B.pieces = [["UBR", "UBL", "DBL", "DBR"], ["UB", "BL", "DB", "BR"], ["B"]];
+    this.groups.B.rotationAxis = [0, 0, 1];
+    this.groups.B.rotationCenter = [0, 0, -2];
+    
+    this.groups.D = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
+    this.groups.D.pieces = [["DBL", "DFL", "DFR", "DBR"], ["DF", "DR", "DB", "DL"], ["D"]];
+    this.groups.D.rotationAxis = [0, 1, 0];
+    this.groups.D.rotationCenter = [0, -2, 0];
 
-
-    this.faces = new Object;
-
-    this.faces.U = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.faces.U.pieces = transformPieces([["UBL", "UBR", "UFR", "UFL"], ["UB", "UR", "UF", "UL"], ["U"]]);
-    this.faces.U.rotationAxis = [0, 1, 0];
-    this.faces.U.rotationCenter = [0, 2, 0];
-    
-    this.faces.L = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.faces.L.pieces = transformPieces([["UBL", "UFL", "DFL", "DBL"], ["UL", "FL", "DL", "BL"], ["L"]]);
-    this.faces.L.rotationAxis = [1, 0, 0];
-    this.faces.L.rotationCenter = [-2, 0, 0];
-    
-    this.faces.F = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.faces.F.pieces = transformPieces([["UFR", "DBR", "DFL", "UFL"], ["UF", "FR", "DF", "FL"], ["F"]]);
-    this.faces.F.rotationAxis = [0, 0, 1];
-    this.faces.F.rotationCenter = [0, 0, 2];
-    
-    this.faces.R = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.faces.R.pieces = transformPieces([["UBR", "DBR", "DFR", "UFR"], ["UR", "BR", "DR", "FR"], ["R"]]);
-    this.faces.R.rotationAxis = [1, 0, 0];
-    this.faces.R.rotationCenter = [2, 0, 0];
-    
-    this.faces.B = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.faces.B.pieces = transformPieces([["UBR", "UBL", "DBL", "DBR"], ["UB", "BL", "DB", "BR"], ["B"]]);
-    this.faces.B.rotationAxis = [0, 0, 1];
-    this.faces.B.rotationCenter = [0, 0, -2];
-    
-    this.faces.D = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.faces.D.pieces = transformPieces([["DBL", "DFL", "DFR", "DBR"], ["DF", "DR", "DB", "DL"], ["D"]]);
-    this.faces.D.rotationAxis = [0, 1, 0];
-    this.faces.D.rotationCenter = [0, -2, 0];
+    this.endInit();
 }
 
 Rubikjs.Puzzle.ClassicRubiksCube.prototype = new Rubikjs.Twisty.FixedPiecePlace;

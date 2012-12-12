@@ -23,7 +23,7 @@
                 var lastCount = 1;
                 window.setInterval(function() {
                     if(cube.ready) {
-                        cube.faces[lastFace].makeTurn(lastCount, 0.5, 0.05);
+                        cube.groups[lastFace].makeTurn(lastCount, 0.5, 0.05);
                         if(lastFace == "U") {
                             lastFace = "R";
                             if(lastCount == 1) {
