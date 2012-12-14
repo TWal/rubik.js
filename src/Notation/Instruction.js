@@ -23,6 +23,6 @@ freely, subject to the following restrictions:
     distribution.
 */
 
+//Just a class so we have a nice inheritance
 Rubikjs.Notation.Instruction = function() {
-    this.name = "null";
 };

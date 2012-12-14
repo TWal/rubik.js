@@ -78,7 +78,7 @@ Rubikjs.Twisty.FixedPiecePlace.prototype.processQueue = function() {
 
     var instruction = this.instructionQueue[0];
 
-    if(instruction.name == "move") {
+    if(instruction instanceof Rubikjs.Notation.Move) {
         var self = this;
         this.groups[instruction.groupName].makeTurn(instruction.count, 0.5, 0.05, function() {
             self.instructionQueue = self.instructionQueue.slice(1); //Remove the first element

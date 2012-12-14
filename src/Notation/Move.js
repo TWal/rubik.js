@@ -26,7 +26,6 @@ freely, subject to the following restrictions:
 Rubikjs.Notation.Move = function(groupName, count) {
     this.groupName = groupName;
     this.count = count;
-    this.name = "move";
 };
 
 Rubikjs.Notation.Move.prototype = new Rubikjs.Notation.Instruction;
