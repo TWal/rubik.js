@@ -18,7 +18,7 @@ TWISTYFILES=src/Twisty/FixedPiecePlace.js src/Twisty/Generic.js
 TWISTYOUT=release/RubikjsTwisty.js
 TWISTYMINOUT=release/RubikjsTwisty.min.js
 
-NOTATIONFILES=src/Notation/Instruction.js src/Notation/Move.js
+NOTATIONFILES=src/Notation/Instruction.js src/Notation/Move.js src/Notation/Parser.js
 NOTATIONOUT=release/RubikjsNotation.js
 NOTATIONMINOUT=release/RubikjsNotation.min.js
 

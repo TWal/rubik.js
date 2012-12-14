@@ -21,12 +21,7 @@
 
                 //Do the sexy move!
                 function dosexy() {
-                    cube.sendMultipleInstructions([
-                        new Rubikjs.Notation.Move("R", 1),
-                        new Rubikjs.Notation.Move("U", 1),
-                        new Rubikjs.Notation.Move("R", -1),
-                        new Rubikjs.Notation.Move("U", -1)
-                    ]);
+                    cube.sendMultipleInstructions(cube.notation.parse("R U R' U'"));
                 }
 
                 window.setInterval(dosexy, 3000);

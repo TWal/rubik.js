@@ -53,6 +53,7 @@ Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager) {
     Rubikjs.Twisty.FixedPiecePlace.call(this);
     this.rendermgr = renderManager;
     this.turnDegree = 90;
+    this.notation = new Rubikjs.Puzzle.ClassicRubiksCube.Notation;
 
     //      Graphic init
 
@@ -204,4 +205,33 @@ Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager) {
 
 Rubikjs.Puzzle.ClassicRubiksCube.prototype = new Rubikjs.Twisty.FixedPiecePlace;
 Rubikjs.Puzzle.ClassicRubiksCube.prototype.constructor = new Rubikjs.Puzzle.ClassicRubiksCube;
+
+Rubikjs.Puzzle.ClassicRubiksCube.Notation = function() {
+};
+
+Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype = new Rubikjs.Notation.Parser;
+Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype.constructor = new Rubikjs.Puzzle.ClassicRubiksCube.Notation;
+
+
+Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype.parseToken = function(token) {
+    var group = token[0];
+    switch(token.slice(1)) {
+        case "":
+            var count = 1;
+            break;
+        case "'":
+            var count = -1;
+            break;
+        case "2":
+            var count = 2;
+            break;
+        case "2'":
+            var count = -2;
+            break;
+        default:
+            var count = 1;
+            break;
+    }
+    return new Rubikjs.Notation.Move(group, count);
+};
 
