@@ -15,18 +15,18 @@
         <canvas id="cube" width="500" height="500"></canvas>
         <p id="log"></p>
         <script>
-            window.onload = function() {
-                var rendermgr = new Rubikjs.Render.RenderManager(Rubikjs.Render.WebGL.Renderer);
-                var cube = new Rubikjs.Puzzle.ClassicRubiksCube(rendermgr);
+            var rendermgr = new Rubikjs.Render.RenderManager(Rubikjs.Render.WebGL.Renderer);
+            var cube = new Rubikjs.Puzzle.ClassicRubiksCube(rendermgr);
 
-                //Do the sexy move!
-                function dosexy() {
-                    cube.sendMultipleInstructions(cube.notation.parse("R U R' U'"));
-                }
+            var algorithms = ["R U R' U' R' F R2 U' R' U' R U R' F'", "M2' E M2' E'", "M2' U M2' U2 M2' U M2'"];
+            var currentalg = 0;
 
-                window.setInterval(dosexy, 3000);
+            function domoves() {
+                cube.sendMultipleInstructions(cube.notation.parse(algorithms[currentalg]));
+                currentalg = (currentalg + 1) % algorithms.length;
             }
         </script>
+        <input type="button" value="Please do an algorithm!" onclick="domoves()" />
     </body>
 </html>
 
