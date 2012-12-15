@@ -43,6 +43,7 @@ Rubikjs.Twisty.FixedPiecePlace = function() {
     this.turnDegree = 90;
     this.instructionQueue = [];
     this.isProcessingQueue = false;
+    this.rendermgr = null;
 };
 
 Rubikjs.Twisty.FixedPiecePlace.prototype.endInit = function() {
@@ -54,6 +55,7 @@ Rubikjs.Twisty.FixedPiecePlace.prototype.endInit = function() {
             });
         });
     }
+    this.rendermgr.render();
 };
 
 Rubikjs.Twisty.FixedPiecePlace.prototype.sendInstruction = function(instruction) {
