@@ -30,3 +30,8 @@ Do `make` to create one file per module, in the release directory, with "use str
 Do `make min` to do the same thing as `make`, and minify the source code with closure.
 
 Don't forget to use `-j` to speed up things! Example: `make min -j8`
+
+Want to see rubik.js's power?
+-----------------------------
+
+See here! --> http://htmlpreview.github.com/?http://github.com/TWal/rubik.js/blob/master/index.html
