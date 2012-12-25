@@ -22,49 +22,54 @@ NOTATIONFILES=src/Notation/Instruction.js src/Notation/Move.js src/Notation/Pars
 NOTATIONOUT=release/RubikjsNotation.js
 NOTATIONMINOUT=release/RubikjsNotation.min.js
 
+.PHONY: simple min clean
+
 all: simple
 
-simple: rendercore webgl canvas svg twisty notation
+simple: $(RENDERCOREOUT) $(WEBGLOUT) $(CANVASOUT) $(SVGOUT) $(TWISTYOUT) $(NOTATIONOUT)
 
-min: rendercore_min webgl_min canvas_min svg_min twisty_min notation_min
+min: $(RENDERCOREMINOUT) $(WEBGLMINOUT) $(CANVASMINOUT) $(SVGMINOUT) $(TWISTYMINOUT) $(NOTATIONMINOUT)
+
+clean:
+	@rm release/*
 
 
-rendercore: $(RENDERCOREFILES)
+$(RENDERCOREOUT): $(RENDERCOREFILES)
 	@echo -n "Packing RenderCore files... "
 	@cat $(RENDERCOREFILES) | grep -vE '^"use strict";$$' > $(RENDERCOREOUT)
 	@echo -e '"use strict";\n' | cat - $(RENDERCOREOUT) > $(RENDERCOREOUT).tmp
 	@mv $(RENDERCOREOUT).tmp $(RENDERCOREOUT)
 	@echo "Done."
 
-webgl: $(WEBGLFILES)
+$(WEBGLOUT): $(WEBGLFILES)
 	@echo -n "Packing WebGL files... "
 	@cat $(WEBGLFILES) | grep -vE '^"use strict";$$' > $(WEBGLOUT)
 	@echo -e '"use strict";\n' | cat - $(WEBGLOUT) > $(WEBGLOUT).tmp
 	@mv $(WEBGLOUT).tmp $(WEBGLOUT)
 	@echo "Done."
 
-canvas: $(CANVASFILES)
+$(CANVASOUT): $(CANVASFILES)
 	@echo -n "Packing Canvas files... "
 	@cat $(CANVASFILES) | grep -vE '^"use strict";$$' > $(CANVASOUT)
 	@echo -e '"use strict";\n' | cat - $(CANVASOUT) > $(CANVASOUT).tmp
 	@mv $(CANVASOUT).tmp $(CANVASOUT)
 	@echo "Done."
 
-svg: $(SVGFILES)
+$(SVGOUT): $(SVGFILES)
 	@echo -n "Packing SVG files... "
 	@cat $(SVGFILES) | grep -vE '^"use strict";$$' > $(SVGOUT)
 	@echo -e '"use strict";\n' | cat - $(SVGOUT) > $(SVGOUT).tmp
 	@mv $(SVGOUT).tmp $(SVGOUT)
 	@echo "Done."
 
-twisty: $(TWISTYFILES)
+$(TWISTYOUT): $(TWISTYFILES)
 	@echo -n "Packing Twisty files... "
 	@cat $(TWISTYFILES) | grep -vE '^"use strict";$$' > $(TWISTYOUT)
 	@echo -e '"use strict";\n' | cat - $(TWISTYOUT) > $(TWISTYOUT).tmp
 	@mv $(TWISTYOUT).tmp $(TWISTYOUT)
 	@echo "Done."
 
-notation: $(NOTATIONFILES)
+$(NOTATIONOUT): $(NOTATIONFILES)
 	@echo -n "Packing Notation files... "
 	@cat $(NOTATIONFILES) | grep -vE '^"use strict";$$' > $(NOTATIONOUT)
 	@echo -e '"use strict";\n' | cat - $(NOTATIONOUT) > $(NOTATIONOUT).tmp
@@ -72,42 +77,42 @@ notation: $(NOTATIONFILES)
 	@echo "Done."
 
 
-rendercore_min: rendercore
+$(RENDERCOREMINOUT): $(RENDERCOREOUT)
 	@echo -n "Minifying RenderCore files... "
 	@java -jar closure/compiler.jar --js $(RENDERCOREOUT) --js_output_file $(RENDERCOREMINOUT) --compilation_level SIMPLE_OPTIMIZATIONS
 	@echo -e "//License: https://github.com/TWal/rubik.js/blob/master/LICENSE and https://github.com/toji/gl-matrix/blob/master/LICENSE.md (glmatrix)\n" | cat - $(RENDERCOREMINOUT) > $(RENDERCOREMINOUT).tmp
 	@mv $(RENDERCOREMINOUT).tmp $(RENDERCOREMINOUT)
 	@echo "Done."
 
-webgl_min: webgl
+$(WEBGLMINOUT): $(WEBGLOUT)
 	@echo -n "Minifying WebGL files... "
 	@java -jar closure/compiler.jar --js $(WEBGLOUT) --js_output_file $(WEBGLMINOUT) --compilation_level SIMPLE_OPTIMIZATIONS
 	@echo -e "//License: https://github.com/TWal/rubik.js/blob/master/LICENSE\n" | cat - $(WEBGLMINOUT) > $(WEBGLMINOUT).tmp
 	@mv $(WEBGLMINOUT).tmp $(WEBGLMINOUT)
 	@echo "Done."
 
-canvas_min: canvas
+$(CANVASMINOUT): $(CANVASOUT)
 	@echo -n "Minifying Canvas files... "
 	@java -jar closure/compiler.jar --js $(CANVASOUT) --js_output_file $(CANVASMINOUT) --compilation_level SIMPLE_OPTIMIZATIONS
 	@echo -e "//License: https://github.com/TWal/rubik.js/blob/master/LICENSE\n" | cat - $(CANVASMINOUT) > $(CANVASMINOUT).tmp
 	@mv $(CANVASMINOUT).tmp $(CANVASMINOUT)
 	@echo "Done."
 
-svg_min: svg
+$(SVGMINOUT): $(SVGOUT)
 	@echo -n "Minifying SVG files... "
 	@java -jar closure/compiler.jar --js $(SVGOUT) --js_output_file $(SVGMINOUT) --compilation_level SIMPLE_OPTIMIZATIONS
 	@echo -e "//License: https://github.com/TWal/rubik.js/blob/master/LICENSE\n" | cat - $(SVGMINOUT) > $(SVGMINOUT).tmp
 	@mv $(SVGMINOUT).tmp $(SVGMINOUT)
 	@echo "Done."
 
-twisty_min: twisty
+$(TWISTYMINOUT): $(TWISTYOUT)
 	@echo -n "Minifying Twisty files... "
 	@java -jar closure/compiler.jar --js $(TWISTYOUT) --js_output_file $(TWISTYMINOUT) --compilation_level SIMPLE_OPTIMIZATIONS
 	@echo -e "//License: https://github.com/TWal/rubik.js/blob/master/LICENSE\n" | cat - $(TWISTYMINOUT) > $(TWISTYMINOUT).tmp
 	@mv $(TWISTYMINOUT).tmp $(TWISTYMINOUT)
 	@echo "Done."
 
-notation_min: notation
+$(NOTATIONMINOUT): $(NOTATIONOUT)
 	@echo -n "Minifying Notation files... "
 	@java -jar closure/compiler.jar --js $(NOTATIONOUT) --js_output_file $(NOTATIONMINOUT) --compilation_level SIMPLE_OPTIMIZATIONS
 	@echo -e "//License: https://github.com/TWal/rubik.js/blob/master/LICENSE\n" | cat - $(NOTATIONMINOUT) > $(NOTATIONMINOUT).tmp
