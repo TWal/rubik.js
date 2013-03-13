@@ -41,6 +41,8 @@ Rubikjs.Twisty.FixedPiecePlace = function() {
     this.pieces = {};
     this.groups = {};
     this.turnDegree = 90;
+    this.turnTime = 0.5;
+    this.stepNumber = 10;
     this.instructionQueue = [];
     this.isProcessingQueue = false;
     this.rendermgr = null;
@@ -82,13 +84,40 @@ Rubikjs.Twisty.FixedPiecePlace.prototype.processQueue = function() {
 
     if(instruction instanceof Rubikjs.Notation.Move) {
         var self = this;
-        this.groups[instruction.groupName].makeTurn(instruction.count, 0.5, 0.05, function() {
-            self.instructionQueue = self.instructionQueue.slice(1); //Remove the first element
+        this.multipleMove(this.stepNumber, [this.groups[instruction.groupName].getTurnFunction(instruction.count, this.stepNumber)], function() {
+            self.instructionQueue.shift();
             self.isProcessingQueue = false;
             self.processQueue();
         });
     }
 };
+
+Rubikjs.Twisty.FixedPiecePlace.prototype.multipleMove = function(stepNumber, moveFunctions, callback) {
+    //TODO: Better fps management
+    var i = 0;
+    var self = this;
+    var loopFunction = function() {
+        if(i < stepNumber) {
+            moveFunctions.forEach(function(moveFunc) {
+                moveFunc.turnFunction();
+            });
+
+            i += 1;
+            setTimeout(loopFunction, self.turnTime / stepNumber * 1000);
+            self.rendermgr.render();
+        } else {
+            moveFunctions.forEach(function(moveFunc) {
+                moveFunc.endFunction();
+            });
+
+            callback();
+        }
+    }
+
+    loopFunction();
+};
+
+
 
 Rubikjs.Twisty.FixedPiecePlace.Group = function(twisty) {
     this.twisty = twisty; //You should NOT change this
@@ -117,31 +146,23 @@ Rubikjs.Twisty.FixedPiecePlace.Group.prototype.cycle = function(count) {
     }
 };
 
-Rubikjs.Twisty.FixedPiecePlace.Group.prototype.makeTurn = function(count, time, timeResolution, callback) {
+Rubikjs.Twisty.FixedPiecePlace.Group.prototype.getTurnFunction = function(count, stepNumber) {
     count = -count; //Clockwise -> trigonometric
-    //TODO: Better fps management, so slow computers won't have to wait a long time
-    var stepNumber = time / timeResolution;
     var stepAngle = ((this.twisty.turnDegree * Math.PI / 180) * count) / stepNumber;
     var self = this;
     var rotationMat = mat4.rotate(mat4.identity(), stepAngle, self.rotationAxis);
 
-    //This a loop
-    var i = 0;
-    var turnStepFonc = function() {
-        if(i * timeResolution < time) {
+
+    return {
+        turnFunction: function() {
             self.pieces.forEach(function(pieces) {
                 pieces.forEach(function(piece) {
                     mat4.multiply(rotationMat, piece.movable.mesh.transform, piece.movable.mesh.transform);
                 });
             });
-            self.twisty.rendermgr.render();
-            i += 1;
-            setTimeout(turnStepFonc, timeResolution*1000);
-        } else {
+        }, endFunction: function() {
             self.cycle(count);
-            callback();
         }
     };
-
-    turnStepFonc();
 };
+
