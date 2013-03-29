@@ -17,16 +17,31 @@
         <script>
             var rendermgr = new Rubikjs.Render.RenderManager(Rubikjs.Render.WebGL.Renderer);
             var cube = new Rubikjs.Puzzle.ClassicRubiksCube(rendermgr);
-            //var algorithms = ["R U R' U' R' F R2 U' R' U' R U R' F'", "M2' E M2' E'", "M2' U M2' U2 M2' U M2'", "M' U M' U M' U M' U X' Z M' U M' U M' U M' U X' Z M' U M' U M' U M' U X' Z "];
-            var algorithms = ["Z2 M U"];
-            var currentalg = 0;
+            //var algorithms = ["R U R' U' R' F R2 U' R' U' R U R' F'", "M2' E M2' E'", "M2' U M2' U2 M2' U M2'", "M' U M' U M' U M' U X' Z M' U M' U M' U M' U X' Z M' U M' U M' U M' U X' Z"];
+            var algorithms = {
+                "PLL T": "R U R' U' R' F R2 U' R' U' R U R' F'",
+                "Center Swap": "M2' E M2' E'",
+                "PLL H": "M2' U M2' U2 M2' U M2'",
+                "Superflip": "M' U M' U M' U M' U X' Z M' U M' U M' U M' U X' Z M' U M' U M' U M' U X' Z"
+            };
 
             function domoves() {
-                cube.sendMultipleInstructions(cube.notation.parse(algorithms[currentalg]));
-                currentalg = (currentalg + 1) % algorithms.length;
+                cube.sendMultipleInstructions(cube.notation.parse(document.getElementById("algorithm").value));
+            }
+
+            function replaceAlg(alg) {
+                document.getElementById("algorithm").value = algorithms[alg];
             }
         </script>
-        <input type="button" value="Please do an algorithm!" onclick="domoves()" />
+        <form>
+            <input type="text" size="150" id="algorithm" value="R U R' U' R' F R2 U' R' U' R U R' F'" /><br />
+            <input type="button" value="Let's turn!" onclick="domoves()" />
+        </form>
+        <br />
+        <input type="button" value="I want a PLL T" onclick="replaceAlg('PLL T')" />
+        <input type="button" value="I want a PLL H" onclick="replaceAlg('PLL H')" />
+        <input type="button" value="I want a center swap" onclick="replaceAlg('Center Swap')" />
+        <input type="button" value="I want a superflip" onclick="replaceAlg('Superflip')" />
     </body>
 </html>
 
