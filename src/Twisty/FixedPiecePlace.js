@@ -40,6 +40,7 @@ Rubikjs.Twisty.FixedPiecePlace = function() {
     //These variables are here only to understand easilier the rest of the code. You must override them
     this.pieces = {};
     this.groups = {};
+    this.fullRotations = {};
     this.turnDegree = 90;
     this.turnTime = 0.5;
     this.stepNumber = 10;
@@ -82,9 +83,15 @@ Rubikjs.Twisty.FixedPiecePlace.prototype.processQueue = function() {
 
     var instruction = this.instructionQueue[0];
 
+    var self = this;
     if(instruction instanceof Rubikjs.Notation.Move) {
-        var self = this;
         this.multipleMove(this.stepNumber, [this.groups[instruction.groupName].getTurnFunction(instruction.count, this.stepNumber)], function() {
+            self.instructionQueue.shift();
+            self.isProcessingQueue = false;
+            self.processQueue();
+        });
+    } else if(instruction instanceof Rubikjs.Notation.FullRotation) {
+        this.multipleMove(this.stepNumber, [this.fullRotations[instruction.rotName].getTurnFunction(instruction.count, this.stepNumber)], function() {
             self.instructionQueue.shift();
             self.isProcessingQueue = false;
             self.processQueue();
@@ -166,3 +173,58 @@ Rubikjs.Twisty.FixedPiecePlace.Group.prototype.getTurnFunction = function(count,
     };
 };
 
+
+
+Rubikjs.Twisty.FixedPiecePlace.FullRotation = function(twisty) {
+    this.twisty = twisty;
+    this.groups = []; //This is an array of array of groups
+    this.rotationAxis = [0, 1, 0];
+    this.rotationCenter = [0, 0, 0];
+};
+
+Rubikjs.Twisty.FixedPiecePlace.FullRotation.prototype.cycle = function(count) {
+    for(var i = 0; i < this.groups.length; ++i) {
+        var groupsPieces = {};
+        for (var key in this.twisty.groups) {
+            if(this.twisty.groups.hasOwnProperty(key)) {
+                groupsPieces[key] = this.twisty.groups[key].pieces;
+            }
+        }
+
+        var groupNb = this.groups[i].length;
+        var positiveCount = (count % groupNb) + groupNb;
+
+        for(var j = 0; j < groupNb; ++j) {
+            this.twisty.groups[this.groups[i][j]].pieces = groupsPieces[this.groups[i][(j + positiveCount) % groupNb]];
+        }
+    }
+};
+
+Rubikjs.Twisty.FixedPiecePlace.FullRotation.prototype.getTurnFunction = function(count, stepNumber) {
+    count = -count; //Clockwise -> trigonometric
+    var stepAngle = ((this.twisty.turnDegree * Math.PI / 180) * count) / stepNumber;
+    var self = this;
+    var rotationMat = mat4.rotate(mat4.identity(), stepAngle, self.rotationAxis);
+
+
+    return {
+        turnFunction: function() {
+            for(var key in self.twisty.pieces) {
+                mat4.multiply(rotationMat, self.twisty.pieces[key].movable.mesh.transform, self.twisty.pieces[key].movable.mesh.transform);
+            }
+        }, endFunction: function() {
+            /*for(var i = 0; i < self.groups.length; ++i) {
+                for(var j = 0; j < self.groups[i].length; ++j) {
+                    var fullRotationMat = mat4.rotate(mat4.identity(), (self.twisty.turnDegree * Math.PI / 180) * count, self.rotationAxis);
+                    var currentGroup = self.twisty.groups[self.groups[i][j]];
+                    console.log(self.groups[i][j]);
+                    console.log(currentGroup.rotationAxis);
+                    mat4.multiplyVec3(fullRotationMat, currentGroup.rotationAxis);
+                    mat4.multiplyVec3(fullRotationMat, currentGroup.rotationCenter);
+                    console.log(currentGroup.rotationAxis);
+                }
+            }*/
+            self.cycle(count);
+        }
+    };
+};

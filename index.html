@@ -17,8 +17,8 @@
         <script>
             var rendermgr = new Rubikjs.Render.RenderManager(Rubikjs.Render.WebGL.Renderer);
             var cube = new Rubikjs.Puzzle.ClassicRubiksCube(rendermgr);
-
-            var algorithms = ["R U R' U' R' F R2 U' R' U' R U R' F'", "M2' E M2' E'", "M2' U M2' U2 M2' U M2'"];
+            //var algorithms = ["R U R' U' R' F R2 U' R' U' R U R' F'", "M2' E M2' E'", "M2' U M2' U2 M2' U M2'", "M' U M' U M' U M' U X' Z M' U M' U M' U M' U X' Z M' U M' U M' U M' U X' Z "];
+            var algorithms = ["Z2 M U"];
             var currentalg = 0;
 
             function domoves() {

@@ -215,6 +215,26 @@ Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager) {
     this.groups.E.rotationAxis = [0, -1, 0];
     this.groups.E.rotationCenter = [0, 0, 0];
 
+
+
+
+
+
+    this.fullRotations.X = new Rubikjs.Twisty.FixedPiecePlace.FullRotation(this);
+    this.fullRotations.X.groups = [["U", "B", "D", "F"], ["E", "S"]];
+    this.fullRotations.X.rotationAxis = [1, 0, 0];
+    this.fullRotations.X.rotationCenter = [0, 0, 0];
+
+    this.fullRotations.Y = new Rubikjs.Twisty.FixedPiecePlace.FullRotation(this);
+    this.fullRotations.Y.groups = [["F", "L", "B", "R"], ["M", "S"]];
+    this.fullRotations.Y.rotationAxis = [0, 1, 0];
+    this.fullRotations.Y.rotationCenter = [0, 0, 0];
+
+    this.fullRotations.Z = new Rubikjs.Twisty.FixedPiecePlace.FullRotation(this);
+    this.fullRotations.Z.groups = [["U", "R", "D", "L"], ["M", "E"]];
+    this.fullRotations.Z.rotationAxis = [0, 0, 1];
+    this.fullRotations.Z.rotationCenter = [0, 0, 0];
+
     this.endInit();
 };
 
@@ -231,7 +251,7 @@ Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype.constructor = new Rubikjs.Pu
 
 
 Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype.parseToken = function(token) {
-    var group = token[0];
+    var first = token[0];
     switch(token.slice(1)) {
         case "":
             var count = 1;
@@ -249,6 +269,45 @@ Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype.parseToken = function(token)
             var count = 1;
             break;
     }
-    return new Rubikjs.Notation.Move(group, count);
+    switch(first) {
+        case "R":
+            return new Rubikjs.Notation.Move("R", count);
+            break;
+        case "L":
+            return new Rubikjs.Notation.Move("L", count);
+            break;
+        case "U":
+            return new Rubikjs.Notation.Move("U", count);
+            break;
+        case "D":
+            return new Rubikjs.Notation.Move("D", count);
+            break;
+        case "F":
+            return new Rubikjs.Notation.Move("F", count);
+            break;
+        case "B":
+            return new Rubikjs.Notation.Move("B", count);
+            break;
+        case "M":
+            return new Rubikjs.Notation.Move("M", count);
+            break;
+        case "E":
+            return new Rubikjs.Notation.Move("E", count);
+            break;
+        case "S":
+            return new Rubikjs.Notation.Move("S", count);
+            break;
+        case "X":
+            return new Rubikjs.Notation.FullRotation("X", count);
+            break;
+        case "Y":
+            return new Rubikjs.Notation.FullRotation("Y", count);
+            break;
+        case "Z":
+            return new Rubikjs.Notation.FullRotation("Z", count);
+            break;
+        default:
+            return new Rubikjs.Notation.Instruction();
+    }
 };
 
