@@ -185,7 +185,7 @@ Rubikjs.Twisty.FixedPiecePlace.Combined = function(twisty, groups) {
 Rubikjs.Twisty.FixedPiecePlace.Combined.prototype.getTurnFunction = function(count, stepNumber) {
     var turnFunctions = [];
 
-    for (var i=0; i < this.groups.length; i++) {
+    for (var i = 0; i < this.groups.length; ++i) {
         turnFunctions.push(this.twisty.groups[this.groups[i][0]].getTurnFunction(count * this.groups[i][1], stepNumber));
     }
 
