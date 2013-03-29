@@ -17,7 +17,12 @@
         <script>
             var rendermgr = new Rubikjs.Render.RenderManager(Rubikjs.Render.WebGL.Renderer);
             var cube = new Rubikjs.Puzzle.ClassicRubiksCube(rendermgr);
-            //var algorithms = ["R U R' U' R' F R2 U' R' U' R U R' F'", "M2' E M2' E'", "M2' U M2' U2 M2' U M2'", "M' U M' U M' U M' U X' Z M' U M' U M' U M' U X' Z M' U M' U M' U M' U X' Z"];
+
+            function restart() {
+                rendermgr = new Rubikjs.Render.RenderManager(Rubikjs.Render.WebGL.Renderer);
+                cube = new Rubikjs.Puzzle.ClassicRubiksCube(rendermgr);
+            }
+
             var algorithms = {
                 "PLL T": "R U R' U' R' F R2 U' R' U' R U R' F'",
                 "Center Swap": "M2' E M2' E'",
@@ -36,6 +41,7 @@
         <form>
             <input type="text" size="150" id="algorithm" value="R U R' U' R' F R2 U' R' U' R U R' F'" /><br />
             <input type="button" value="Let's turn!" onclick="domoves()" />
+            <input type="button" value="Reset" onclick="restart()" />
         </form>
         <br />
         <input type="button" value="I want a PLL T" onclick="replaceAlg('PLL T')" />
