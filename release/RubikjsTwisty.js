@@ -41,7 +41,6 @@ Rubikjs.Twisty.FixedPiecePlace = function() {
     //These variables are here only to understand easilier the rest of the code. You must override them
     this.pieces = {};
     this.groups = {};
-    this.fullRotations = {};
     this.turnDegree = 90;
     this.turnTime = 0.5;
     this.stepNumber = 10;
@@ -89,12 +88,6 @@ Rubikjs.Twisty.FixedPiecePlace.prototype.processQueue = function() {
     var self = this;
     if(instruction instanceof Rubikjs.Notation.Move) {
         this.multipleMove(this.stepNumber, [this.groups[instruction.groupName].getTurnFunction(instruction.count, this.stepNumber)], function() {
-            self.instructionQueue.shift();
-            self.isProcessingQueue = false;
-            self.processQueue();
-        });
-    } else if(instruction instanceof Rubikjs.Notation.FullRotation) {
-        this.multipleMove(this.stepNumber, [this.fullRotations[instruction.rotName].getTurnFunction(instruction.count, this.stepNumber)], function() {
             self.instructionQueue.shift();
             self.isProcessingQueue = false;
             self.processQueue();
