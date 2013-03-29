@@ -30,9 +30,13 @@ Rubikjs.Notation.Parser = function() {
 Rubikjs.Notation.Parser.prototype.parse = function(formula) {
     var splitted = formula.split(this.separator);
     var self = this;
-    return splitted.map(function(x) {
-        return self.parseToken(x);
-    });
+    var result = [];
+    for(var i = 0; i < splitted.length; ++i) {
+        if(splitted[i] != "") {
+            result.push(self.parseToken(splitted[i]));
+        }
+    }
+    return result;
 };
 
 Rubikjs.Notation.Parser.prototype.parseToken = function(token) {
