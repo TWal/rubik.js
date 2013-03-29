@@ -52,11 +52,13 @@ Rubikjs.Twisty.FixedPiecePlace = function() {
 Rubikjs.Twisty.FixedPiecePlace.prototype.endInit = function() {
     var self = this;
     for(var i in this.groups) {
-        this.groups[i].pieces = this.groups[i].pieces.map(function(piecesId) {
-            return piecesId.map(function(pieceId) {
-                return self.pieces[pieceId];
+        if(this.groups[i] instanceof Rubikjs.Twisty.FixedPiecePlace.Group) {
+            this.groups[i].pieces = this.groups[i].pieces.map(function(piecesId) {
+                return piecesId.map(function(pieceId) {
+                    return self.pieces[pieceId];
+                });
             });
-        });
+        }
     }
     this.rendermgr.render();
 };
@@ -167,64 +169,35 @@ Rubikjs.Twisty.FixedPiecePlace.Group.prototype.getTurnFunction = function(count,
                     mat4.multiply(rotationMat, piece.movable.mesh.transform, piece.movable.mesh.transform);
                 });
             });
-        }, endFunction: function() {
+        },
+        endFunction: function() {
             self.cycle(count);
         }
     };
 };
 
-
-
-Rubikjs.Twisty.FixedPiecePlace.FullRotation = function(twisty) {
+Rubikjs.Twisty.FixedPiecePlace.Combined = function(twisty, groups) {
     this.twisty = twisty;
-    this.groups = []; //This is an array of array of groups
-    this.rotationAxis = [0, 1, 0];
-    this.rotationCenter = [0, 0, 0];
+    this.groups = groups;
 };
 
-Rubikjs.Twisty.FixedPiecePlace.FullRotation.prototype.cycle = function(count) {
-    for(var i = 0; i < this.groups.length; ++i) {
-        var groupsPieces = {};
-        for (var key in this.twisty.groups) {
-            if(this.twisty.groups.hasOwnProperty(key)) {
-                groupsPieces[key] = this.twisty.groups[key].pieces;
-            }
-        }
+Rubikjs.Twisty.FixedPiecePlace.Combined.prototype.getTurnFunction = function(count, stepNumber) {
+    var turnFunctions = [];
 
-        var groupNb = this.groups[i].length;
-        var positiveCount = (count % groupNb) + groupNb;
-
-        for(var j = 0; j < groupNb; ++j) {
-            this.twisty.groups[this.groups[i][j]].pieces = groupsPieces[this.groups[i][(j + positiveCount) % groupNb]];
-        }
+    for (var i=0; i < this.groups.length; i++) {
+        turnFunctions.push(this.twisty.groups[this.groups[i][0]].getTurnFunction(count * this.groups[i][1], stepNumber));
     }
-};
-
-Rubikjs.Twisty.FixedPiecePlace.FullRotation.prototype.getTurnFunction = function(count, stepNumber) {
-    count = -count; //Clockwise -> trigonometric
-    var stepAngle = ((this.twisty.turnDegree * Math.PI / 180) * count) / stepNumber;
-    var self = this;
-    var rotationMat = mat4.rotate(mat4.identity(), stepAngle, self.rotationAxis);
-
 
     return {
         turnFunction: function() {
-            for(var key in self.twisty.pieces) {
-                mat4.multiply(rotationMat, self.twisty.pieces[key].movable.mesh.transform, self.twisty.pieces[key].movable.mesh.transform);
+            for(var i = 0; i < turnFunctions.length; ++i) {
+                turnFunctions[i].turnFunction();
             }
-        }, endFunction: function() {
-            /*for(var i = 0; i < self.groups.length; ++i) {
-                for(var j = 0; j < self.groups[i].length; ++j) {
-                    var fullRotationMat = mat4.rotate(mat4.identity(), (self.twisty.turnDegree * Math.PI / 180) * count, self.rotationAxis);
-                    var currentGroup = self.twisty.groups[self.groups[i][j]];
-                    console.log(self.groups[i][j]);
-                    console.log(currentGroup.rotationAxis);
-                    mat4.multiplyVec3(fullRotationMat, currentGroup.rotationAxis);
-                    mat4.multiplyVec3(fullRotationMat, currentGroup.rotationCenter);
-                    console.log(currentGroup.rotationAxis);
-                }
-            }*/
-            self.cycle(count);
+        },
+        endFunction: function() {
+            for(var i = 0; i < turnFunctions.length; ++i) {
+                turnFunctions[i].endFunction();
+            }
         }
-    };
+    }
 };

@@ -215,25 +215,16 @@ Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager) {
     this.groups.E.rotationAxis = [0, -1, 0];
     this.groups.E.rotationCenter = [0, 0, 0];
 
+    this.groups.u = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["U", 1], ["E", -1]]);
+    this.groups.l = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["L", 1], ["M",  1]]);
+    this.groups.f = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["F", 1], ["S",  1]]);
+    this.groups.r = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["R", 1], ["M", -1]]);
+    this.groups.b = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["B", 1], ["S", -1]]);
+    this.groups.d = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["D", 1], ["E",  1]]);
 
-
-
-
-
-    this.fullRotations.X = new Rubikjs.Twisty.FixedPiecePlace.FullRotation(this);
-    this.fullRotations.X.groups = [["U", "B", "D", "F"], ["E", "S"]];
-    this.fullRotations.X.rotationAxis = [1, 0, 0];
-    this.fullRotations.X.rotationCenter = [0, 0, 0];
-
-    this.fullRotations.Y = new Rubikjs.Twisty.FixedPiecePlace.FullRotation(this);
-    this.fullRotations.Y.groups = [["F", "L", "B", "R"], ["M", "S"]];
-    this.fullRotations.Y.rotationAxis = [0, 1, 0];
-    this.fullRotations.Y.rotationCenter = [0, 0, 0];
-
-    this.fullRotations.Z = new Rubikjs.Twisty.FixedPiecePlace.FullRotation(this);
-    this.fullRotations.Z.groups = [["U", "R", "D", "L"], ["M", "E"]];
-    this.fullRotations.Z.rotationAxis = [0, 0, 1];
-    this.fullRotations.Z.rotationCenter = [0, 0, 0];
+    this.groups.X = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["R", 1], ["M", -1], ["L", -1]]);
+    this.groups.Y = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["U", 1], ["E", -1], ["D", -1]]);
+    this.groups.Z = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["F", 1], ["S",  1], ["B", -1]]);
 
     this.endInit();
 };
@@ -251,7 +242,8 @@ Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype.constructor = new Rubikjs.Pu
 
 
 Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype.parseToken = function(token) {
-    var first = token[0];
+    var group = token[0];
+
     switch(token.slice(1)) {
         case "":
             var count = 1;
@@ -265,49 +257,17 @@ Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype.parseToken = function(token)
         case "2'":
             var count = -2;
             break;
+        case "3":
+            var count = 3;
+            break;
+        case "3'":
+            var count = -3;
+            break;
         default:
             var count = 1;
             break;
     }
-    switch(first) {
-        case "R":
-            return new Rubikjs.Notation.Move("R", count);
-            break;
-        case "L":
-            return new Rubikjs.Notation.Move("L", count);
-            break;
-        case "U":
-            return new Rubikjs.Notation.Move("U", count);
-            break;
-        case "D":
-            return new Rubikjs.Notation.Move("D", count);
-            break;
-        case "F":
-            return new Rubikjs.Notation.Move("F", count);
-            break;
-        case "B":
-            return new Rubikjs.Notation.Move("B", count);
-            break;
-        case "M":
-            return new Rubikjs.Notation.Move("M", count);
-            break;
-        case "E":
-            return new Rubikjs.Notation.Move("E", count);
-            break;
-        case "S":
-            return new Rubikjs.Notation.Move("S", count);
-            break;
-        case "X":
-            return new Rubikjs.Notation.FullRotation("X", count);
-            break;
-        case "Y":
-            return new Rubikjs.Notation.FullRotation("Y", count);
-            break;
-        case "Z":
-            return new Rubikjs.Notation.FullRotation("Z", count);
-            break;
-        default:
-            return new Rubikjs.Notation.Instruction();
-    }
+
+    return new Rubikjs.Notation.Move(group, count)
 };
 
