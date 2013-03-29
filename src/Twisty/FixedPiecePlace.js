@@ -176,6 +176,72 @@ Rubikjs.Twisty.FixedPiecePlace.Group.prototype.getTurnFunction = function(count,
     };
 };
 
+
+
+
+
+
+/* Be *very* careful with this class !
+ * Let n be the number of full rotations to return to the first state
+ * Let m such that m < n
+ * If a group is at the same place after m full rotations, there can be a *nasty bug*.
+ *
+ * For example, in the classic rubik's cube (3^3), n=4 and m=2
+ * When you to Z2, for example, the M slice is at the same place as it was before Z2
+ * When you'll use the M slice after Z2, the pieces will cycle in the wrong direction
+ * Then, when you will do U, D, F, or B, the pieces will overlap and your cube will be bugged
+ *
+ * If you run in a such case while creating your own cube, you can use FixedPiecePlace.Combined, to do multiple moves at the same time
+ * For example, in the classic Rubik's cube, "X" will be a combination of R, M', and L'
+ */
+
+Rubikjs.Twisty.FixedPiecePlace.FullRotation = function(twisty) {
+    this.twisty = twisty;
+    this.groups = []; //This is an array of array of groups
+    this.rotationAxis = [0, 1, 0];
+    this.rotationCenter = [0, 0, 0];
+};
+
+Rubikjs.Twisty.FixedPiecePlace.FullRotation.prototype.cycle = function(count) {
+    for(var i = 0; i < this.groups.length; ++i) {
+        var groupsPieces = {};
+        for (var key in this.twisty.groups) {
+            if(this.twisty.groups.hasOwnProperty(key)) {
+                groupsPieces[key] = this.twisty.groups[key].pieces;
+            }
+        }
+
+        var groupNb = this.groups[i].length;
+        var positiveCount = (count % groupNb) + groupNb;
+
+        for(var j = 0; j < groupNb; ++j) {
+            this.twisty.groups[this.groups[i][j]].pieces = groupsPieces[this.groups[i][(j + positiveCount) % groupNb]];
+        }
+    }
+};
+
+Rubikjs.Twisty.FixedPiecePlace.FullRotation.prototype.getTurnFunction = function(count, stepNumber) {
+    count = -count; //Clockwise -> trigonometric
+    var stepAngle = ((this.twisty.turnDegree * Math.PI / 180) * count) / stepNumber;
+    var self = this;
+    var rotationMat = mat4.rotate(mat4.identity(), stepAngle, self.rotationAxis);
+
+
+    return {
+        turnFunction: function() {
+            for(var key in self.twisty.pieces) {
+                mat4.multiply(rotationMat, self.twisty.pieces[key].movable.mesh.transform, self.twisty.pieces[key].movable.mesh.transform);
+            }
+        }, endFunction: function() {
+            self.cycle(count);
+        }
+    };
+};
+
+
+
+
+
 Rubikjs.Twisty.FixedPiecePlace.Combined = function(twisty, groups) {
     this.twisty = twisty;
     this.groups = groups;
