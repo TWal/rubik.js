@@ -53,8 +53,8 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-Rubikjs.Notation.Move = function(groupName, count) {
-    this.groupName = groupName;
+Rubikjs.Notation.Move = function(group, count) {
+    this.group = group;
     this.count = count;
 };
 

@@ -85,12 +85,16 @@ Rubikjs.Twisty.FixedPiecePlace.prototype.processQueue = function() {
     var instruction = this.instructionQueue[0];
 
     var self = this;
+    var finishFunction = function() {
+        self.instructionQueue.shift();
+        self.isProcessingQueue = false;
+        self.processQueue();
+    };
+
     if(instruction instanceof Rubikjs.Notation.Move) {
-        this.multipleMove(this.stepNumber, [this.groups[instruction.groupName].getTurnFunction(instruction.count, this.stepNumber)], function() {
-            self.instructionQueue.shift();
-            self.isProcessingQueue = false;
-            self.processQueue();
-        });
+        this.multipleMove(this.stepNumber, [instruction.group.getTurnFunction(instruction.count, this.stepNumber)], finishFunction);
+    } else {
+        finishFunction();
     }
 };
 
