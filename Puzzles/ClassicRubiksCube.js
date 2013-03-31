@@ -249,28 +249,9 @@ Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype.constructor = new Rubikjs.Pu
 Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype.parseToken = function(token) {
     var group = token[0];
 
-    switch(token.slice(1)) {
-        case "":
-            var count = 1;
-            break;
-        case "'":
-            var count = -1;
-            break;
-        case "2":
-            var count = 2;
-            break;
-        case "2'":
-            var count = -2;
-            break;
-        case "3":
-            var count = 3;
-            break;
-        case "3'":
-            var count = -3;
-            break;
-        default:
-            var count = 1;
-            break;
+    var count = this.getCount(token.slice(1));
+    if(count != count) { //If count == NaN
+        count = 1;
     }
 
     if(this.twisty.groups[group] != undefined) {

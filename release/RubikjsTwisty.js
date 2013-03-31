@@ -242,7 +242,7 @@ Rubikjs.Twisty.FixedPiecePlace.FullRotation.prototype.getTurnFunction = function
 
 Rubikjs.Twisty.FixedPiecePlace.Combined = function(twisty, groups) {
     this.twisty = twisty;
-    this.groups = groups;
+    this.groups = groups; //groups has the following form: [[group, count], [group, count], [group, count], ...]
 };
 
 Rubikjs.Twisty.FixedPiecePlace.Combined.prototype.getTurnFunction = function(count, stepNumber) {
