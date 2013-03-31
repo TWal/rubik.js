@@ -94,6 +94,10 @@ Rubikjs.Twisty.FixedPiecePlace.prototype.processQueue = function() {
 
     if(instruction instanceof Rubikjs.Notation.Move) {
         this.multipleMove(this.stepNumber, [instruction.group.getTurnFunction(instruction.count, this.stepNumber)], finishFunction);
+    } else if(instruction instanceof Rubikjs.Notation.MultiMove) {
+        this.multipleMove(this.stepNumber, instruction.moves.map(function(move) {
+            return move.group.getTurnFunction(move.count, this.stepNumber);
+        }, this), finishFunction);
     } else {
         finishFunction();
     }

@@ -34,12 +34,10 @@ Rubikjs.Notation.Parser.prototype.parse = function(formula) {
     if(splitted[0] == formula) {
         if(formula[0] == "(") {
             var matchingPar = formula.lastIndexOf(")");
-            console.log(this.getCount(formula.substring(matchingPar + 1)));
             return this.multiplyInstuctions(this.parse(formula.substring(1, matchingPar)), this.getCount(formula.substring(matchingPar + 1)));
         } else if(formula[0] == "[") {
             var matchingBracket = formula.lastIndexOf("]");
-            console.log(this.getCount(formula.substring(matchingBracket + 1)));
-            return this.parse(formula.substring(1, matchingBracket));
+            return this.combineInstructions(this.parse(formula.substring(1, matchingBracket)), this.getCount(formula.substring(matchingBracket + 1)));
         } else {
             return this.simpleParse(splitted[0]);
         }
@@ -139,7 +137,10 @@ Rubikjs.Notation.Parser.prototype.multiplyInstuctions = function(instructions, c
 };
 
 Rubikjs.Notation.Parser.prototype.combineInstructions = function(instructions, count) {
-    return instructions; //TODO
+    for(var i = 0; i < instructions.length; ++i) {
+        instructions[i].count *= count;
+    }
+    return new Rubikjs.Notation.MultiMove(instructions);
 };
 
 Rubikjs.Notation.Parser.prototype.getCount = function(str) {

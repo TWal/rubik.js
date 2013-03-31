@@ -227,8 +227,8 @@ Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager) {
     this.groups.Z = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["F", 1], ["S",  1], ["B", -1]]);
 
     this.groups.x = this.groups.X;
-    this.groups.y = this.groups.y;
-    this.groups.z = this.groups.z;
+    this.groups.y = this.groups.Y;
+    this.groups.z = this.groups.Z;
 
     this.endInit();
 };
