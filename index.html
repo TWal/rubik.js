@@ -27,8 +27,10 @@
                 "PLL T": "R U R' U' R' F R2 U' R' U' R U R' F'",
                 "Center Swap": "M2' E M2' E'",
                 "PLL H": "M2' U M2' U2 M2' U M2'",
-                "Superflip": "M' U M' U M' U M' U x' z M' U M' U M' U M' U x' z M' U M' U M' U M' U x' z",
-                "Sexy": "(R U R' U')3"
+                "Superflip": "(M' U M' U M' U M' U [x' z])3",
+                "Sexy": "(R U R' U')3",
+                "Diagonals": "([R L y])6",
+                "Pr0n": "(([U x z])3 B' L' U' [R2 L2'])2 (R U R' U')2 (R U R' U')2'"
             };
 
             function domoves() {
@@ -50,6 +52,8 @@
         <input type="button" value="I want a center swap" onclick="replaceAlg('Center Swap')" />
         <input type="button" value="I want a superflip" onclick="replaceAlg('Superflip')" />
         <input type="button" value="I want a three sexy moves" onclick="replaceAlg('Sexy')" />
+        <input type="button" value="I want diagonals" onclick="replaceAlg('Diagonals')" />
+        <input type="button" value="SHOW ME RUBIK'S CUBE PR0N!!!" onclick="replaceAlg('Pr0n')" />
     </body>
 </html>
 
