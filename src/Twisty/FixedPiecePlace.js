@@ -108,9 +108,17 @@ Rubikjs.Twisty.FixedPiecePlace.prototype.multipleMove = function(stepNumber, mov
     var self = this;
     var loopFunction = function() {
         if(i < stepNumber) {
-            moveFunctions.forEach(function(moveFunc) {
-                moveFunc.turnFunction();
-            });
+            if(moveFunctions.length == 1) {
+                moveFunctions[0].turnFunction();
+            } else {
+                var j = moveFunctions.length;
+                while(j--) {
+                    moveFunctions[j].nbTurnFunction(-i);
+                }
+                for(j = 0; j < moveFunctions.length; ++j) {
+                    moveFunctions[j].nbTurnFunction(i + 1);
+                }
+            }
 
             i += 1;
             setTimeout(loopFunction, self.turnTime / stepNumber * 1000);
@@ -122,7 +130,7 @@ Rubikjs.Twisty.FixedPiecePlace.prototype.multipleMove = function(stepNumber, mov
 
             callback();
         }
-    }
+    };
 
     loopFunction();
 };
@@ -168,6 +176,14 @@ Rubikjs.Twisty.FixedPiecePlace.Group.prototype.getTurnFunction = function(count,
             self.pieces.forEach(function(pieces) {
                 pieces.forEach(function(piece) {
                     mat4.multiply(rotationMat, piece.movable.mesh.transform, piece.movable.mesh.transform);
+                });
+            });
+        },
+        nbTurnFunction: function(nb) {
+            var rotationMatrix = mat4.rotate(mat4.identity(), nb*stepAngle, self.rotationAxis);
+            self.pieces.forEach(function(pieces) {
+                pieces.forEach(function(piece) {
+                    mat4.multiply(rotationMatrix, piece.movable.mesh.transform, piece.movable.mesh.transform);
                 });
             });
         },
@@ -233,7 +249,14 @@ Rubikjs.Twisty.FixedPiecePlace.FullRotation.prototype.getTurnFunction = function
             for(var key in self.twisty.pieces) {
                 mat4.multiply(rotationMat, self.twisty.pieces[key].movable.mesh.transform, self.twisty.pieces[key].movable.mesh.transform);
             }
-        }, endFunction: function() {
+        },
+        nbTurnFunction: function(nb) {
+            var rotationMatrix = mat4.rotate(mat4.identity(), stepAngle*nb, self.rotationAxis);
+            for(var key in self.twisty.pieces) {
+                mat4.multiply(rotationMatrix, self.twisty.pieces[key].movable.mesh.transform, self.twisty.pieces[key].movable.mesh.transform);
+            }
+        },
+        endFunction: function() {
             self.cycle(count);
         }
     };
@@ -259,6 +282,11 @@ Rubikjs.Twisty.FixedPiecePlace.Combined.prototype.getTurnFunction = function(cou
         turnFunction: function() {
             for(var i = 0; i < turnFunctions.length; ++i) {
                 turnFunctions[i].turnFunction();
+            }
+        },
+        nbTurnFunction: function(nb) {
+            for(var i = 0; i < turnFunctions.length; ++i) {
+                turnFunctions[i].nbTurnFunction(nb);
             }
         },
         endFunction: function() {
