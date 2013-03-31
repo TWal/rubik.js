@@ -27,7 +27,8 @@
                 "PLL T": "R U R' U' R' F R2 U' R' U' R U R' F'",
                 "Center Swap": "M2' E M2' E'",
                 "PLL H": "M2' U M2' U2 M2' U M2'",
-                "Superflip": "M' U M' U M' U M' U X' Z M' U M' U M' U M' U X' Z M' U M' U M' U M' U X' Z"
+                "Superflip": "M' U M' U M' U M' U x' z M' U M' U M' U M' U x' z M' U M' U M' U M' U x' z",
+                "Sexy": "(R U R' U')3"
             };
 
             function domoves() {
@@ -48,6 +49,7 @@
         <input type="button" value="I want a PLL H" onclick="replaceAlg('PLL H')" />
         <input type="button" value="I want a center swap" onclick="replaceAlg('Center Swap')" />
         <input type="button" value="I want a superflip" onclick="replaceAlg('Superflip')" />
+        <input type="button" value="I want a three sexy moves" onclick="replaceAlg('Sexy')" />
     </body>
 </html>
 
