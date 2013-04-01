@@ -73,6 +73,10 @@ Rubikjs.Twisty.FixedPiecePlace.prototype.sendMultipleInstructions = function(ins
     this.processQueue();
 };
 
+Rubikjs.Twisty.FixedPiecePlace.prototype.stop = function() {
+    this.instructionQueue = [];
+};
+
 Rubikjs.Twisty.FixedPiecePlace.prototype.processQueue = function() {
     if(this.isProcessingQueue) {
         return;

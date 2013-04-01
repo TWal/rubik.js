@@ -23,6 +23,10 @@
                 cube = new Rubikjs.Puzzle.ClassicRubiksCube(rendermgr);
             }
 
+            function stop() {
+                cube.stop();
+            }
+
             var algorithms = {
                 "PLL T": "R U R' U' R' F R2 U' R' U' R U R' F'",
                 "Center Swap": "M2' E M2' E'",
@@ -45,6 +49,7 @@
             <input type="text" size="150" id="algorithm" value="R U R' U' R' F R2 U' R' U' R U R' F'" /><br />
             <input type="button" value="Let's turn!" onclick="domoves()" />
             <input type="button" value="Reset" onclick="restart()" />
+            <input type="button" value="Stop" onclick="stop()" />
         </form>
         <br />
         <input type="button" value="I want a PLL T" onclick="replaceAlg('PLL T')" />
