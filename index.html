@@ -12,19 +12,49 @@
 
     </head>
     <body>
-        <canvas id="cube" width="500" height="500"></canvas>
+        <div>
+            <canvas id="cube" width="500" height="500"></canvas>
+        </div>
         <p id="log"></p>
         <script>
-            var rendermgr = new Rubikjs.Render.RenderManager(Rubikjs.Render.WebGL.Renderer);
-            var cube = new Rubikjs.Puzzle.ClassicRubiksCube(rendermgr);
+            window.onerror = function(e) {
+                document.getElementById("errors").innerHTML += e + "<br />";
+            };
+
+            var renderer = Rubikjs.Render.WebGL.Renderer;
+
+            var rendermgr = null;
+            var cube = null;
 
             function restart() {
-                rendermgr = new Rubikjs.Render.RenderManager(Rubikjs.Render.WebGL.Renderer);
+                //Reset the context...
+                var canvas = document.getElementById("cube");
+                var parentNode = canvas.parentNode;
+                parentNode.removeChild(canvas);
+                canvas = document.createElement("canvas");
+                canvas.setAttribute("width", "500");
+                canvas.setAttribute("height", "500");
+                canvas.setAttribute("id", "cube");
+                parentNode.appendChild(canvas);
+
+                rendermgr = new Rubikjs.Render.RenderManager(renderer);
                 cube = new Rubikjs.Puzzle.ClassicRubiksCube(rendermgr);
             }
 
+            restart();
+
             function stop() {
                 cube.stop();
+            }
+
+            function useWebGL() {
+                renderer = Rubikjs.Render.WebGL.Renderer;
+                restart();
+            }
+
+            function useCanvas() {
+                renderer = Rubikjs.Render.Canvas.Renderer;
+                restart();
             }
 
             var algorithms = {
@@ -50,6 +80,8 @@
             <input type="button" value="Let's turn!" onclick="domoves()" />
             <input type="button" value="Reset" onclick="restart()" />
             <input type="button" value="Stop" onclick="stop()" />
+            <input type="button" value="Use WebGL" onclick="useWebGL()" />
+            <input type="button" value="Use Canvas" onclick="useCanvas()" />
         </form>
         <br />
         <input type="button" value="I want a PLL T" onclick="replaceAlg('PLL T')" />
@@ -59,6 +91,8 @@
         <input type="button" value="I want a three sexy moves" onclick="replaceAlg('Sexy')" />
         <input type="button" value="I want diagonals" onclick="replaceAlg('Diagonals')" />
         <input type="button" value="SHOW ME RUBIK'S CUBE PR0N!!!" onclick="replaceAlg('Pr0n')" />
+
+        <div id="errors"></div>
     </body>
 </html>
 
