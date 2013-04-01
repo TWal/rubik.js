@@ -88,8 +88,6 @@ Rubikjs.Render.Canvas.Renderer.prototype.render = function(mesh) {
             zmean: 0
         };
         tri.zmean = (tri.pt0[2] + tri.pt1[2] + tri.pt2[2]) / 3.0;
-        tri.sortz = [tri.pt0[2], tri.pt1[2], tri.pt2[2]];
-        tri.sortz.sort();
 
         this.triangles.push(tri);
     }
@@ -97,14 +95,7 @@ Rubikjs.Render.Canvas.Renderer.prototype.render = function(mesh) {
 
 Rubikjs.Render.Canvas.Renderer.prototype.endFrame = function() {
     this.triangles.sort(function(tri0, tri1) {
-        //return tri1.zmean - tri0.zmean;
-        if(tri0.sortz[0] != tri1.sortz[0]) {
-            return tri1.sortz[0] - tri0.sortz[0];
-        } else if(tri0.sortz[1] != tri1.sortz[1]) {
-            return tri1.sortz[1] - tri0.sortz[1];
-        } else {
-            return tri1.sortz[2] - tri0.sortz[2];
-        }
+        return tri1.zmean - tri0.zmean;
     });
 
     this.ctx.clearRect(0, 0, 500, 500);
