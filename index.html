@@ -59,12 +59,18 @@
 
             var algorithms = {
                 "PLL T": "R U R' U' R' F R2 U' R' U' R U R' F'",
-                "Center Swap": "M2' E M2' E'",
+                "C PLL T": "[R, U] [R', F] [F [R: U']: U']",
                 "PLL H": "M2' U M2' U2 M2' U M2'",
-                "Superflip": "(M' U M' U M' U M' U {x' z})3",
+                "C PLL H": "[M2' U': [M2', U2]]",
+                "Center Swap": "M2' E M2' E'",
+                "C Center Swap": "[M2', E]",
+                "Superflip": "((M' U)4 {x' z})3",
                 "Sexy": "(R U R' U')3",
+                "C Sexy": "[R, U]3",
                 "Diagonals": "({R L y})6",
-                "Pr0n": "(({U x z})3 B' L' U' {R2 L2})2 (R U R' U')2 (R U R' U')2'"
+                "C PLL E": "[x': [[R: U'], D] [[R: U], D]]",
+                "Pr0n": "(({U x z})3 B' L' U' {R2 L2})2 (R U R' U')2 (R U R' U')2'",
+                "C H": "[{U D}, {R2 L2}]"
             };
 
             function domoves() {
@@ -76,7 +82,7 @@
             }
         </script>
         <form>
-            <input type="text" size="150" id="algorithm" value="R U R' U' R' F R2 U' R' U' R U R' F'" /><br />
+            <input type="text" size="150" id="algorithm" value="R U R' U'" /><br />
             <input type="button" value="Let's turn!" onclick="domoves()" />
             <input type="button" value="Reset" onclick="restart()" />
             <input type="button" value="Stop" onclick="stop()" />
@@ -84,13 +90,31 @@
             <input type="button" value="Use Canvas" onclick="useCanvas()" />
         </form>
         <br />
+        Normal algorithms:<br />
         <input type="button" value="I want a PLL T" onclick="replaceAlg('PLL T')" />
         <input type="button" value="I want a PLL H" onclick="replaceAlg('PLL H')" />
         <input type="button" value="I want a center swap" onclick="replaceAlg('Center Swap')" />
         <input type="button" value="I want a superflip" onclick="replaceAlg('Superflip')" />
-        <input type="button" value="I want a three sexy moves" onclick="replaceAlg('Sexy')" />
+        <input type="button" value="I want three sexy moves" onclick="replaceAlg('Sexy')" />
         <input type="button" value="I want diagonals" onclick="replaceAlg('Diagonals')" />
         <input type="button" value="SHOW ME RUBIK'S CUBE PR0N!!!" onclick="replaceAlg('Pr0n')" />
+        <br />Commutators algorithms:<br />
+        <input type="button" value="I want a PLL T" onclick="replaceAlg('C PLL T')" />
+        <input type="button" value="I want a PLL H" onclick="replaceAlg('C PLL H')" />
+        <input type="button" value="I want a PLL E" onclick="replaceAlg('C PLL E')" />
+        <input type="button" value="I want a center swap" onclick="replaceAlg('C Center Swap')" />
+        <input type="button" value="I want three sexy moves" onclick="replaceAlg('C Sexy')" />
+        <input type="button" value="I want a H" onclick="replaceAlg('C H')" />
+
+        <br /><br /><br />
+        Notation:
+        <ul>
+            <li>You can use parenthesis. "(A)3" is the same as "A A A".</li>
+            <li>You can use braces. "{A B}" will make A and B at the same time (just be careful!)</li>
+            <li>You can use brackets. "[A, B]" is the same as "A B A' B'", and "[A: B]" is the same as "A B A'"</li>
+            <li>And of course, you can combine them!</li>
+            <li>Have fun!</li>
+        </ul>
 
         <div id="errors"></div>
     </body>
