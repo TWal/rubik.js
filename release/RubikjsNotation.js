@@ -130,9 +130,9 @@ Rubikjs.Notation.Parser.prototype.parse = function(formula) {
         if(formula[0] == "(") {
             var matchingPar = formula.lastIndexOf(")");
             return this.multiplyInstuctions(this.parse(formula.substring(1, matchingPar)), this.getCount(formula.substring(matchingPar + 1)));
-        } else if(formula[0] == "[") {
-            var matchingBracket = formula.lastIndexOf("]");
-            return this.combineInstructions(this.parse(formula.substring(1, matchingBracket)), this.getCount(formula.substring(matchingBracket + 1)));
+        } else if(formula[0] == "{") {
+            var matchingBrace = formula.lastIndexOf("}");
+            return this.combineInstructions(this.parse(formula.substring(1, matchingBrace)), this.getCount(formula.substring(matchingBrace + 1)));
         } else {
             return this.simpleParse(splitted[0]);
         }
@@ -170,8 +170,8 @@ Rubikjs.Notation.Parser.prototype.roughSplit = function(formula) {
         return [formula.substring(0, splitTo)].concat(this.roughSplit(formula.substring(splitTo)));
     }
 
-    if(this.handleCombined && formula[0] == "[") {
-        var matching = this.findMatching(formula, "[", "]");
+    if(this.handleCombined && formula[0] == "{") {
+        var matching = this.findMatching(formula, "{", "}");
         var matchingSeparator = formula.indexOf(this.separator, matching);
         if(matchingSeparator != -1) {
             var splitTo = matchingSeparator;
@@ -190,9 +190,9 @@ Rubikjs.Notation.Parser.prototype.roughSplit = function(formula) {
     }
 
     if(this.handleCombined) {
-        var firstBracket = formula.indexOf("[");
-        if(firstBracket != -1 && firstBracket < splitTo) {
-            splitTo = firstBracket;
+        var firstBrace = formula.indexOf("{");
+        if(firstBrace != -1 && firstBrace < splitTo) {
+            splitTo = firstBrace;
         }
     }
 
