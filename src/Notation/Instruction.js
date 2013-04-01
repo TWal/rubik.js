@@ -26,3 +26,7 @@ freely, subject to the following restrictions:
 //Just a class so we have a nice inheritance
 Rubikjs.Notation.Instruction = function() {
 };
+
+Rubikjs.Notation.Instruction.prototype.copy = function() {
+    return new Rubikjs.Notation.Instruction();
+};

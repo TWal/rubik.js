@@ -99,7 +99,7 @@ Rubikjs.Twisty.FixedPiecePlace.prototype.processQueue = function() {
         this.multipleMove(this.stepNumber, [instruction.group.getTurnFunction(instruction.count, this.stepNumber)], finishFunction);
     } else if(instruction instanceof Rubikjs.Notation.MultiMove) {
         this.multipleMove(this.stepNumber, instruction.moves.map(function(move) {
-            return move.group.getTurnFunction(move.count, this.stepNumber);
+            return move.group.getTurnFunction(move.count * instruction.count, this.stepNumber);
         }, this), finishFunction);
     } else {
         finishFunction();

@@ -23,10 +23,18 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-Rubikjs.Notation.MultiMove = function(moves) {
+Rubikjs.Notation.MultiMove = function(moves, count) {
     this.moves = moves;
+    this.count = count;
 };
 
 Rubikjs.Notation.MultiMove.prototype = new Rubikjs.Notation.Instruction;
 Rubikjs.Notation.MultiMove.prototype.constructor = new Rubikjs.Notation.MultiMove;
 
+Rubikjs.Notation.MultiMove.prototype.copy = function() {
+    var newMoves = [];
+    for(var i = 0; i < this.moves.length; ++i) {
+        newMoves.push(this.moves[i].copy());
+    }
+    return new Rubikjs.Notation.MultiMove(newMoves, this.count);
+};

@@ -28,6 +28,10 @@ freely, subject to the following restrictions:
 //Just a class so we have a nice inheritance
 Rubikjs.Notation.Instruction = function() {
 };
+
+Rubikjs.Notation.Instruction.prototype.copy = function() {
+    return new Rubikjs.Notation.Instruction();
+};
 /*
 Rubik.js
 
@@ -61,6 +65,9 @@ Rubikjs.Notation.Move = function(group, count) {
 Rubikjs.Notation.Move.prototype = new Rubikjs.Notation.Instruction;
 Rubikjs.Notation.Move.prototype.constructor = new Rubikjs.Notation.Move;
 
+Rubikjs.Notation.Move.prototype.copy = function() {
+    return new Rubikjs.Notation.Move(this.group, this.count);
+};
 /*
 Rubik.js
 
@@ -86,13 +93,21 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-Rubikjs.Notation.MultiMove = function(moves) {
+Rubikjs.Notation.MultiMove = function(moves, count) {
     this.moves = moves;
+    this.count = count;
 };
 
 Rubikjs.Notation.MultiMove.prototype = new Rubikjs.Notation.Instruction;
 Rubikjs.Notation.MultiMove.prototype.constructor = new Rubikjs.Notation.MultiMove;
 
+Rubikjs.Notation.MultiMove.prototype.copy = function() {
+    var newMoves = [];
+    for(var i = 0; i < this.moves.length; ++i) {
+        newMoves.push(this.moves[i].copy());
+    }
+    return new Rubikjs.Notation.MultiMove(newMoves, this.count);
+};
 /*
 Rubik.js
 
@@ -122,6 +137,7 @@ Rubikjs.Notation.Parser = function() {
     this.separator = " ";
     this.handleParenthesis = true;
     this.handleCombined = true;
+    this.handleCommutators = true; //And conjugates too
 };
 
 Rubikjs.Notation.Parser.prototype.parse = function(formula) {
@@ -132,7 +148,18 @@ Rubikjs.Notation.Parser.prototype.parse = function(formula) {
             return this.multiplyInstuctions(this.parse(formula.substring(1, matchingPar)), this.getCount(formula.substring(matchingPar + 1)));
         } else if(formula[0] == "{") {
             var matchingBrace = formula.lastIndexOf("}");
-            return this.combineInstructions(this.parse(formula.substring(1, matchingBrace)), this.getCount(formula.substring(matchingBrace + 1)));
+            return [this.combineInstructions(this.parse(formula.substring(1, matchingBrace)), this.getCount(formula.substring(matchingBrace + 1)))];
+        } else if(formula[0] == "[") {
+            var matchingBracket = formula.lastIndexOf("]");
+            var matchingComma = this.findMatching(formula, "[", "]", ",");
+            var matchingColon = this.findMatching(formula, "[", "]", ":");
+            if(matchingComma != -1) {
+                return this.multiplyInstuctions(this.commutateInstructions(this.parse(formula.substring(1, matchingComma)), this.parse(formula.substring(matchingComma + 1, matchingBracket))), this.getCount(formula.substring(matchingBracket + 1)));
+            } else if(matchingColon != -1) {
+                return this.multiplyInstuctions(this.conjugateInstructions(this.parse(formula.substring(1, matchingColon)), this.parse(formula.substring(matchingColon + 1, matchingBracket))), this.getCount(formula.substring(matchingBracket + 1)));
+            } else {
+                return [];
+            }
         } else {
             return this.simpleParse(splitted[0]);
         }
@@ -181,6 +208,17 @@ Rubikjs.Notation.Parser.prototype.roughSplit = function(formula) {
         return [formula.substring(0, splitTo)].concat(this.roughSplit(formula.substring(splitTo)));
     }
 
+    if(this.handleCommutators && formula[0] == "[") {
+        var matching = this.findMatching(formula, "[", "]");
+        var matchingSeparator = formula.indexOf(this.separator, matching);
+        if(matchingSeparator != -1) {
+            var splitTo = matchingSeparator;
+        } else {
+            splitTo = formula.length;
+        }
+        return [formula.substring(0, splitTo)].concat(this.roughSplit(formula.substring(splitTo)));
+    }
+
     var splitTo = formula.length;
     if(this.handleParenthesis) {
         var firstPar = formula.indexOf("(");
@@ -196,22 +234,36 @@ Rubikjs.Notation.Parser.prototype.roughSplit = function(formula) {
         }
     }
 
+    if(this.handleCommutators) {
+        var firstBrace = formula.indexOf("[");
+        if(firstBrace != -1 && firstBrace < splitTo) {
+            splitTo = firstBrace;
+        }
+    }
+
     return [formula.substring(0, splitTo)].concat(this.roughSplit(formula.substring(splitTo)));
 }
 
-Rubikjs.Notation.Parser.prototype.findMatching = function(str, open, close) {
+Rubikjs.Notation.Parser.prototype.findMatching = function(str, open, close, find) {
+    find = find || close;
     var i = 0;
     var depth = 1;
-    while(depth != 0) {
+    while(true) {
         ++i;
+        if(depth == 1 && str[i] == find) {
+            return i;
+        }
+
         if(str[i] == open) {
             depth += 1;
         } else if(str[i] == close) {
             depth -= 1;
         }
-    }
 
-    return i;
+        if(i >= str.length) {
+            return -1;
+        }
+    }
 }
 
 Rubikjs.Notation.Parser.prototype.multiplyInstuctions = function(instructions, count) {
@@ -232,10 +284,40 @@ Rubikjs.Notation.Parser.prototype.multiplyInstuctions = function(instructions, c
 };
 
 Rubikjs.Notation.Parser.prototype.combineInstructions = function(instructions, count) {
-    for(var i = 0; i < instructions.length; ++i) {
-        instructions[i].count *= count;
+    return new Rubikjs.Notation.MultiMove(instructions, count);
+};
+
+Rubikjs.Notation.Parser.prototype.commutateInstructions = function(instructions1, instructions2) {
+    var result = instructions1.concat(instructions2);
+
+    var i = instructions1.length;
+    while(i--) {
+        var newInstruction = instructions1[i].copy();
+        newInstruction.count = -newInstruction.count;
+        result.push(newInstruction);
     }
-    return new Rubikjs.Notation.MultiMove(instructions);
+
+    i = instructions2.length;
+    while(i--) {
+        var newInstruction = instructions2[i].copy();
+        newInstruction.count = -newInstruction.count;
+        result.push(newInstruction);
+    }
+
+    return result;
+};
+
+Rubikjs.Notation.Parser.prototype.conjugateInstructions = function(instructions1, instructions2) {
+    var result = instructions1.concat(instructions2);
+
+    var i = instructions1.length;
+    while(i--) {
+        var newInstruction = instructions1[i].copy();
+        newInstruction.count = -newInstruction.count;
+        result.push(newInstruction);
+    }
+
+    return result;
 };
 
 Rubikjs.Notation.Parser.prototype.getCount = function(str) {

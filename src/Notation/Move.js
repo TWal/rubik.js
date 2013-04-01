@@ -31,3 +31,6 @@ Rubikjs.Notation.Move = function(group, count) {
 Rubikjs.Notation.Move.prototype = new Rubikjs.Notation.Instruction;
 Rubikjs.Notation.Move.prototype.constructor = new Rubikjs.Notation.Move;
 
+Rubikjs.Notation.Move.prototype.copy = function() {
+    return new Rubikjs.Notation.Move(this.group, this.count);
+};
