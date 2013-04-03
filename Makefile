@@ -29,6 +29,7 @@ all: simple
 simple: $(RENDERCOREOUT) $(WEBGLOUT) $(CANVASOUT) $(SVGOUT) $(TWISTYOUT) $(NOTATIONOUT)
 
 min: $(RENDERCOREMINOUT) $(WEBGLMINOUT) $(CANVASMINOUT) $(SVGMINOUT) $(TWISTYMINOUT) $(NOTATIONMINOUT)
+	@sed -re 's#release/(.+)\.js#release/\1.min.js#g' index.html > index.min.html
 
 clean:
 	@rm release/*
