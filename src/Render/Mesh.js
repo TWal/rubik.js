@@ -23,7 +23,6 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-"use strict";
 Rubikjs.Render.Mesh = function() {
     this.beautifulLevel = 1;
     this.transform = mat4.create();

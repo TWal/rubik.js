@@ -23,7 +23,6 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-"use strict";
 Rubikjs.Render.WebGL.Shader = function(gl) {
     this.gl = gl;
     this.vertexShader = this.gl.createShader(this.gl.VERTEX_SHADER);

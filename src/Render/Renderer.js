@@ -23,7 +23,6 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-"use strict";
 Rubikjs.Render.Renderer = function(element) {
     if(element) {
         this.perspectiveMat = mat4.create();

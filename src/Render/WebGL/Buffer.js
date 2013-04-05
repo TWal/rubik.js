@@ -23,7 +23,6 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-"use strict";
 Rubikjs.Render.WebGL.Buffer = function(gl, data, type) {
     this.gl = gl;
     this.type = type || this.gl.ARRAY_BUFFER;

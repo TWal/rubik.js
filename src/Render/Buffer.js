@@ -23,7 +23,6 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-"use strict";
 Rubikjs.Render.Buffer = function(data) {
     if(data) {
         this.data = data;

@@ -23,7 +23,6 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-"use strict";
 Rubikjs.SVG.Renderer = function(element) {
     Rubikjs.Renderer.call(this, element);
 };

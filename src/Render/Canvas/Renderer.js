@@ -23,7 +23,6 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-"use strict";
 Rubikjs.Render.Canvas.Renderer = function(element) {
     Rubikjs.Render.Renderer.call(this, element);
     var canvas = element.localName == "canvas" ? element : undefined;

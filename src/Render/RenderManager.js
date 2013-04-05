@@ -23,7 +23,6 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-"use strict";
 Rubikjs.Render.RenderManager = function(renderer) {
     this.meshs = [];
     if(renderer) {

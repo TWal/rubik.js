@@ -23,7 +23,6 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-"use strict";
 
 //Use this class if you want to simulate a doctrinaire puzzle, or a shape-mod of a doctrinaire puzzle.
 //A doctrinaire puzzle is a puzzle that keep its shape identical after each turn
