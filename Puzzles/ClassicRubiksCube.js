@@ -164,7 +164,7 @@ Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager) {
         piece.movable.mesh.vertexBuffer = cubeMesh.vertexBuffer;
         piece.movable.mesh.colorBuffer = cubeMesh.colorBuffer;
         piece.movable.mesh.indexBuffer = cubeMesh.indexBuffer;
-        mat4.translate(piece.movable.mesh.transform, translations[i]);
+        mat4.translate(piece.movable.mesh.transform, piece.movable.mesh.transform, translations[i]);
         this.rendermgr.meshs.push(piece.movable.mesh);
         this.pieces[i] = piece;
     }

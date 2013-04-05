@@ -32,9 +32,9 @@ Rubikjs.Render.RenderManager = function(renderer) {
     } else {
         this.renderer = new Rubikjs.WebGL.Renderer(document.getElementById("cube"));
     }
-    mat4.translate(this.renderer.perspectiveMat, [0, 0, -15]);
-    mat4.rotateX(this.renderer.perspectiveMat, Math.PI/6);
-    mat4.rotateY(this.renderer.perspectiveMat, -Math.PI/6);
+    mat4.translate(this.renderer.perspectiveMat, this.renderer.perspectiveMat, [0, 0, -15]);
+    mat4.rotateX(this.renderer.perspectiveMat, this.renderer.perspectiveMat, Math.PI/6);
+    mat4.rotateY(this.renderer.perspectiveMat, this.renderer.perspectiveMat, -Math.PI/6);
 
     /*this.meshs.push(this.renderer.createMesh());
     this.meshs[0].vertexBuffer.feed([
@@ -102,7 +102,7 @@ Rubikjs.Render.RenderManager = function(renderer) {
         16, 17, 18,   16, 18, 19, // Right face
         20, 21, 22,   20, 22, 23  // Left face
     ]);
-    mat4.translate(this.meshs[0].transform, [0, 0, -3]);
+    mat4.translate(this.meshs[0].transform, this.meshs[0].transform, [0, 0, -3]);
     mat4.rotate(this.meshs[0].transform, 0.5, [1, 0, 0]);*/
 };
 

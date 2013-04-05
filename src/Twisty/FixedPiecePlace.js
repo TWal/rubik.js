@@ -172,22 +172,24 @@ Rubikjs.Twisty.FixedPiecePlace.Group.prototype.getTurnFunction = function(count,
     count = -count; //Clockwise -> trigonometric
     var stepAngle = ((this.twisty.turnDegree * Math.PI / 180) * count) / stepNumber;
     var self = this;
-    var rotationMat = mat4.rotate(mat4.identity(), stepAngle, self.rotationAxis);
+    var rotationMat = mat4.create();
+    mat4.rotate(rotationMat, rotationMat, stepAngle, self.rotationAxis);
 
 
     return {
         turnFunction: function() {
             self.pieces.forEach(function(pieces) {
                 pieces.forEach(function(piece) {
-                    mat4.multiply(rotationMat, piece.movable.mesh.transform, piece.movable.mesh.transform);
+                    mat4.multiply(piece.movable.mesh.transform, rotationMat, piece.movable.mesh.transform);
                 });
             });
         },
         nbTurnFunction: function(nb) {
-            var rotationMatrix = mat4.rotate(mat4.identity(), nb*stepAngle, self.rotationAxis);
+            var rotationMatrix = mat4.create();
+            mat4.rotate(rotationMatrix, rotationMatrix, nb*stepAngle, self.rotationAxis);
             self.pieces.forEach(function(pieces) {
                 pieces.forEach(function(piece) {
-                    mat4.multiply(rotationMatrix, piece.movable.mesh.transform, piece.movable.mesh.transform);
+                    mat4.multiply(piece.movable.mesh.transform, rotationMatrix, piece.movable.mesh.transform);
                 });
             });
         },
@@ -245,19 +247,21 @@ Rubikjs.Twisty.FixedPiecePlace.FullRotation.prototype.getTurnFunction = function
     count = -count; //Clockwise -> trigonometric
     var stepAngle = ((this.twisty.turnDegree * Math.PI / 180) * count) / stepNumber;
     var self = this;
-    var rotationMat = mat4.rotate(mat4.identity(), stepAngle, self.rotationAxis);
+    var rotationMat = mat4.create();
+    mat4.rotate(rotationMat, rotationMat, stepAngle, self.rotationAxis);
 
 
     return {
         turnFunction: function() {
             for(var key in self.twisty.pieces) {
-                mat4.multiply(rotationMat, self.twisty.pieces[key].movable.mesh.transform, self.twisty.pieces[key].movable.mesh.transform);
+                mat4.multiply(self.twisty.pieces[key].movable.mesh.transform, rotationMat, self.twisty.pieces[key].movable.mesh.transform);
             }
         },
         nbTurnFunction: function(nb) {
-            var rotationMatrix = mat4.rotate(mat4.identity(), stepAngle*nb, self.rotationAxis);
+            var rotationMatrix = mat4.create();
+            mat4.rotate(rotationMatrix, rotationMatrix, nb*stepAngle, self.rotationAxis);
             for(var key in self.twisty.pieces) {
-                mat4.multiply(rotationMatrix, self.twisty.pieces[key].movable.mesh.transform, self.twisty.pieces[key].movable.mesh.transform);
+                mat4.multiply(self.twisty.pieces[key].movable.mesh.transform, rotationMatrix, self.twisty.pieces[key].movable.mesh.transform);
             }
         },
         endFunction: function() {

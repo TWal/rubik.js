@@ -48,11 +48,12 @@ Rubikjs.Render.Canvas.Renderer.prototype.startFrame = function() {
 
 Rubikjs.Render.Canvas.Renderer.prototype.render = function(mesh) {
     var mvproj = mat4.create();
-    mat4.multiply(this.perspectiveMat, mesh.transform, mvproj);
+    mat4.multiply(mvproj, this.perspectiveMat, mesh.transform);
 
     var vertexProj = [];
     for(var i = 0; i < mesh.vertexBuffer.data.length; i+=3) {
-        var currentPt = mat4.multiplyVec4(mvproj, [mesh.vertexBuffer.data[i], mesh.vertexBuffer.data[i+1], mesh.vertexBuffer.data[i+2], 1], [0,0,0,0]);
+        var currentPt = vec4.create();
+        vec4.transformMat4(currentPt, [mesh.vertexBuffer.data[i], mesh.vertexBuffer.data[i+1], mesh.vertexBuffer.data[i+2], 1], mvproj);
 
         currentPt[0] = -currentPt[0];
 
