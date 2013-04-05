@@ -46,11 +46,9 @@ Rubikjs.Render.WebGL.Buffer.prototype.feed = function(data) {
 Rubikjs.Render.WebGL.Buffer.prototype.bind = function() {
     //Don't re-bind a buffer that is already bounded, because it is a really expansive operation
     if(this.gl.boundBuffer != this.buffer) {
-        //console.log("Bound")
         this.gl.bindBuffer(this.type, this.buffer);
         this.gl.boundBuffer = this.buffer;
     } else {
-        //console.log("Rebound");
     }
 };
 
