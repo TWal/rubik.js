@@ -44,12 +44,14 @@ Rubikjs.Render.Canvas.Renderer.prototype.constructor = Rubikjs.Render.Canvas.Ren
 
 Rubikjs.Render.Canvas.Renderer.prototype.startFrame = function() {
     this.triangles = [];
-    this.ctx.clearRect(0, 0, 500, 500);
 };
 
 Rubikjs.Render.Canvas.Renderer.prototype.render = function(mesh) {
     var mvproj = mat4.create();
     mat4.multiply(mvproj, this.perspectiveMat, mesh.transform);
+
+    var halfWidth = this.element.offsetWidth * 0.5;
+    var halfHeight = this.element.offsetHeight * 0.5;
 
     var vertexProj = [];
     for(var i = 0; i < mesh.vertexBuffer.data.length; i+=3) {
@@ -64,14 +66,9 @@ Rubikjs.Render.Canvas.Renderer.prototype.render = function(mesh) {
         currentPt[2] *= invW;
         currentPt[3] = 1.0; //W * (1/W) = 1
 
-        currentPt[0] *= -1;
-        currentPt[1] *= -1;
-
-        currentPt[0] += 1;
-        currentPt[1] += 1;
-
-        currentPt[0] *= this.element.offsetWidth * 0.5;
-        currentPt[1] *= this.element.offsetHeight * 0.5;
+        // (x + 0.5) | 0   is equivalent to   Math.round(x)   and is faster (see http://jsperf.com/math-round-vs-hack/60)
+        currentPt[0] = ((1 - currentPt[0]) * halfWidth + 0.5) | 0;
+        currentPt[1] = ((1 - currentPt[1]) * halfHeight + 0.5) | 0;
 
         vertexProj.push(currentPt);
     }
@@ -82,10 +79,10 @@ Rubikjs.Render.Canvas.Renderer.prototype.render = function(mesh) {
             pt0: vertexProj[mesh.indexBuffer.data[i]],
             pt1: vertexProj[mesh.indexBuffer.data[i+1]],
             pt2: vertexProj[mesh.indexBuffer.data[i+2]],
-            color: [Math.round(mesh.colorBuffer.data[colorId]*255),
-                    Math.round(mesh.colorBuffer.data[colorId+1]*255),
-                    Math.round(mesh.colorBuffer.data[colorId+2]*255),
-                    Math.round(mesh.colorBuffer.data[colorId+3]*255)],
+            color: [(mesh.colorBuffer.data[colorId]  * 255 + 0.5) | 0,
+                    (mesh.colorBuffer.data[colorId+1]* 255 + 0.5) | 0,
+                    (mesh.colorBuffer.data[colorId+2]* 255 + 0.5) | 0,
+                    (mesh.colorBuffer.data[colorId+3]* 255 + 0.5) | 0],
             zmean: 0
         };
         tri.zmean = (tri.pt0[2] + tri.pt1[2] + tri.pt2[2]) / 3.0;
@@ -99,12 +96,17 @@ Rubikjs.Render.Canvas.Renderer.prototype.endFrame = function() {
         return tri1.zmean - tri0.zmean;
     });
 
-    this.ctx.clearRect(0, 0, 500, 500);
+    this.ctx.clearRect(0, 0, this.element.offsetWidth, this.element.offsetHeight);
 
+    var currentStyle = "";
     var self = this;
     this.triangles.forEach(function(tri) {
-        self.ctx.fillStyle = "rgba("+tri.color[0]+", "+tri.color[1]+", "+tri.color[2]+", "+tri.color[3]+")";
-        self.ctx.strokeStyle = self.ctx.fillStyle;
+        var newStyle = "rgba("+tri.color[0]+", "+tri.color[1]+", "+tri.color[2]+", "+tri.color[3]+")";
+        if(newStyle != currentStyle) {
+            self.ctx.fillStyle = newStyle;
+            self.ctx.strokeStyle = newStyle;
+            currentStyle = newStyle;
+        }
         self.ctx.beginPath();
         self.ctx.moveTo(tri.pt0[0], tri.pt0[1]);
         self.ctx.lineTo(tri.pt1[0], tri.pt1[1]);
