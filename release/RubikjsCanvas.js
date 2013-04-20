@@ -50,9 +50,6 @@ Rubikjs.Render.Canvas.Renderer.prototype.render = function(mesh) {
     var mvproj = mat4.create();
     mat4.multiply(mvproj, this.perspectiveMat, mesh.transform);
 
-    var halfWidth = this.element.offsetWidth * 0.5;
-    var halfHeight = this.element.offsetHeight * 0.5;
-
     var vertexProj = [];
     for(var i = 0; i < mesh.vertexBuffer.data.length; i+=3) {
         var currentPt = vec4.create();
@@ -66,28 +63,41 @@ Rubikjs.Render.Canvas.Renderer.prototype.render = function(mesh) {
         currentPt[2] *= invW;
         currentPt[3] = 1.0; //W * (1/W) = 1
 
-        // (x + 0.5) | 0   is equivalent to   Math.round(x)   and is faster (see http://jsperf.com/math-round-vs-hack/60)
-        currentPt[0] = ((1 - currentPt[0]) * halfWidth + 0.5) | 0;
-        currentPt[1] = ((1 - currentPt[1]) * halfHeight + 0.5) | 0;
+        //Convert to screen-space later, we need to calculate the normals first
 
         vertexProj.push(currentPt);
     }
 
     for(var i = 0; i < mesh.indexBuffer.data.length; i+=3) {
-        var colorId = mesh.indexBuffer.data[i]*4;
-        var tri = {
-            pt0: vertexProj[mesh.indexBuffer.data[i]],
-            pt1: vertexProj[mesh.indexBuffer.data[i+1]],
-            pt2: vertexProj[mesh.indexBuffer.data[i+2]],
-            color: [(mesh.colorBuffer.data[colorId]  * 255 + 0.5) | 0,
-                    (mesh.colorBuffer.data[colorId+1]* 255 + 0.5) | 0,
-                    (mesh.colorBuffer.data[colorId+2]* 255 + 0.5) | 0,
-                    (mesh.colorBuffer.data[colorId+3]* 255 + 0.5) | 0],
-            zmean: 0
-        };
-        tri.zmean = (tri.pt0[2] + tri.pt1[2] + tri.pt2[2]) / 3.0;
+        var pt0 = vertexProj[mesh.indexBuffer.data[i]];
+        var pt1 = vertexProj[mesh.indexBuffer.data[i+1]];
+        var pt2 = vertexProj[mesh.indexBuffer.data[i+2]];
 
-        this.triangles.push(tri);
+        if(vec3.cross([], vec3.subtract([], pt1, pt0), vec3.subtract([], pt2, pt0))[2] < 0) {
+            var colorId = mesh.indexBuffer.data[i]*4;
+            var tri = {
+                pt0: pt0,
+                pt1: pt1,
+                pt2: pt2,
+                color: [(mesh.colorBuffer.data[colorId]  * 255 + 0.5) | 0,
+                        (mesh.colorBuffer.data[colorId+1]* 255 + 0.5) | 0,
+                        (mesh.colorBuffer.data[colorId+2]* 255 + 0.5) | 0,
+                        (mesh.colorBuffer.data[colorId+3]* 255 + 0.5) | 0],
+                zmean: 0
+            };
+            tri.zmean = (tri.pt0[2] + tri.pt1[2] + tri.pt2[2]) / 3.0;
+
+            this.triangles.push(tri);
+        }
+    }
+
+    var halfWidth = this.element.offsetWidth * 0.5;
+    var halfHeight = this.element.offsetHeight * 0.5;
+
+    for(var i = 0; i < vertexProj.length; ++i) {
+        // (x + 0.5) | 0   is equivalent to   Math.round(x)   and is faster (see http://jsperf.com/math-round-vs-hack/60)
+        vertexProj[i][0] = ((1 - vertexProj[i][0]) * halfWidth + 0.5) | 0;
+        vertexProj[i][1] = ((1 - vertexProj[i][1]) * halfHeight + 0.5) | 0;
     }
 };
 

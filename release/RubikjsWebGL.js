@@ -91,6 +91,7 @@ Rubikjs.Render.WebGL.Renderer = function(element) {
         }
     } catch(e) {}
     this.gl.enable(this.gl.DEPTH_TEST);
+    this.gl.enable(this.gl.CULL_FACE);
 
     this.shader = new Rubikjs.Render.WebGL.Shader(this.gl);
     //Some basic shaders

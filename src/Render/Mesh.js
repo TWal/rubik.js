@@ -24,11 +24,7 @@ freely, subject to the following restrictions:
 */
 
 Rubikjs.Render.Mesh = function() {
-    this.beautifulLevel = 1;
     this.transform = mat4.create();
-    mat4.identity(this.transform);
-
-    //Buffers
     this.vertexBuffer = new Rubikjs.Render.Buffer();
     this.colorBuffer = new Rubikjs.Render.Buffer();
     this.indexBuffer = new Rubikjs.Render.Buffer();
