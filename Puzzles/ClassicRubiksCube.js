@@ -24,26 +24,6 @@ freely, subject to the following restrictions:
 */
 
 
-//                                                 dddddddd                 
-//TTTTTTTTTTTTTTTTTTTTTTT                          d::::::d                 
-//T:::::::::::::::::::::T                          d::::::d                 
-//T:::::::::::::::::::::T                          d::::::d  <-- Wow, what a big todo               
-//T:::::TT:::::::TT:::::T                          d:::::d                  
-//TTTTTT  T:::::T  TTTTTTooooooooooo       ddddddddd:::::d    ooooooooooo   
-//        T:::::T      oo:::::::::::oo   dd::::::::::::::d  oo:::::::::::oo 
-//        T:::::T     o:::::::::::::::o d::::::::::::::::d o:::::::::::::::o
-//        T:::::T     o:::::ooooo:::::od:::::::ddddd:::::d o:::::ooooo:::::o
-//        T:::::T     o::::o     o::::od::::::d    d:::::d o::::o     o::::o
-//        T:::::T     o::::o     o::::od:::::d     d:::::d o::::o     o::::o
-//        T:::::T     o::::o     o::::od:::::d     d:::::d o::::o     o::::o
-//        T:::::T     o::::o     o::::od:::::d     d:::::d o::::o     o::::o
-//      TT:::::::TT   o:::::ooooo:::::od::::::ddddd::::::ddo:::::ooooo:::::o
-//      T:::::::::T   o:::::::::::::::o d:::::::::::::::::do:::::::::::::::o
-//      T:::::::::T    oo:::::::::::oo   d:::::::::ddd::::d oo:::::::::::oo 
-//      TTTTTTTTTTT      ooooooooooo      ddddddddd   ddddd   ooooooooooo   
-//
-// Un-hack this file, and improve the interface of the core to make it a LOT cleaner
-
 "use strict";
 
 Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager) {
@@ -153,134 +133,231 @@ Rubikjs.Puzzle.ClassicRubiksCube.prototype.initGroups = function() {
 
 
 Rubikjs.Puzzle.ClassicRubiksCube.prototype.initGraphics = function() {
-    var cubeMesh = this.rendermgr.renderer.createMesh();
-    cubeMesh.vertexBuffer.feed([
-        // Front face
+    var cubie = this.rendermgr.renderer.createMesh();
+    cubie.vertexBuffer.feed([
+        // F
         -1.0, -1.0,  1.0,
         1.0, -1.0,  1.0,
         1.0,  1.0,  1.0,
         -1.0,  1.0,  1.0,
 
-        // Back face
+        // B
         -1.0, -1.0, -1.0,
         -1.0,  1.0, -1.0,
         1.0,  1.0, -1.0,
         1.0, -1.0, -1.0,
 
-        // Top face
+        // U
         -1.0,  1.0, -1.0,
         -1.0,  1.0,  1.0,
         1.0,  1.0,  1.0,
         1.0,  1.0, -1.0,
 
-        // Bottom face
+        // D
         -1.0, -1.0, -1.0,
         1.0, -1.0, -1.0,
         1.0, -1.0,  1.0,
         -1.0, -1.0,  1.0,
 
-        // Right face
+        // R
         1.0, -1.0, -1.0,
         1.0,  1.0, -1.0,
         1.0,  1.0,  1.0,
         1.0, -1.0,  1.0,
 
-        // Left face
+        // L
         -1.0, -1.0, -1.0,
         -1.0, -1.0,  1.0,
         -1.0,  1.0,  1.0,
         -1.0,  1.0, -1.0
     ]);
-    var colors = [
-        "F",     // Front face
-        "B",     // Back face
-        "U",     // Top face
-        "D",     // Bottom face
-        "R",     // Right face
-        "L"     // Left face
-    ];
 
-    var defaultColors = {
-        F: [0.5, 0.5, 0.5, 1.0],
-        B: [0.5, 0.5, 0.5, 1.0],
-        U: [0.5, 0.5, 0.5, 1.0],
-        D: [0.5, 0.5, 0.5, 1.0],
-        R: [0.5, 0.5, 0.5, 1.0],
-        L: [0.5, 0.5, 0.5, 1.0]
-    };
-    //var colors = [
-        //[1.0, 0.0, 0.0, 1.0],     // Front face
-        //[1.0, 0.5, 0.0, 1.0],     // Back face
-        //[0.9, 0.9, 0.9, 1.0],     // Top face
-        //[1.0, 1.0, 0.0, 1.0],     // Bottom face
-        //[0.0, 0.0, 1.0, 1.0],     // Right face
-        //[0.0, 1.0, 0.0, 1.0]     // Left face
-    //];
-
-    var unpackedColors = [];
-    for (var i = 0; i < colors.length; ++i) {
-        var color = colors[i];
-        for (var j = 0; j < 4; ++j) {
-            //unpackedColors = unpackedColors.concat(color);
-            unpackedColors.push(color);
-        }
-    }
-
-    cubeMesh.colorBuffer.feed(unpackedColors);
-
-
-    cubeMesh.indexBuffer.feed([
-        0, 1, 2,      0, 2, 3,    // Front face
-        4, 5, 6,      4, 6, 7,    // Back face
-        8, 9, 10,     8, 10, 11,  // Top face
-        12, 13, 14,   12, 14, 15, // Bottom face
-        16, 17, 18,   16, 18, 19, // Right face
-        20, 21, 22,   20, 22, 23  // Left face
+    cubie.indexBuffer.feed([
+        0, 1, 2,      0, 2, 3,    // F
+        4, 5, 6,      4, 6, 7,    // B
+        8, 9, 10,     8, 10, 11,  // U
+        12, 13, 14,   12, 14, 15, // D
+        16, 17, 18,   16, 18, 19, // R
+        20, 21, 22,   20, 22, 23  // L
     ]);
 
-    var pieceFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, cubeMesh.vertexBuffer, cubeMesh.indexBuffer, cubeMesh.colorBuffer, unpackedColors, defaultColors);
+    var colors = [
+        "p", "p", "p", "p", // F
+        "p", "p", "p", "p", // B
+        "p", "p", "p", "p", // U
+        "p", "p", "p", "p", // D
+        "p", "p", "p", "p", // R
+        "p", "p", "p", "p"  // L
+    ];
 
-    var translations = {
-        UBL: [-2,  2, -2],
-        UBR: [ 2,  2, -2],
-        UFR: [ 2,  2,  2],
-        UFL: [-2,  2,  2],
-        DBL: [-2, -2, -2],
-        DBR: [ 2, -2, -2],
-        DFR: [ 2, -2,  2],
-        DFL: [-2, -2,  2],
-
-        UB: [ 0,  2, -2],
-        UR: [ 2,  2,  0],
-        UF: [ 0,  2,  2],
-        UL: [-2,  2,  0],
-        FL: [-2,  0,  2],
-        FR: [ 2,  0,  2],
-        BR: [ 2,  0, -2],
-        BL: [-2,  0, -2],
-        DF: [ 0, -2,  2],
-        DR: [ 2, -2,  0],
-        DB: [ 0, -2, -2],
-        DL: [-2, -2,  0],
-
-        U: [ 0,  2,  0],
-        L: [-2,  0,  0],
-        F: [ 0,  0,  2],
-        R: [ 2,  0,  0],
-        B: [ 0,  0, -2],
-        D: [ 0, -2,  0]
+    var colorscheme = {
+        U: [1.0, 1.0, 1.0, 1.0],
+        D: [1.0, 1.0, 0.0, 1.0],
+        L: [0.0, 1.0, 0.0, 1.0],
+        R: [0.0, 0.0, 1.0, 1.0],
+        F: [1.0, 0.0, 0.0, 1.0],
+        B: [1.0, 0.5, 0.0, 1.0]
     };
 
-    for(var i in translations) {
-        var customColors = {
-            U: [0.9, 0.9, 0.9, 1.0],
-            D: [1.0, 1.0, 0.0, 1.0],
-            L: [0.0, 1.0, 0.0, 1.0],
-            R: [0.0, 0.0, 1.0, 1.0],
-            F: [1.0, 0.0, 0.0, 1.0],
-            B: [1.0, 0.5, 0.0, 1.0]
-        };
-        var piece = pieceFactory.create(translations[i], [0, 0, 0], customColors);
+    var pi = Math.PI;
+    var pi2 = pi/2;
+
+    // ----- Corners -----
+
+    var cornerMesh = this.rendermgr.renderer.createMesh();
+    cornerMesh.vertexBuffer.feed(cubie.vertexBuffer.data.concat([
+        // F
+        -0.9, -0.9,  1.01,
+         0.9, -0.9,  1.01,
+         0.9,  0.9,  1.01,
+        -0.9,  0.9,  1.01,
+        // U
+        -0.9,  1.01, -0.9,
+        -0.9,  1.01,  0.9,
+         0.9,  1.01,  0.9,
+         0.9,  1.01, -0.9,
+        // R
+        1.01, -0.9, -0.9,
+        1.01,  0.9, -0.9,
+        1.01,  0.9,  0.9,
+        1.01, -0.9,  0.9
+    ]));
+
+    cornerMesh.indexBuffer.feed(cubie.indexBuffer.data.concat([
+        0, 1, 2,      0, 2, 3,    // F
+        4, 5, 6,      4, 6, 7,    // U
+        8, 9, 10,     8, 10, 11   // R
+    ].map(function(d) {
+        return d + cubie.vertexBuffer.data.length/3;
+    })));
+
+    var cornerColors = colors.concat([
+        "F", "F", "F", "F",
+        "U", "U", "U", "U",
+        "R", "R", "R", "R"
+    ]);
+
+    var cornerDefaultColors = {
+        p: [0.0, 0.0, 0.0, 1.0],
+        F: [0.5, 0.5, 0.5, 1.0],
+        U: [0.5, 0.5, 0.5, 1.0],
+        R: [0.5, 0.5, 0.5, 1.0]
+    };
+
+    var cornerFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, cornerMesh.vertexBuffer, cornerMesh.indexBuffer, cornerMesh.colorBuffer, cornerColors, cornerDefaultColors);
+
+    var corners = {
+        UBL: [[-2,  2, -2], [0,    pi, 0], {U: colorscheme.U, F: colorscheme.B, R: colorscheme.L}],
+        UBR: [[ 2,  2, -2], [0,   pi2, 0], {U: colorscheme.U, F: colorscheme.R, R: colorscheme.B}],
+        UFR: [[ 2,  2,  2], [0,     0, 0], {U: colorscheme.U, F: colorscheme.F, R: colorscheme.R}],
+        UFL: [[-2,  2,  2], [0,  -pi2, 0], {U: colorscheme.U, F: colorscheme.L, R: colorscheme.F}],
+        DBL: [[-2, -2, -2], [pi, -pi2, 0], {U: colorscheme.D, F: colorscheme.L, R: colorscheme.B}],
+        DBR: [[ 2, -2, -2], [pi,    0, 0], {U: colorscheme.D, F: colorscheme.B, R: colorscheme.R}],
+        DFR: [[ 2, -2,  2], [pi,  pi2, 0], {U: colorscheme.D, F: colorscheme.R, R: colorscheme.F}],
+        DFL: [[-2, -2,  2], [pi,   pi, 0], {U: colorscheme.D, F: colorscheme.F, R: colorscheme.L}]
+    };
+    for(var i in corners) {
+        var piece = cornerFactory.create(corners[i][0], corners[i][1], corners[i][2]);
+        this.rendermgr.meshs.push(piece.movable.mesh);
+        this.pieces[i] = piece;
+    }
+
+    // ----- Edges -----
+
+    var edgeMesh = this.rendermgr.renderer.createMesh();
+    edgeMesh.vertexBuffer.feed(cubie.vertexBuffer.data.concat([
+        // F
+        -0.9, -0.9,  1.01,
+         0.9, -0.9,  1.01,
+         0.9,  0.9,  1.01,
+        -0.9,  0.9,  1.01,
+        // U
+        -0.9,  1.01, -0.9,
+        -0.9,  1.01,  0.9,
+         0.9,  1.01,  0.9,
+         0.9,  1.01, -0.9
+    ]));
+
+    edgeMesh.indexBuffer.feed(cubie.indexBuffer.data.concat([
+        0, 1, 2,      0, 2, 3,    // F
+        4, 5, 6,      4, 6, 7     // U
+    ].map(function(d) {
+        return d + cubie.vertexBuffer.data.length/3;
+    })));
+
+    var edgeColors = colors.concat([
+        "F", "F", "F", "F",
+        "U", "U", "U", "U"
+    ]);
+
+    var edgeDefaultColors = {
+        p: [0.0, 0.0, 0.0, 1.0],
+        F: [0.5, 0.5, 0.5, 1.0],
+        U: [0.5, 0.5, 0.5, 1.0]
+    };
+
+    var edgeFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, edgeMesh.vertexBuffer, edgeMesh.indexBuffer, edgeMesh.colorBuffer, edgeColors, edgeDefaultColors);
+
+    var edges = {
+        UB: [[ 0,  2, -2], [0,   pi,    0], {U: colorscheme.U, F: colorscheme.B}],
+        UR: [[ 2,  2,  0], [0,  pi2,    0], {U: colorscheme.U, F: colorscheme.R}],
+        UF: [[ 0,  2,  2], [0,    0,    0], {U: colorscheme.U, F: colorscheme.F}],
+        UL: [[-2,  2,  0], [0, -pi2,    0], {U: colorscheme.U, F: colorscheme.L}],
+        FL: [[-2,  0,  2], [0,    0,  pi2], {U: colorscheme.L, F: colorscheme.F}],
+        FR: [[ 2,  0,  2], [0,    0, -pi2], {U: colorscheme.R, F: colorscheme.F}],
+        BR: [[ 2,  0, -2], [0,   pi,  pi2], {U: colorscheme.R, F: colorscheme.B}],
+        BL: [[-2,  0, -2], [0,   pi, -pi2], {U: colorscheme.L, F: colorscheme.B}],
+        DF: [[ 0, -2,  2], [0,    0,   pi], {U: colorscheme.D, F: colorscheme.F}],
+        DR: [[ 2, -2,  0], [0,  pi2,    pi], {U: colorscheme.D, F: colorscheme.R}],
+        DB: [[ 0, -2, -2], [0,   pi,    pi], {U: colorscheme.D, F: colorscheme.B}],
+        DL: [[-2, -2,  0], [0, -pi2,    pi], {U: colorscheme.D, F: colorscheme.L}]
+    };
+
+    for(var i in edges) {
+        var piece = edgeFactory.create(edges[i][0], edges[i][1], edges[i][2]);
+        this.rendermgr.meshs.push(piece.movable.mesh);
+        this.pieces[i] = piece;
+    }
+
+    // ----- Centers -----
+
+    var centerMesh = this.rendermgr.renderer.createMesh();
+    centerMesh.vertexBuffer.feed(cubie.vertexBuffer.data.concat([
+        // U
+        -0.9,  1.01, -0.9,
+        -0.9,  1.01,  0.9,
+         0.9,  1.01,  0.9,
+         0.9,  1.01, -0.9,
+    ]));
+
+    centerMesh.indexBuffer.feed(cubie.indexBuffer.data.concat([
+        0, 1, 2,      0, 2, 3     // U
+    ].map(function(d) {
+        return d + cubie.vertexBuffer.data.length/3;
+    })));
+
+    var centerColors = colors.concat([
+        "U", "U", "U", "U"
+    ]);
+
+    var centerDefaultColors = {
+        p: [0.0, 0.0, 0.0, 1.0],
+        U: [0.5, 0.5, 0.5, 1.0],
+    };
+
+    var centerFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, centerMesh.vertexBuffer, centerMesh.indexBuffer, centerMesh.colorBuffer, centerColors, centerDefaultColors);
+
+    var centers = {
+        U: [[ 0,  2,  0], [0,    0,    0], {U: colorscheme.U}],
+        L: [[-2,  0,  0], [0,    0,  pi2], {U: colorscheme.L}],
+        F: [[ 0,  0,  2], [pi2,  0,    0], {U: colorscheme.F}],
+        R: [[ 2,  0,  0], [0,    0, -pi2], {U: colorscheme.R}],
+        B: [[ 0,  0, -2], [-pi2, 0,    0], {U: colorscheme.B}],
+        D: [[ 0, -2,  0], [pi,   0,    0], {U: colorscheme.D}]
+    };
+
+    for(var i in centers) {
+        var piece = centerFactory.create(centers[i][0], centers[i][1], centers[i][2]);
         this.rendermgr.meshs.push(piece.movable.mesh);
         this.pieces[i] = piece;
     }
