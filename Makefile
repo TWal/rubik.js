@@ -1,4 +1,4 @@
-RENDERCOREFILES=src/libs/gl-matrix-min.js src/main.js src/Render/Buffer.js src/Render/Renderer.js src/Render/Mesh.js src/Render/RenderManager.js
+RENDERCOREFILES=src/libs/gl-matrix-min.js src/main.js src/Render/Buffer.js src/Render/Renderer.js src/Render/Mesh.js src/Render/RenderManager.js src/Render/PieceFactory.js
 RENDERCOREOUT=release/RubikjsRenderCore.js
 RENDERCOREMINOUT=release/RubikjsRenderCore.min.js
 

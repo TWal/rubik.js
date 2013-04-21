@@ -49,8 +49,11 @@ Rubikjs.Render.WebGL.Buffer.prototype.bind = function() {
     if(this.gl.boundBuffer != this.buffer) {
         this.gl.bindBuffer(this.type, this.buffer);
         this.gl.boundBuffer = this.buffer;
-    } else {
     }
+};
+
+Rubikjs.Render.WebGL.Buffer.prototype.copy = function() {
+    return new Rubikjs.Render.WebGL.Buffer(this.gl, this.data, this.type);
 };
 
 /*

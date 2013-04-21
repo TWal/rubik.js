@@ -55,121 +55,41 @@ Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager) {
     this.turnDegree = 90;
     this.notation = new Rubikjs.Puzzle.ClassicRubiksCube.Notation(this);
 
-    //      Graphic init
+    this.initGroups();
+    this.initGraphics();
 
-    var cubeMesh = this.rendermgr.renderer.createMesh();
-    cubeMesh.vertexBuffer.feed([
-        // Front face
-        -1.0, -1.0,  1.0,
-        1.0, -1.0,  1.0,
-        1.0,  1.0,  1.0,
-        -1.0,  1.0,  1.0,
+    this.endInit();
+};
 
-        // Back face
-        -1.0, -1.0, -1.0,
-        -1.0,  1.0, -1.0,
-        1.0,  1.0, -1.0,
-        1.0, -1.0, -1.0,
+Rubikjs.Puzzle.ClassicRubiksCube.prototype = new Rubikjs.Twisty.FixedPiecePlace;
+Rubikjs.Puzzle.ClassicRubiksCube.prototype.constructor = new Rubikjs.Puzzle.ClassicRubiksCube;
 
-        // Top face
-        -1.0,  1.0, -1.0,
-        -1.0,  1.0,  1.0,
-        1.0,  1.0,  1.0,
-        1.0,  1.0, -1.0,
 
-        // Bottom face
-        -1.0, -1.0, -1.0,
-        1.0, -1.0, -1.0,
-        1.0, -1.0,  1.0,
-        -1.0, -1.0,  1.0,
 
-        // Right face
-        1.0, -1.0, -1.0,
-        1.0,  1.0, -1.0,
-        1.0,  1.0,  1.0,
-        1.0, -1.0,  1.0,
+Rubikjs.Puzzle.ClassicRubiksCube.Notation = function(twisty) {
+    this.twisty = twisty;
+};
 
-        // Left face
-        -1.0, -1.0, -1.0,
-        -1.0, -1.0,  1.0,
-        -1.0,  1.0,  1.0,
-        -1.0,  1.0, -1.0
-    ]);
-    var colors = [
-        [1.0, 0.0, 0.0, 1.0],     // Front face
-        [1.0, 0.5, 0.0, 1.0],     // Back face
-        [0.9, 0.9, 0.9, 1.0],     // Top face
-        [1.0, 1.0, 0.0, 1.0],     // Bottom face
-        [0.0, 0.0, 1.0, 1.0],     // Right face
-        [0.0, 1.0, 0.0, 1.0]     // Left face
-    ];
+Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype = new Rubikjs.Notation.Parser;
+Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype.constructor = new Rubikjs.Puzzle.ClassicRubiksCube.Notation;
 
-    var unpackedColors = [];
-    for (var i = 0; i < colors.length; ++i) {
-        var color = colors[i];
-        for (var j = 0; j < 4; ++j) {
-            unpackedColors = unpackedColors.concat(color);
-        }
+
+Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype.parseToken = function(token) {
+    var group = token[0];
+
+    var count = this.getCount(token.slice(1));
+    if(count != count) { //If count == NaN
+        count = 1;
     }
 
-    cubeMesh.colorBuffer.feed(unpackedColors);
-
-
-    cubeMesh.indexBuffer.feed([
-        0, 1, 2,      0, 2, 3,    // Front face
-        4, 5, 6,      4, 6, 7,    // Back face
-        8, 9, 10,     8, 10, 11,  // Top face
-        12, 13, 14,   12, 14, 15, // Bottom face
-        16, 17, 18,   16, 18, 19, // Right face
-        20, 21, 22,   20, 22, 23  // Left face
-    ]);
-
-    //      Groups init
-
-    var translations = {
-        UBL: [-2,  2, -2],
-        UBR: [ 2,  2, -2],
-        UFR: [ 2,  2,  2],
-        UFL: [-2,  2,  2],
-        DBL: [-2, -2, -2],
-        DBR: [ 2, -2, -2],
-        DFR: [ 2, -2,  2],
-        DFL: [-2, -2,  2],
-
-        UB: [ 0,  2, -2],
-        UR: [ 2,  2,  0],
-        UF: [ 0,  2,  2],
-        UL: [-2,  2,  0],
-        FL: [-2,  0,  2],
-        FR: [ 2,  0,  2],
-        BR: [ 2,  0, -2],
-        BL: [-2,  0, -2],
-        DF: [ 0, -2,  2],
-        DR: [ 2, -2,  0],
-        DB: [ 0, -2, -2],
-        DL: [-2, -2,  0],
-
-        U: [ 0,  2,  0],
-        L: [-2,  0,  0],
-        F: [ 0,  0,  2],
-        R: [ 2,  0,  0],
-        B: [ 0,  0, -2],
-        D: [ 0, -2,  0]
-    };
-
-    for(var i in translations) {
-        var piece = new Object;
-        piece.movable = new Object;
-        piece.movable.mesh = new Rubikjs.Render.Mesh;
-        piece.movable.mesh.vertexBuffer = cubeMesh.vertexBuffer;
-        piece.movable.mesh.colorBuffer = cubeMesh.colorBuffer;
-        piece.movable.mesh.indexBuffer = cubeMesh.indexBuffer;
-        mat4.translate(piece.movable.mesh.transform, piece.movable.mesh.transform, translations[i]);
-        this.rendermgr.meshs.push(piece.movable.mesh);
-        this.pieces[i] = piece;
+    if(this.twisty.groups[group] != undefined) {
+        return new Rubikjs.Notation.Move(this.twisty.groups[group], count);
+    } else {
+        return new Rubikjs.Notation.Instruction();
     }
+};
 
-
+Rubikjs.Puzzle.ClassicRubiksCube.prototype.initGroups = function() {
     this.groups.U = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
     this.groups.U.pieces = [["UBL", "UBR", "UFR", "UFL"], ["UB", "UR", "UF", "UL"], ["U"]];
     this.groups.U.rotationAxis = [0, 1, 0];
@@ -229,35 +149,139 @@ Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager) {
     this.groups.x = this.groups.X;
     this.groups.y = this.groups.Y;
     this.groups.z = this.groups.Z;
-
-    this.endInit();
 };
 
-Rubikjs.Puzzle.ClassicRubiksCube.prototype = new Rubikjs.Twisty.FixedPiecePlace;
-Rubikjs.Puzzle.ClassicRubiksCube.prototype.constructor = new Rubikjs.Puzzle.ClassicRubiksCube;
 
+Rubikjs.Puzzle.ClassicRubiksCube.prototype.initGraphics = function() {
+    var cubeMesh = this.rendermgr.renderer.createMesh();
+    cubeMesh.vertexBuffer.feed([
+        // Front face
+        -1.0, -1.0,  1.0,
+        1.0, -1.0,  1.0,
+        1.0,  1.0,  1.0,
+        -1.0,  1.0,  1.0,
 
+        // Back face
+        -1.0, -1.0, -1.0,
+        -1.0,  1.0, -1.0,
+        1.0,  1.0, -1.0,
+        1.0, -1.0, -1.0,
 
-Rubikjs.Puzzle.ClassicRubiksCube.Notation = function(twisty) {
-    this.twisty = twisty;
-};
+        // Top face
+        -1.0,  1.0, -1.0,
+        -1.0,  1.0,  1.0,
+        1.0,  1.0,  1.0,
+        1.0,  1.0, -1.0,
 
-Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype = new Rubikjs.Notation.Parser;
-Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype.constructor = new Rubikjs.Puzzle.ClassicRubiksCube.Notation;
+        // Bottom face
+        -1.0, -1.0, -1.0,
+        1.0, -1.0, -1.0,
+        1.0, -1.0,  1.0,
+        -1.0, -1.0,  1.0,
 
+        // Right face
+        1.0, -1.0, -1.0,
+        1.0,  1.0, -1.0,
+        1.0,  1.0,  1.0,
+        1.0, -1.0,  1.0,
 
-Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype.parseToken = function(token) {
-    var group = token[0];
+        // Left face
+        -1.0, -1.0, -1.0,
+        -1.0, -1.0,  1.0,
+        -1.0,  1.0,  1.0,
+        -1.0,  1.0, -1.0
+    ]);
+    var colors = [
+        "F",     // Front face
+        "B",     // Back face
+        "U",     // Top face
+        "D",     // Bottom face
+        "R",     // Right face
+        "L"     // Left face
+    ];
 
-    var count = this.getCount(token.slice(1));
-    if(count != count) { //If count == NaN
-        count = 1;
+    var defaultColors = {
+        F: [0.5, 0.5, 0.5, 1.0],
+        B: [0.5, 0.5, 0.5, 1.0],
+        U: [0.5, 0.5, 0.5, 1.0],
+        D: [0.5, 0.5, 0.5, 1.0],
+        R: [0.5, 0.5, 0.5, 1.0],
+        L: [0.5, 0.5, 0.5, 1.0]
+    };
+    //var colors = [
+        //[1.0, 0.0, 0.0, 1.0],     // Front face
+        //[1.0, 0.5, 0.0, 1.0],     // Back face
+        //[0.9, 0.9, 0.9, 1.0],     // Top face
+        //[1.0, 1.0, 0.0, 1.0],     // Bottom face
+        //[0.0, 0.0, 1.0, 1.0],     // Right face
+        //[0.0, 1.0, 0.0, 1.0]     // Left face
+    //];
+
+    var unpackedColors = [];
+    for (var i = 0; i < colors.length; ++i) {
+        var color = colors[i];
+        for (var j = 0; j < 4; ++j) {
+            //unpackedColors = unpackedColors.concat(color);
+            unpackedColors.push(color);
+        }
     }
 
-    if(this.twisty.groups[group] != undefined) {
-        return new Rubikjs.Notation.Move(this.twisty.groups[group], count);
-    } else {
-        return new Rubikjs.Notation.Instruction();
+    cubeMesh.colorBuffer.feed(unpackedColors);
+
+
+    cubeMesh.indexBuffer.feed([
+        0, 1, 2,      0, 2, 3,    // Front face
+        4, 5, 6,      4, 6, 7,    // Back face
+        8, 9, 10,     8, 10, 11,  // Top face
+        12, 13, 14,   12, 14, 15, // Bottom face
+        16, 17, 18,   16, 18, 19, // Right face
+        20, 21, 22,   20, 22, 23  // Left face
+    ]);
+
+    var pieceFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, cubeMesh.vertexBuffer, cubeMesh.indexBuffer, cubeMesh.colorBuffer, unpackedColors, defaultColors);
+
+    var translations = {
+        UBL: [-2,  2, -2],
+        UBR: [ 2,  2, -2],
+        UFR: [ 2,  2,  2],
+        UFL: [-2,  2,  2],
+        DBL: [-2, -2, -2],
+        DBR: [ 2, -2, -2],
+        DFR: [ 2, -2,  2],
+        DFL: [-2, -2,  2],
+
+        UB: [ 0,  2, -2],
+        UR: [ 2,  2,  0],
+        UF: [ 0,  2,  2],
+        UL: [-2,  2,  0],
+        FL: [-2,  0,  2],
+        FR: [ 2,  0,  2],
+        BR: [ 2,  0, -2],
+        BL: [-2,  0, -2],
+        DF: [ 0, -2,  2],
+        DR: [ 2, -2,  0],
+        DB: [ 0, -2, -2],
+        DL: [-2, -2,  0],
+
+        U: [ 0,  2,  0],
+        L: [-2,  0,  0],
+        F: [ 0,  0,  2],
+        R: [ 2,  0,  0],
+        B: [ 0,  0, -2],
+        D: [ 0, -2,  0]
+    };
+
+    for(var i in translations) {
+        var customColors = {
+            U: [0.9, 0.9, 0.9, 1.0],
+            D: [1.0, 1.0, 0.0, 1.0],
+            L: [0.0, 1.0, 0.0, 1.0],
+            R: [0.0, 0.0, 1.0, 1.0],
+            F: [1.0, 0.0, 0.0, 1.0],
+            B: [1.0, 0.5, 0.0, 1.0]
+        };
+        var piece = pieceFactory.create(translations[i], [0, 0, 0], customColors);
+        this.rendermgr.meshs.push(piece.movable.mesh);
+        this.pieces[i] = piece;
     }
 };
-

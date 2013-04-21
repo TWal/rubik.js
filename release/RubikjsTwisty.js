@@ -142,6 +142,17 @@ Rubikjs.Twisty.FixedPiecePlace.prototype.multipleMove = function(stepNumber, mov
 
 
 
+
+
+Rubikjs.Twisty.FixedPiecePlace.Piece = function(mesh) {
+    this.movable = {
+        mesh: mesh
+    };
+};
+
+
+
+
 Rubikjs.Twisty.FixedPiecePlace.Group = function(twisty) {
     this.twisty = twisty; //You should NOT change this
     this.pieces = []; //This is an array of array of pieces

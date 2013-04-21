@@ -33,3 +33,7 @@ Rubikjs.Render.Buffer.prototype.feed = function(data) {
     this.data = data;
 };
 
+Rubikjs.Render.Buffer.prototype.copy = function() {
+    return new Rubikjs.Render.Buffer(this.data);
+};
+
