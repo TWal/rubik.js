@@ -1,4 +1,8 @@
-RENDERFILES=src/libs/gl-matrix-min.js src/main.js src/Render/Buffer.js src/Render/Renderer.js src/Render/Mesh.js src/Render/RenderManager.js src/Render/PieceFactory.js
+COREFILES=src/main.js src/Core/Logger.js
+COREOUT=release/RubikjsCore.js
+COREMINOUT=release/RubikjsCore.min.js
+
+RENDERFILES=src/libs/gl-matrix-min.js src/Render/Buffer.js src/Render/Renderer.js src/Render/Mesh.js src/Render/RenderManager.js src/Render/PieceFactory.js
 RENDEROUT=release/RubikjsRender.js
 RENDERMINOUT=release/RubikjsRender.min.js
 
@@ -26,14 +30,20 @@ NOTATIONMINOUT=release/RubikjsNotation.min.js
 
 all: simple
 
-simple: $(RENDEROUT) $(WEBGLOUT) $(CANVASOUT) $(SVGOUT) $(TWISTYOUT) $(NOTATIONOUT)
+simple: $(COREOUT) $(RENDEROUT) $(WEBGLOUT) $(CANVASOUT) $(SVGOUT) $(TWISTYOUT) $(NOTATIONOUT)
 
-min: $(RENDERMINOUT) $(WEBGLMINOUT) $(CANVASMINOUT) $(SVGMINOUT) $(TWISTYMINOUT) $(NOTATIONMINOUT)
+min: $(COREMINOUT) $(RENDERMINOUT) $(WEBGLMINOUT) $(CANVASMINOUT) $(SVGMINOUT) $(TWISTYMINOUT) $(NOTATIONMINOUT)
 	@sed -re 's#release/(.+)\.js#release/\1.min.js#g' index.html > index.min.html
 
 clean:
 	@rm release/*
 
+
+$(COREOUT): $(COREFILES)
+	@echo "Packing Core files... "
+	@cat $(COREFILES) | grep -vE '^"use strict";$$' > $(COREOUT)
+	@echo -e '"use strict";\n' | cat - $(COREOUT) > $(COREOUT).tmp
+	@mv $(COREOUT).tmp $(COREOUT)
 
 $(RENDEROUT): $(RENDERFILES)
 	@echo "Packing Render files... "
@@ -71,6 +81,12 @@ $(NOTATIONOUT): $(NOTATIONFILES)
 	@echo -e '"use strict";\n' | cat - $(NOTATIONOUT) > $(NOTATIONOUT).tmp
 	@mv $(NOTATIONOUT).tmp $(NOTATIONOUT)
 
+
+$(COREMINOUT): $(COREOUT)
+	@echo "Minifying Core files... "
+	@java -jar closure/compiler.jar --js $(COREOUT) --js_output_file $(COREMINOUT) --compilation_level SIMPLE_OPTIMIZATIONS
+	@echo -e "//License: https://github.com/TWal/rubik.js/blob/master/LICENSE\n" | cat - $(COREMINOUT) > $(COREMINOUT).tmp
+	@mv $(COREMINOUT).tmp $(COREMINOUT)
 
 $(RENDERMINOUT): $(RENDEROUT)
 	@echo "Minifying Render files... "

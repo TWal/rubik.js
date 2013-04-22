@@ -23,17 +23,31 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-//Define namespaces
+Rubikjs.Core.Logger = function() {
+};
 
-(function(_global) {
-    _global.Rubikjs = {};
-    _global.Rubikjs.Core = {};
-    _global.Rubikjs.Render = {};
-    _global.Rubikjs.Render.SVG = {};
-    _global.Rubikjs.Render.Canvas = {};
-    _global.Rubikjs.Render.WebGL = {};
-    _global.Rubikjs.Twisty = {};
-    _global.Rubikjs.Notation = {};
-    _global.Rubikjs.Puzzle = {};
-})((typeof(exports) != 'undefined') ? global : this); //Taken from glMatrix
+Rubikjs.Core.Logger.levels = {
+    info: 0,
+    warn: 1,
+    error: 2
+};
+
+Rubikjs.Core.Logger.listeners = [];
+
+Rubikjs.Core.Logger.addListener = function(callback, minLevel, maxLevel) {
+    this.listeners.push({
+        callback: callback,
+        minLevel: this.levels[minLevel],
+        maxLevel: this.levels[maxLevel]
+    });
+};
+
+Rubikjs.Core.Logger.log = function(who, text, level) {
+    var rawLevel = this.levels[level];
+    this.listeners.forEach(function(l) {
+        if(l.minLevel <= rawLevel && l.maxLevel >= rawLevel) {
+            l.callback(who, text, level);
+        }
+    });
+};
 
