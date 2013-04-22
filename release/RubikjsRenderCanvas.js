@@ -32,9 +32,13 @@ Rubikjs.Render.Canvas.Renderer = function(element) {
         try {
             this.ctx = element.getContext("2d");
             if(this.ctx == undefined) {
-                alert("No canvas :("); //To be removed in the future
+                Rubikjs.Core.Logger.log("Canvas Renderer", "No canvas :(", "error");
+                return;
             }
-        } catch(e) {}
+        } catch(e) {
+            Rubikjs.Core.Logger.log("Canvas Renderer", "Exception caught: " + e.message, "error");
+            return;
+        }
     }
     this.triangles = [];
 };

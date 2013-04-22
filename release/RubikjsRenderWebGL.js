@@ -90,9 +90,13 @@ Rubikjs.Render.WebGL.Renderer = function(element) {
             this.gl = canvas.getContext("webgl");
         }
         if(this.gl == undefined) {
-            alert("No WebGL :("); //To be removed in the future
+            Rubikjs.Core.Logger.log("WebGL Renderer", "No WebGL :(", "error");
+            return;
         }
-    } catch(e) {}
+    } catch(e) {
+        Rubikjs.Core.Logger.log("WebGL Renderer", "Exception caught: " + e.message, "error");
+        return;
+    }
     this.gl.enable(this.gl.DEPTH_TEST);
     this.gl.enable(this.gl.CULL_FACE);
 

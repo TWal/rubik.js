@@ -18,9 +18,23 @@
         </div>
         <p id="log"></p>
         <script>
-            window.onerror = function(e) {
-                document.getElementById("errors").innerHTML += e + "<br />";
-            };
+            function addToLogs(color) {
+                return function(who, text) {
+                    var logsDiv = document.getElementById("logs");
+                    var span = document.createElement("span");
+                    span.style.background = color;
+                    span.appendChild(document.createTextNode(who + ": " + text));
+                    var br = document.createElement("br");
+                    logsDiv.appendChild(span);
+                    logsDiv.appendChild(br);
+                }
+            }
+            Rubikjs.Core.Logger.addListener(function(who, text) {console.log(who + ": " + text);}, "info", "info");
+            Rubikjs.Core.Logger.addListener(function(who, text) {console.warn(who + ": " + text);}, "warn", "warn");
+            Rubikjs.Core.Logger.addListener(function(who, text) {console.error(who + ": " + text);}, "error", "error");
+            Rubikjs.Core.Logger.addListener(addToLogs("#00FF00"), "info", "info");
+            Rubikjs.Core.Logger.addListener(addToLogs("#FFFF00"), "warn", "warn");
+            Rubikjs.Core.Logger.addListener(addToLogs("#FF0000"), "error", "error");
 
             var renderer = Rubikjs.Render.WebGL.Renderer;
 
@@ -117,7 +131,8 @@
             <li>Have fun!</li>
         </ul>
 
-        <div id="errors"></div>
+        <br /><br />Logs: (<span style="background:#FF0000">error</span> <span style="background:#FFFF00">warning</span> <span style="background:#00FF00">info</span>)
+        <div id="logs" style="border: 1px solid black"></div>
     </body>
 </html>
 

@@ -142,33 +142,42 @@ Rubikjs.Notation.Parser = function() {
 
 //Can parse complicated formulas like "([[x': [[R: U'], D] [[R: U], D]], U] [M2' U': [M2', U2]] {D2 U2})2"
 Rubikjs.Notation.Parser.prototype.parse = function(formula) {
-    var splitted = this.roughSplit(formula);
-    if(splitted[0] == formula) {
-        if(formula[0] == "(") {
-            var matchingPar = formula.lastIndexOf(")");
-            return this.multiplyInstuctions(this.parse(formula.substring(1, matchingPar)), this.getCount(formula.substring(matchingPar + 1)));
-        } else if(formula[0] == "{") {
-            var matchingBrace = formula.lastIndexOf("}");
-            return [this.combineInstructions(this.parse(formula.substring(1, matchingBrace)), this.getCount(formula.substring(matchingBrace + 1)))];
-        } else if(formula[0] == "[") {
-            var matchingBracket = formula.lastIndexOf("]");
-            var matchingComma = this.findMatching(formula, "[", "]", ",");
-            var matchingColon = this.findMatching(formula, "[", "]", ":");
-            if(matchingComma != -1) {
-                return this.multiplyInstuctions(this.commutateInstructions(this.parse(formula.substring(1, matchingComma)), this.parse(formula.substring(matchingComma + 1, matchingBracket))), this.getCount(formula.substring(matchingBracket + 1)));
-            } else if(matchingColon != -1) {
-                return this.multiplyInstuctions(this.conjugateInstructions(this.parse(formula.substring(1, matchingColon)), this.parse(formula.substring(matchingColon + 1, matchingBracket))), this.getCount(formula.substring(matchingBracket + 1)));
+    Rubikjs.Core.Logger.log("Notation", "Parsing \"" + formula + "\"", "info");
+
+    //To log only once
+    var self = this;
+    var internalParse = function(formula) {
+        var splitted = self.roughSplit(formula);
+        if(splitted[0] == formula) {
+            if(formula[0] == "(") {
+                var matchingPar = formula.lastIndexOf(")");
+                return self.multiplyInstuctions(internalParse(formula.substring(1, matchingPar)), self.getCount(formula.substring(matchingPar + 1)));
+            } else if(formula[0] == "{") {
+                var matchingBrace = formula.lastIndexOf("}");
+                return [self.combineInstructions(internalParse(formula.substring(1, matchingBrace)), self.getCount(formula.substring(matchingBrace + 1)))];
+            } else if(formula[0] == "[") {
+                var matchingBracket = formula.lastIndexOf("]");
+                var matchingComma = self.findMatching(formula, "[", "]", ",");
+                var matchingColon = self.findMatching(formula, "[", "]", ":");
+                if(matchingComma != -1) {
+                    return self.multiplyInstuctions(self.commutateInstructions(internalParse(formula.substring(1, matchingComma)), internalParse(formula.substring(matchingComma + 1, matchingBracket))), self.getCount(formula.substring(matchingBracket + 1)));
+                } else if(matchingColon != -1) {
+                    return self.multiplyInstuctions(self.conjugateInstructions(internalParse(formula.substring(1, matchingColon)), internalParse(formula.substring(matchingColon + 1, matchingBracket))), self.getCount(formula.substring(matchingBracket + 1)));
+                } else {
+                    Rubikjs.Core.Logger.log("Notation", "No ',' or ':' between '[' and ']'", "error");
+                    return [];
+                }
             } else {
-                return [];
+                return self.simpleParse(splitted[0]);
             }
         } else {
-            return this.simpleParse(splitted[0]);
+            return splitted.map(internalParse).reduce(function(a, b) {
+                return a.concat(b);
+            }, []);
         }
-    } else {
-        return splitted.map(this.parse, this).reduce(function(a, b) {
-            return a.concat(b);
-        });
     }
+
+    return internalParse(formula);
 };
 
 //Can parse simple formulas like "R U R' U'"
@@ -190,14 +199,17 @@ Rubikjs.Notation.Parser.prototype.roughSplit = function(formula) {
     }
 
     if(this.handleParenthesis && !this.occurencesEqual(formula, "(", ")")) {
+        Rubikjs.Core.Logger.log("Notation", "Unmatched '(' or ')'", "error");
         return [];
     }
 
     if(this.handleCombined && !this.occurencesEqual(formula, "{", "}")) {
+        Rubikjs.Core.Logger.log("Notation", "Unmatched '{' or '}'", "error");
         return [];
     }
 
     if(this.handleCommutators && !this.occurencesEqual(formula, "[", "]")) {
+        Rubikjs.Core.Logger.log("Notation", "Unmatched '[' or ']'", "error");
         return [];
     }
 
