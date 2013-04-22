@@ -27,9 +27,10 @@ Rubikjs.Notation.Parser = function() {
     this.separator = " ";
     this.handleParenthesis = true;
     this.handleCombined = true;
-    this.handleCommutators = true; //And conjugates too
+    this.handleCommutators = true; //And conjugates too. But this.handleCommutatorsAndConjugates is a little bit long.
 };
 
+//Can parse complicated formulas like "([[x': [[R: U'], D] [[R: U], D]], U] [M2' U': [M2', U2]] {D2 U2})2"
 Rubikjs.Notation.Parser.prototype.parse = function(formula) {
     var splitted = this.roughSplit(formula);
     if(splitted[0] == formula) {
@@ -60,6 +61,7 @@ Rubikjs.Notation.Parser.prototype.parse = function(formula) {
     }
 };
 
+//Can parse simple formulas like "R U R' U'"
 Rubikjs.Notation.Parser.prototype.simpleParse = function(formula) {
     var splitted = formula.split(this.separator);
     var result = [];
@@ -71,8 +73,21 @@ Rubikjs.Notation.Parser.prototype.simpleParse = function(formula) {
     return result;
 };
 
+//Split roughly a formula. It will transform a formula like "[R, U] [R', F] [F [R: U']: U']" to ["[R, U]", "[R', F]", "[F [R: U']: U']"]
 Rubikjs.Notation.Parser.prototype.roughSplit = function(formula) {
     if(formula == "") {
+        return [];
+    }
+
+    if(this.handleParenthesis && !this.occurencesEqual(formula, "(", ")")) {
+        return [];
+    }
+
+    if(this.handleCombined && !this.occurencesEqual(formula, "{", "}")) {
+        return [];
+    }
+
+    if(this.handleCommutators && !this.occurencesEqual(formula, "[", "]")) {
         return [];
     }
 
@@ -82,7 +97,7 @@ Rubikjs.Notation.Parser.prototype.roughSplit = function(formula) {
         if(matchingSeparator != -1) {
             var splitTo = matchingSeparator;
         } else {
-            splitTo = formula.length;
+            var splitTo = formula.length;
         }
         return [formula.substring(0, splitTo)].concat(this.roughSplit(formula.substring(splitTo)));
     }
@@ -93,7 +108,7 @@ Rubikjs.Notation.Parser.prototype.roughSplit = function(formula) {
         if(matchingSeparator != -1) {
             var splitTo = matchingSeparator;
         } else {
-            splitTo = formula.length;
+            var splitTo = formula.length;
         }
         return [formula.substring(0, splitTo)].concat(this.roughSplit(formula.substring(splitTo)));
     }
@@ -104,7 +119,7 @@ Rubikjs.Notation.Parser.prototype.roughSplit = function(formula) {
         if(matchingSeparator != -1) {
             var splitTo = matchingSeparator;
         } else {
-            splitTo = formula.length;
+            var splitTo = formula.length;
         }
         return [formula.substring(0, splitTo)].concat(this.roughSplit(formula.substring(splitTo)));
     }
@@ -132,7 +147,7 @@ Rubikjs.Notation.Parser.prototype.roughSplit = function(formula) {
     }
 
     return [formula.substring(0, splitTo)].concat(this.roughSplit(formula.substring(splitTo)));
-}
+};
 
 Rubikjs.Notation.Parser.prototype.findMatching = function(str, open, close, find) {
     find = find || close;
@@ -154,7 +169,22 @@ Rubikjs.Notation.Parser.prototype.findMatching = function(str, open, close, find
             return -1;
         }
     }
-}
+};
+
+Rubikjs.Notation.Parser.prototype.occurencesEqual = function(str, open, close) {
+    var openNb = 0;
+    var closeNb = 0;
+
+    for(var i = 0; i < str.length; ++i) {
+        if(str[i] == open) {
+            ++openNb;
+        } else if(str[i] == close) {
+            ++closeNb;
+        }
+    }
+
+    return openNb == closeNb;
+};
 
 Rubikjs.Notation.Parser.prototype.multiplyInstuctions = function(instructions, count) {
     if(count < 0) {
