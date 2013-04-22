@@ -1,18 +1,18 @@
-RENDERCOREFILES=src/libs/gl-matrix-min.js src/main.js src/Render/Buffer.js src/Render/Renderer.js src/Render/Mesh.js src/Render/RenderManager.js src/Render/PieceFactory.js
-RENDERCOREOUT=release/RubikjsRenderCore.js
-RENDERCOREMINOUT=release/RubikjsRenderCore.min.js
+RENDERFILES=src/libs/gl-matrix-min.js src/main.js src/Render/Buffer.js src/Render/Renderer.js src/Render/Mesh.js src/Render/RenderManager.js src/Render/PieceFactory.js
+RENDEROUT=release/RubikjsRender.js
+RENDERMINOUT=release/RubikjsRender.min.js
 
 WEBGLFILES=src/Render/WebGL/Buffer.js src/Render/WebGL/Renderer.js src/Render/WebGL/Shader.js
-WEBGLOUT=release/RubikjsWebGL.js
-WEBGLMINOUT=release/RubikjsWebGL.min.js
+WEBGLOUT=release/RubikjsRenderWebGL.js
+WEBGLMINOUT=release/RubikjsRenderWebGL.min.js
 
 CANVASFILES=src/Render/Canvas/Renderer.js
-CANVASOUT=release/RubikjsCanvas.js
-CANVASMINOUT=release/RubikjsCanvas.min.js
+CANVASOUT=release/RubikjsRenderCanvas.js
+CANVASMINOUT=release/RubikjsRenderCanvas.min.js
 
 SVGFILES=src/Render/SVG/Renderer.js
-SVGOUT=release/RubikjsSVG.js
-SVGMINOUT=release/RubikjsSVG.min.js
+SVGOUT=release/RubikjsRenderSVG.js
+SVGMINOUT=release/RubikjsRenderSVG.min.js
 
 TWISTYFILES=src/Twisty/FixedPiecePlace.js src/Twisty/Generic.js
 TWISTYOUT=release/RubikjsTwisty.js
@@ -26,35 +26,35 @@ NOTATIONMINOUT=release/RubikjsNotation.min.js
 
 all: simple
 
-simple: $(RENDERCOREOUT) $(WEBGLOUT) $(CANVASOUT) $(SVGOUT) $(TWISTYOUT) $(NOTATIONOUT)
+simple: $(RENDEROUT) $(WEBGLOUT) $(CANVASOUT) $(SVGOUT) $(TWISTYOUT) $(NOTATIONOUT)
 
-min: $(RENDERCOREMINOUT) $(WEBGLMINOUT) $(CANVASMINOUT) $(SVGMINOUT) $(TWISTYMINOUT) $(NOTATIONMINOUT)
+min: $(RENDERMINOUT) $(WEBGLMINOUT) $(CANVASMINOUT) $(SVGMINOUT) $(TWISTYMINOUT) $(NOTATIONMINOUT)
 	@sed -re 's#release/(.+)\.js#release/\1.min.js#g' index.html > index.min.html
 
 clean:
 	@rm release/*
 
 
-$(RENDERCOREOUT): $(RENDERCOREFILES)
-	@echo "Packing RenderCore files... "
-	@cat $(RENDERCOREFILES) | grep -vE '^"use strict";$$' > $(RENDERCOREOUT)
-	@echo -e '"use strict";\n' | cat - $(RENDERCOREOUT) > $(RENDERCOREOUT).tmp
-	@mv $(RENDERCOREOUT).tmp $(RENDERCOREOUT)
+$(RENDEROUT): $(RENDERFILES)
+	@echo "Packing Render files... "
+	@cat $(RENDERFILES) | grep -vE '^"use strict";$$' > $(RENDEROUT)
+	@echo -e '"use strict";\n' | cat - $(RENDEROUT) > $(RENDEROUT).tmp
+	@mv $(RENDEROUT).tmp $(RENDEROUT)
 
 $(WEBGLOUT): $(WEBGLFILES)
-	@echo "Packing WebGL files... "
+	@echo "Packing RenderWebGL files... "
 	@cat $(WEBGLFILES) | grep -vE '^"use strict";$$' > $(WEBGLOUT)
 	@echo -e '"use strict";\n' | cat - $(WEBGLOUT) > $(WEBGLOUT).tmp
 	@mv $(WEBGLOUT).tmp $(WEBGLOUT)
 
 $(CANVASOUT): $(CANVASFILES)
-	@echo "Packing Canvas files... "
+	@echo "Packing RenderCanvas files... "
 	@cat $(CANVASFILES) | grep -vE '^"use strict";$$' > $(CANVASOUT)
 	@echo -e '"use strict";\n' | cat - $(CANVASOUT) > $(CANVASOUT).tmp
 	@mv $(CANVASOUT).tmp $(CANVASOUT)
 
 $(SVGOUT): $(SVGFILES)
-	@echo "Packing SVG files... "
+	@echo "Packing RenderSVG files... "
 	@cat $(SVGFILES) | grep -vE '^"use strict";$$' > $(SVGOUT)
 	@echo -e '"use strict";\n' | cat - $(SVGOUT) > $(SVGOUT).tmp
 	@mv $(SVGOUT).tmp $(SVGOUT)
@@ -72,26 +72,26 @@ $(NOTATIONOUT): $(NOTATIONFILES)
 	@mv $(NOTATIONOUT).tmp $(NOTATIONOUT)
 
 
-$(RENDERCOREMINOUT): $(RENDERCOREOUT)
-	@echo "Minifying RenderCore files... "
-	@java -jar closure/compiler.jar --js $(RENDERCOREOUT) --js_output_file $(RENDERCOREMINOUT) --compilation_level SIMPLE_OPTIMIZATIONS
-	@echo -e "//License: https://github.com/TWal/rubik.js/blob/master/LICENSE and https://github.com/toji/gl-matrix/blob/master/LICENSE.md (glmatrix)\n" | cat - $(RENDERCOREMINOUT) > $(RENDERCOREMINOUT).tmp
-	@mv $(RENDERCOREMINOUT).tmp $(RENDERCOREMINOUT)
+$(RENDERMINOUT): $(RENDEROUT)
+	@echo "Minifying Render files... "
+	@java -jar closure/compiler.jar --js $(RENDEROUT) --js_output_file $(RENDERMINOUT) --compilation_level SIMPLE_OPTIMIZATIONS
+	@echo -e "//License: https://github.com/TWal/rubik.js/blob/master/LICENSE and https://github.com/toji/gl-matrix/blob/master/LICENSE.md (glmatrix)\n" | cat - $(RENDERMINOUT) > $(RENDERMINOUT).tmp
+	@mv $(RENDERMINOUT).tmp $(RENDERMINOUT)
 
 $(WEBGLMINOUT): $(WEBGLOUT)
-	@echo "Minifying WebGL files... "
+	@echo "Minifying RenderWebGL files... "
 	@java -jar closure/compiler.jar --js $(WEBGLOUT) --js_output_file $(WEBGLMINOUT) --compilation_level SIMPLE_OPTIMIZATIONS
 	@echo -e "//License: https://github.com/TWal/rubik.js/blob/master/LICENSE\n" | cat - $(WEBGLMINOUT) > $(WEBGLMINOUT).tmp
 	@mv $(WEBGLMINOUT).tmp $(WEBGLMINOUT)
 
 $(CANVASMINOUT): $(CANVASOUT)
-	@echo "Minifying Canvas files... "
+	@echo "Minifying RenderCanvas files... "
 	@java -jar closure/compiler.jar --js $(CANVASOUT) --js_output_file $(CANVASMINOUT) --compilation_level SIMPLE_OPTIMIZATIONS
 	@echo -e "//License: https://github.com/TWal/rubik.js/blob/master/LICENSE\n" | cat - $(CANVASMINOUT) > $(CANVASMINOUT).tmp
 	@mv $(CANVASMINOUT).tmp $(CANVASMINOUT)
 
 $(SVGMINOUT): $(SVGOUT)
-	@echo "Minifying SVG files... "
+	@echo "Minifying RenderSVG files... "
 	@java -jar closure/compiler.jar --js $(SVGOUT) --js_output_file $(SVGMINOUT) --compilation_level SIMPLE_OPTIMIZATIONS
 	@echo -e "//License: https://github.com/TWal/rubik.js/blob/master/LICENSE\n" | cat - $(SVGMINOUT) > $(SVGMINOUT).tmp
 	@mv $(SVGMINOUT).tmp $(SVGMINOUT)
