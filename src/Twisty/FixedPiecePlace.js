@@ -25,7 +25,7 @@ freely, subject to the following restrictions:
 
 
 //Use this class if you want to simulate a doctrinaire puzzle, or a shape-mod of a doctrinaire puzzle.
-//A doctrinaire puzzle is a puzzle that keep its shape identical after each turn
+//A puzzle is doctrinaire, if when we remove the stickers, the puzzle remain the same after each turn
 
 //For example: The classic Rubik's cube is doctrinaire, and the fisher cube is a shape-mod of the classic Rubik's cube, so you should use this class for both.
 //Some puzzles like the mixup cube can be considered as a shape-mod of a doctrinaire puzzle, you should use this class for them.
@@ -33,8 +33,8 @@ freely, subject to the following restrictions:
 //There is a common thing for each of these puzzle: Each piece has a place, and each place of the puzzle has a piece in it.
 
 //Examples: Should go here: N*N*N, fisher cube, X*Y*Z (half turn only), Mixup Cube, Megaminx, Skewb, Pyraminx, Square-2
-//          Should NOT go here: Curvy-copter, TomZ's 3*4*5, TomZ's 4*4*6
-//          Bandaged puzzles should NOT go here too: Square-1 (it's a square-2 bandaged), bandaged cube
+//          Should NOT go here: Curvy-copter
+//          Bandaged puzzles should NOT go here too: Square-1 (it's a square-2 bandaged), bandaged cube, 4*4*6 (it's a 6*6*6 bandaged)
 Rubikjs.Twisty.FixedPiecePlace = function() {
     //These variables are here only to understand easilier the rest of the code. You must override them
     this.pieces = {};
