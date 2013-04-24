@@ -26,7 +26,7 @@ freely, subject to the following restrictions:
 
 "use strict";
 
-Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager) {
+Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager, options) {
     if(renderManager == undefined) {
         return;
     }
@@ -34,6 +34,30 @@ Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager) {
     this.rendermgr = renderManager;
     this.turnDegree = 90;
     this.notation = new Rubikjs.Puzzle.ClassicRubiksCube.Notation(this);
+
+    this.options = {};
+    var defaultOptions = {
+        colorscheme: {
+            U: [1.0, 1.0, 1.0, 1.0],
+            D: [1.0, 1.0, 0.0, 1.0],
+            L: [0.0, 1.0, 0.0, 1.0],
+            R: [0.0, 0.0, 1.0, 1.0],
+            F: [1.0, 0.0, 0.0, 1.0],
+            B: [1.0, 0.5, 0.0, 1.0],
+        },
+        plasticColor: [0.0, 0.0, 0.0, 1.0],
+        minimal: false
+    };
+    if(options) {
+        for(var key in defaultOptions) {
+            this.options[key] = defaultOptions[key];
+        }
+        for(var key in options) {
+            this.options[key] = options[key];
+        }
+    } else {
+        this.options = defaultOptions;
+    }
 
     this.initGroups();
     this.initGraphics();
@@ -134,71 +158,69 @@ Rubikjs.Puzzle.ClassicRubiksCube.prototype.initGroups = function() {
 
 Rubikjs.Puzzle.ClassicRubiksCube.prototype.initGraphics = function() {
     var cubie = this.rendermgr.renderer.createMesh();
-    cubie.vertexBuffer.feed([
-        // F
-        -1.0, -1.0,  1.0,
-        1.0, -1.0,  1.0,
-        1.0,  1.0,  1.0,
-        -1.0,  1.0,  1.0,
+    if(this.options.minimal) {
+        cubie.vertexBuffer.feed([]);
+        cubie.indexBuffer.feed([]);
+        var colors = [];
+    } else {
+        cubie.vertexBuffer.feed([
+            // F
+            -1.0, -1.0,  1.0,
+            1.0, -1.0,  1.0,
+            1.0,  1.0,  1.0,
+            -1.0,  1.0,  1.0,
 
-        // B
-        -1.0, -1.0, -1.0,
-        -1.0,  1.0, -1.0,
-        1.0,  1.0, -1.0,
-        1.0, -1.0, -1.0,
+            // B
+            -1.0, -1.0, -1.0,
+            -1.0,  1.0, -1.0,
+            1.0,  1.0, -1.0,
+            1.0, -1.0, -1.0,
 
-        // U
-        -1.0,  1.0, -1.0,
-        -1.0,  1.0,  1.0,
-        1.0,  1.0,  1.0,
-        1.0,  1.0, -1.0,
+            // U
+            -1.0,  1.0, -1.0,
+            -1.0,  1.0,  1.0,
+            1.0,  1.0,  1.0,
+            1.0,  1.0, -1.0,
 
-        // D
-        -1.0, -1.0, -1.0,
-        1.0, -1.0, -1.0,
-        1.0, -1.0,  1.0,
-        -1.0, -1.0,  1.0,
+            // D
+            -1.0, -1.0, -1.0,
+            1.0, -1.0, -1.0,
+            1.0, -1.0,  1.0,
+            -1.0, -1.0,  1.0,
 
-        // R
-        1.0, -1.0, -1.0,
-        1.0,  1.0, -1.0,
-        1.0,  1.0,  1.0,
-        1.0, -1.0,  1.0,
+            // R
+            1.0, -1.0, -1.0,
+            1.0,  1.0, -1.0,
+            1.0,  1.0,  1.0,
+            1.0, -1.0,  1.0,
 
-        // L
-        -1.0, -1.0, -1.0,
-        -1.0, -1.0,  1.0,
-        -1.0,  1.0,  1.0,
-        -1.0,  1.0, -1.0
-    ]);
+            // L
+            -1.0, -1.0, -1.0,
+            -1.0, -1.0,  1.0,
+            -1.0,  1.0,  1.0,
+            -1.0,  1.0, -1.0
+        ]);
 
-    cubie.indexBuffer.feed([
-        0, 1, 2,      0, 2, 3,    // F
-        4, 5, 6,      4, 6, 7,    // B
-        8, 9, 10,     8, 10, 11,  // U
-        12, 13, 14,   12, 14, 15, // D
-        16, 17, 18,   16, 18, 19, // R
-        20, 21, 22,   20, 22, 23  // L
-    ]);
+        cubie.indexBuffer.feed([
+            0, 1, 2,      0, 2, 3,    // F
+            4, 5, 6,      4, 6, 7,    // B
+            8, 9, 10,     8, 10, 11,  // U
+            12, 13, 14,   12, 14, 15, // D
+            16, 17, 18,   16, 18, 19, // R
+            20, 21, 22,   20, 22, 23  // L
+        ]);
 
-    var colors = [
-        "p", "p", "p", "p", // F
-        "p", "p", "p", "p", // B
-        "p", "p", "p", "p", // U
-        "p", "p", "p", "p", // D
-        "p", "p", "p", "p", // R
-        "p", "p", "p", "p"  // L
-    ];
+        var colors = [
+            "p", "p", "p", "p", // F
+            "p", "p", "p", "p", // B
+            "p", "p", "p", "p", // U
+            "p", "p", "p", "p", // D
+            "p", "p", "p", "p", // R
+            "p", "p", "p", "p"  // L
+        ];
+    }
 
-    var colorscheme = {
-        U: [1.0, 1.0, 1.0, 1.0],
-        D: [1.0, 1.0, 0.0, 1.0],
-        L: [0.0, 1.0, 0.0, 1.0],
-        R: [0.0, 0.0, 1.0, 1.0],
-        F: [1.0, 0.0, 0.0, 1.0],
-        B: [1.0, 0.5, 0.0, 1.0]
-    };
-
+    var colorscheme = this.options.colorscheme;
     var pi = Math.PI;
     var pi2 = pi/2;
 
@@ -238,7 +260,7 @@ Rubikjs.Puzzle.ClassicRubiksCube.prototype.initGraphics = function() {
     ]);
 
     var cornerDefaultColors = {
-        p: [0.0, 0.0, 0.0, 1.0],
+        p: this.options.plasticColor,
         F: [0.5, 0.5, 0.5, 1.0],
         U: [0.5, 0.5, 0.5, 1.0],
         R: [0.5, 0.5, 0.5, 1.0]
@@ -291,7 +313,7 @@ Rubikjs.Puzzle.ClassicRubiksCube.prototype.initGraphics = function() {
     ]);
 
     var edgeDefaultColors = {
-        p: [0.0, 0.0, 0.0, 1.0],
+        p: this.options.plasticColor,
         F: [0.5, 0.5, 0.5, 1.0],
         U: [0.5, 0.5, 0.5, 1.0]
     };
@@ -341,7 +363,7 @@ Rubikjs.Puzzle.ClassicRubiksCube.prototype.initGraphics = function() {
     ]);
 
     var centerDefaultColors = {
-        p: [0.0, 0.0, 0.0, 1.0],
+        p: this.options.plasticColor,
         U: [0.5, 0.5, 0.5, 1.0],
     };
 

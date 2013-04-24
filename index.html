@@ -10,6 +10,14 @@
         <script type="text/javascript" src="release/RubikjsTwisty.js"></script>
         <script type="text/javascript" src="release/RubikjsNotation.js"></script>
         <script type="text/javascript" src="Puzzles/ClassicRubiksCube.js"></script>
+        <style>
+            #options {
+                font-family: monospace;
+            }
+            #options input {
+                border: 1px dotted #808080;
+            }
+        </style>
 
     </head>
     <body>
@@ -40,6 +48,8 @@
 
             var rendermgr = null;
             var cube = null;
+            var options = {};
+            var backgroundColor = "";
 
             function restart() {
                 //Reset the context...
@@ -49,14 +59,32 @@
                 canvas = document.createElement("canvas");
                 canvas.setAttribute("width", "500");
                 canvas.setAttribute("height", "500");
+                canvas.style.background = backgroundColor;
                 canvas.setAttribute("id", "cube");
                 parentNode.appendChild(canvas);
 
                 rendermgr = new Rubikjs.Render.RenderManager(renderer);
-                cube = new Rubikjs.Puzzle.ClassicRubiksCube(rendermgr);
+                cube = new Rubikjs.Puzzle.ClassicRubiksCube(rendermgr, options);
             }
 
-            restart();
+            function applyOptions() {
+                options = {
+                    colorscheme: {
+                        U: eval("[" + document.getElementById("colorU").value + "]"),
+                        D: eval("[" + document.getElementById("colorD").value + "]"),
+                        L: eval("[" + document.getElementById("colorL").value + "]"),
+                        R: eval("[" + document.getElementById("colorR").value + "]"),
+                        F: eval("[" + document.getElementById("colorF").value + "]"),
+                        B: eval("[" + document.getElementById("colorB").value + "]")
+                    },
+                    plasticColor: eval("[" + document.getElementById("colorp").value + "]"),
+                    minimal: eval(document.getElementById("minimal").value)
+                };
+                backgroundColor = document.getElementById("bgcolor").value;
+                restart();
+            }
+
+            window.onload = applyOptions;
 
             function stop() {
                 cube.stop();
@@ -102,7 +130,7 @@
             <input type="button" value="Reset" onclick="restart()" />
             <input type="button" value="Stop" onclick="stop()" />
             <input type="button" value="Use WebGL" onclick="useWebGL()" />
-            <input type="button" value="Use Canvas (warning: does not work well)" onclick="useCanvas()" />
+            <input type="button" value="Use Canvas (use with minimal=true)" onclick="useCanvas()" />
         </form>
         <br />
         Normal algorithms:<br />
@@ -130,6 +158,24 @@
             <li>And of course, you can combine them!</li>
             <li>Have fun!</li>
         </ul>
+
+        Change the cube's options!<br /> <br />
+        <div id="options">
+            var options = {<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;colorscheme = {<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;U: [<input type="text" id="colorU" size="12" value="1.0, 1.0, 1.0, 1.0" />],<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D: [<input type="text" id="colorD" size="12" value="1.0, 1.0, 0.0, 1.0" />],<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L: [<input type="text" id="colorL" size="12" value="0.0, 1.0, 0.0, 1.0" />],<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R: [<input type="text" id="colorR" size="12" value="0.0, 0.0, 1.0, 1.0" />],<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;F: [<input type="text" id="colorF" size="12" value="1.0, 0.0, 0.0, 1.0" />],<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B: [<input type="text" id="colorB" size="12" value="1.0, 0.5, 0.0, 1.0" />]<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;},<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;plasticColor: [<input type="text" id="colorp" size="12" value="0.0, 0.0, 0.0, 1.0" />],<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;minimal: <input type="text" id="minimal" size="2" value="false" /><br />
+            };<br />
+            var background = <input type="text" id="bgcolor" size="6" value="#A0A0A0" />;<br />
+        </div>
+        <input type="button" value="Apply" onclick="applyOptions()" />
 
         <br /><br />Logs: (<span style="background:#FF0000">error</span> <span style="background:#FFFF00">warning</span> <span style="background:#00FF00">info</span>)
         <div id="logs" style="border: 1px solid black"></div>
