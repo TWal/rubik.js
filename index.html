@@ -10,12 +10,20 @@
         <script type="text/javascript" src="release/RubikjsTwisty.js"></script>
         <script type="text/javascript" src="release/RubikjsNotation.js"></script>
         <script type="text/javascript" src="Puzzles/ClassicRubiksCube.js"></script>
+        <script type="text/javascript" src="Puzzles/PocketCube.js"></script>
         <style>
             #options {
                 font-family: monospace;
             }
             #options input {
                 border: 1px dotted #808080;
+            }
+            table {
+                border: none;
+                text-align: center;
+            }
+            fieldset {
+                display: inline-block;
             }
         </style>
 
@@ -45,6 +53,7 @@
             Rubikjs.Core.Logger.addListener(addToLogs("#FF0000"), "error", "error");
 
             var renderer = Rubikjs.Render.WebGL.Renderer;
+            var puzzle = Rubikjs.Puzzle.ClassicRubiksCube;
 
             var rendermgr = null;
             var cube = null;
@@ -64,7 +73,7 @@
                 parentNode.appendChild(canvas);
 
                 rendermgr = new Rubikjs.Render.RenderManager(renderer);
-                cube = new Rubikjs.Puzzle.ClassicRubiksCube(rendermgr, options);
+                cube = new puzzle(rendermgr, options);
             }
 
             function applyOptions() {
@@ -90,30 +99,45 @@
                 cube.stop();
             }
 
-            function useWebGL() {
-                renderer = Rubikjs.Render.WebGL.Renderer;
+            function changeRenderer(name) {
+                renderer = Rubikjs.Render[name].Renderer;
                 restart();
             }
 
-            function useCanvas() {
-                renderer = Rubikjs.Render.Canvas.Renderer;
+            function changePuzzle(name) {
+                puzzle = Rubikjs.Puzzle[name];
                 restart();
             }
 
             var algorithms = {
-                "PLL T": "R U R' U' R' F R2 U' R' U' R U R' F'",
-                "C PLL T": "[R, U] [R', F] [F [R: U']: U']",
-                "PLL H": "M2' U M2' U2 M2' U M2'",
-                "C PLL H": "[M2' U': [M2', U2]]",
-                "Center Swap": "M2' E M2' E'",
-                "C Center Swap": "[M2', E]",
-                "Superflip": "((M' U)4 {x' z})3",
-                "Sexy": "(R U R' U')3",
-                "C Sexy": "[R, U]3",
-                "Diagonals": "({R L y})6",
-                "C PLL E": "[x': [[R: U'], D] [[R: U], D]]",
-                "Fun": "(({U x z})3 B' L' U' {R2 L2})2 (R U R' U')2 (R U R' U')2'",
-                "C H": "[{U D}, {R2 L2}]"
+                "3 PLL T": "R U R' U' R' F R2 U' R' U' R U R' F'",
+                "3 C PLL T": "[R, U] [R', F] [F [R: U']: U']",
+                "3 PLL H": "M2' U M2' U2 M2' U M2'",
+                "3 C PLL H": "[M2' U': [M2', U2]]",
+                "3 Center Swap": "M2' E M2' E'",
+                "3 C Center Swap": "[M2', E]",
+                "3 Superflip": "((M' U)4 {x' z})3",
+                "3 Sexy": "(R U R' U')3",
+                "3 C Sexy": "[R, U]3",
+                "3 Diagonals": "({R L y})6",
+                "3 C PLL E": "[x': [[R: U'], D] [[R: U], D]]",
+                "3 Fun": "(({U x z})3 B' L' U' {R2 L2})2 (R U R' U')2 (R U R' U')2'",
+                "3 C H": "[{U D}, {R2 L2}]",
+                "2 O Sune": "R U R' U R U2' R'",
+                "2 O Antisune": "R U2 R' U' R U' R'",
+                "2 O Bowtie": "F R U' R' U' R U R' F'",
+                "2 O T": "R U R' U' R' F R F'",
+                "2 O Headlights": "F R U R' U' F'",
+                "2 O Pi": "F R U R' U' R U R' U' F'",
+                "2 O H": "R2 U2' R' U2 R2",
+                "2 P AA": "R2 U' B2 U2 R2' U' R2",
+                "2 P DD": "R2' F2 R2",
+                "2 P AD": "R' U R' F2 R F' R",
+                "2 P DA": "L D' L F2 L' D L'",
+                "2 P DS": "R U' R' U' F2 U' R U R' D R2",
+                "2 P SD": "R U' R' U' F2 U' R U R' U R2 F2",
+                "2 P AS": "R U2 R' U' R U2 L' U R' U' L",
+                "2 P SA": "R2 U' R' U L' U2 R U' R' U2 x'",
             };
 
             function domoves() {
@@ -129,25 +153,81 @@
             <input type="button" value="Let's turn!" onclick="domoves()" />
             <input type="button" value="Reset" onclick="restart()" />
             <input type="button" value="Stop" onclick="stop()" />
-            <input type="button" value="Use WebGL" onclick="useWebGL()" />
-            <input type="button" value="Use Canvas (use with minimal=true)" onclick="useCanvas()" />
+            <input type="button" value="Use WebGL" onclick="changeRenderer('WebGL')" />
+            <input type="button" value="Use Canvas (use with minimal=true)" onclick="changeRenderer('Canvas')" />
         </form>
         <br />
-        Normal algorithms:<br />
-        <input type="button" value="PLL T" onclick="replaceAlg('PLL T')" />
-        <input type="button" value="PLL H" onclick="replaceAlg('PLL H')" />
-        <input type="button" value="Center swap" onclick="replaceAlg('Center Swap')" />
-        <input type="button" value="Superflip" onclick="replaceAlg('Superflip')" />
-        <input type="button" value="Three sexy moves" onclick="replaceAlg('Sexy')" />
-        <input type="button" value="Diagonals" onclick="replaceAlg('Diagonals')" />
-        <input type="button" value="Notation fun" onclick="replaceAlg('Fun')" />
-        <br />Commutators algorithms:<br />
-        <input type="button" value="PLL T" onclick="replaceAlg('C PLL T')" />
-        <input type="button" value="PLL H" onclick="replaceAlg('C PLL H')" />
-        <input type="button" value="PLL E" onclick="replaceAlg('C PLL E')" />
-        <input type="button" value="Center swap" onclick="replaceAlg('C Center Swap')" />
-        <input type="button" value="Three sexy moves" onclick="replaceAlg('C Sexy')" />
-        <input type="button" value="H" onclick="replaceAlg('C H')" />
+        <fieldset>
+            <legend><input type="button" value="333" onclick="changePuzzle('ClassicRubiksCube')" /></legend>
+            <table>
+                <tr><td>Normal</td><td>Commutators</td></tr>
+                <tr>
+                    <td><input type="button" value="PLL T" onclick="replaceAlg('3 PLL T')" /></td>
+                    <td><input type="button" value="PLL T" onclick="replaceAlg('3 C PLL T')" /></td>
+                </tr>
+                <tr>
+                    <td><input type="button" value="PLL H" onclick="replaceAlg('3 PLL H')" /></td>
+                    <td><input type="button" value="PLL H" onclick="replaceAlg('3 C PLL H')" /></td>
+                </tr>
+                <tr>
+                    <td><input type="button" value="Center swap" onclick="replaceAlg('3 Center Swap')" /></td>
+                    <td><input type="button" value="Center swap" onclick="replaceAlg('3 C Center Swap')" /></td>
+                </tr>
+                <tr>
+                    <td><input type="button" value="Three sexy moves" onclick="replaceAlg('3 Sexy')" /></td>
+                    <td><input type="button" value="Three sexy moves" onclick="replaceAlg('3 C Sexy')" /></td>
+                </tr>
+                <tr>
+                    <td><input type="button" value="Superflip" onclick="replaceAlg('3 Superflip')" /></td>
+                    <td><input type="button" value="PLL E" onclick="replaceAlg('3 C PLL E')" /></td>
+                </tr>
+                <tr>
+                    <td><input type="button" value="Diagonals" onclick="replaceAlg('3 Diagonals')" /></td>
+                    <td><input type="button" value="H" onclick="replaceAlg('3 C H')" /></td>
+                </tr>
+                <tr>
+                    <td><input type="button" value="Notation fun" onclick="replaceAlg('3 Fun')" /></td>
+                </tr>
+            </table>
+        </fieldset>
+        <fieldset>
+            <legend><input type="button" value="222" onclick="changePuzzle('PocketCube')" /></legend>
+            <table>
+                <tr><td>OLL</td><td>PBL</td></tr>
+                <tr>
+                    <td><input type="button" value="Sune" onclick="replaceAlg('2 O Sune')" /></td>
+                    <td><input type="button" value="AA" onclick="replaceAlg('2 P AA')" /></td>
+                </tr>
+                <tr>
+                    <td><input type="button" value="Antisune" onclick="replaceAlg('2 O Antisune')" /></td>
+                    <td><input type="button" value="DD" onclick="replaceAlg('2 P DD')" /></td>
+                </tr>
+                <tr>
+                    <td><input type="button" value="Bowtie" onclick="replaceAlg('2 O Bowtie')" /></td>
+                    <td><input type="button" value="AD" onclick="replaceAlg('2 P AD')" /></td>
+                </tr>
+                <tr>
+                    <td><input type="button" value="T" onclick="replaceAlg('2 O T')" /></td>
+                    <td><input type="button" value="DA" onclick="replaceAlg('2 P DA')" /></td>
+                </tr>
+                <tr>
+                    <td><input type="button" value="Headlights" onclick="replaceAlg('2 O Headlights')" /></td>
+                    <td><input type="button" value="DS" onclick="replaceAlg('2 P DS')" /></td>
+                </tr>
+                <tr>
+                    <td><input type="button" value="Pi" onclick="replaceAlg('2 O Pi')" /></td>
+                    <td><input type="button" value="SD" onclick="replaceAlg('2 P SD')" /></td>
+                </tr>
+                <tr>
+                    <td><input type="button" value="H" onclick="replaceAlg('2 O H')" /></td>
+                    <td><input type="button" value="AS" onclick="replaceAlg('2 P AS')" /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="button" value="SA" onclick="replaceAlg('2 P SA')" /></td>
+                </tr>
+            </table>
+        </fieldset>
 
         <br /><br /><br />
         Notation:
