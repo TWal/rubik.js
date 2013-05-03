@@ -33,7 +33,7 @@ Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager, options) {
     Rubikjs.Twisty.FixedPiecePlace.call(this);
     this.rendermgr = renderManager;
     this.turnDegree = 90;
-    this.notation = new Rubikjs.Puzzle.ClassicRubiksCube.Notation(this);
+    this.notation = new Rubikjs.Twisty.FixedPiecePlace.DefaultNotation(this);
 
     this.options = {};
     var defaultOptions = {
@@ -68,30 +68,6 @@ Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager, options) {
 Rubikjs.Puzzle.ClassicRubiksCube.prototype = new Rubikjs.Twisty.FixedPiecePlace;
 Rubikjs.Puzzle.ClassicRubiksCube.prototype.constructor = new Rubikjs.Puzzle.ClassicRubiksCube;
 
-
-
-Rubikjs.Puzzle.ClassicRubiksCube.Notation = function(twisty) {
-    this.twisty = twisty;
-};
-
-Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype = new Rubikjs.Notation.Parser;
-Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype.constructor = new Rubikjs.Puzzle.ClassicRubiksCube.Notation;
-
-
-Rubikjs.Puzzle.ClassicRubiksCube.Notation.prototype.parseToken = function(token) {
-    var group = token[0];
-
-    var count = this.getCount(token.slice(1));
-    if(count != count) { //If count == NaN
-        count = 1;
-    }
-
-    if(this.twisty.groups[group] != undefined) {
-        return new Rubikjs.Notation.Move(this.twisty.groups[group], count);
-    } else {
-        return new Rubikjs.Notation.Instruction();
-    }
-};
 
 Rubikjs.Puzzle.ClassicRubiksCube.prototype.initGroups = function() {
     this.groups.U = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
@@ -145,6 +121,13 @@ Rubikjs.Puzzle.ClassicRubiksCube.prototype.initGroups = function() {
     this.groups.r = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["R", 1], ["M", -1]]);
     this.groups.b = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["B", 1], ["S", -1]]);
     this.groups.d = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["D", 1], ["E",  1]]);
+
+    this.groups.Uw = this.groups.u;
+    this.groups.Lw = this.groups.l;
+    this.groups.Fw = this.groups.f;
+    this.groups.Rw = this.groups.r;
+    this.groups.Bw = this.groups.b;
+    this.groups.Dw = this.groups.d;
 
     this.groups.X = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["R", 1], ["M", -1], ["L", -1]]);
     this.groups.Y = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["U", 1], ["E", -1], ["D", -1]]);

@@ -316,4 +316,26 @@ Rubikjs.Twisty.FixedPiecePlace.Combined.prototype.getTurnFunction = function(cou
         }
     }
 };
+
+Rubikjs.Twisty.FixedPiecePlace.DefaultNotation = function(twisty) {
+    this.twisty = twisty;
+};
+
+Rubikjs.Twisty.FixedPiecePlace.DefaultNotation.prototype = new Rubikjs.Notation.Parser;
+Rubikjs.Twisty.FixedPiecePlace.DefaultNotation.prototype.constructor = new Rubikjs.Twisty.FixedPiecePlace.DefaultNotation;
+
+
+Rubikjs.Twisty.FixedPiecePlace.DefaultNotation.prototype.parseToken = function(token) {
+    var groupLength = this.groupNameLength(token);
+    var group = token.substr(0, groupLength);
+
+    var count = this.getCount(token.substr(groupLength));
+
+    if(this.twisty.groups[group] != undefined) {
+        return new Rubikjs.Notation.Move(this.twisty.groups[group], count);
+    } else {
+        Rubikjs.Core.Logger.log("Twisty", "Undefined group name: '" + group + "'", "warn");
+        return new Rubikjs.Notation.Instruction();
+    }
+};
 //TODO: Implement me!

@@ -33,7 +33,7 @@ Rubikjs.Puzzle.PocketCube = function(renderManager, options) {
     Rubikjs.Twisty.FixedPiecePlace.call(this);
     this.rendermgr = renderManager;
     this.turnDegree = 90;
-    this.notation = new Rubikjs.Puzzle.PocketCube.Notation(this);
+    this.notation = new Rubikjs.Twisty.FixedPiecePlace.DefaultNotation(this);
 
     this.options = {};
     var defaultOptions = {
@@ -68,30 +68,6 @@ Rubikjs.Puzzle.PocketCube = function(renderManager, options) {
 Rubikjs.Puzzle.PocketCube.prototype = new Rubikjs.Twisty.FixedPiecePlace;
 Rubikjs.Puzzle.PocketCube.prototype.constructor = new Rubikjs.Puzzle.PocketCube;
 
-
-
-Rubikjs.Puzzle.PocketCube.Notation = function(twisty) {
-    this.twisty = twisty;
-};
-
-Rubikjs.Puzzle.PocketCube.Notation.prototype = new Rubikjs.Notation.Parser;
-Rubikjs.Puzzle.PocketCube.Notation.prototype.constructor = new Rubikjs.Puzzle.PocketCube.Notation;
-
-
-Rubikjs.Puzzle.PocketCube.Notation.prototype.parseToken = function(token) {
-    var group = token[0];
-
-    var count = this.getCount(token.slice(1));
-    if(count != count) { //If count == NaN
-        count = 1;
-    }
-
-    if(this.twisty.groups[group] != undefined) {
-        return new Rubikjs.Notation.Move(this.twisty.groups[group], count);
-    } else {
-        return new Rubikjs.Notation.Instruction();
-    }
-};
 
 Rubikjs.Puzzle.PocketCube.prototype.initGroups = function() {
     this.groups.U = new Rubikjs.Twisty.FixedPiecePlace.Group(this);

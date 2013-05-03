@@ -252,6 +252,17 @@ Rubikjs.Notation.Parser.prototype.conjugateInstructions = function(instructions1
     return result;
 };
 
+Rubikjs.Notation.Parser.prototype.groupNameLength = function(str) {
+    var countChars = "0123456789'";
+    var i = str.length;
+    while(i--) {
+        if(countChars.indexOf(str[i]) == -1) {
+            return i+1;
+        }
+    }
+    return 0;
+};
+
 Rubikjs.Notation.Parser.prototype.getCount = function(str) {
     //Special cases
     if(str == "") {
@@ -260,6 +271,9 @@ Rubikjs.Notation.Parser.prototype.getCount = function(str) {
         return -1;
     } else {
         var count = parseInt(str);
+        if(count != count) { //If count == NaN
+            return 1;
+        }
         if(str[str.length - 1] == "'") {
             return -count;
         } else {
