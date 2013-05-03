@@ -21,13 +21,13 @@ Wanted features
 * Mouse control (camera rotation and puzzle turning)
 * User-defined sticker color (=> grey sticker)
 * An ergonomic user interface
-* An optional rear view
 
 How to use the makefile
 -----------------------
 
 Do `make` to create one file per module, in the release directory, with "use strict";
 Do `make min` to do the same thing as `make`, and minify the source code with closure.
+Do `make watch` to do `make` when a file is changed (Linux only, it uses inotify)
 
 Don't forget to use `-j` to speed up things! Example: `make min -j8`
 

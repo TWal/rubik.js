@@ -35,6 +35,13 @@ simple: $(COREOUT) $(RENDEROUT) $(WEBGLOUT) $(CANVASOUT) $(SVGOUT) $(TWISTYOUT) 
 min: $(COREMINOUT) $(RENDERMINOUT) $(WEBGLMINOUT) $(CANVASMINOUT) $(SVGMINOUT) $(TWISTYMINOUT) $(NOTATIONMINOUT)
 	@sed -re 's#release/(.+)\.js#release/\1.min.js#g' index.html > index.min.html
 
+watch:
+	@while true; do \
+		inotifywait $(COREFILES) $(RENDERFILES) $(WEBGLFILES) $(CANVASFILES) $(SVGFILES) $(TWISTYFILES) $(NOTATIONFILES) > /dev/null 2>&1; \
+		sleep 0.5; \
+		make simple; \
+	done
+
 clean:
 	@rm release/*
 
