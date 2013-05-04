@@ -59,6 +59,12 @@ Rubikjs.Puzzle.ClassicRubiksCube = function(renderManager, options) {
         this.options = defaultOptions;
     }
 
+    var cameraMatrix = mat4.create();
+    mat4.translate(cameraMatrix, cameraMatrix, [0, 0, -12]);
+    mat4.rotateX(cameraMatrix, cameraMatrix, Math.PI/6);
+    mat4.rotateY(cameraMatrix, cameraMatrix, -Math.PI/6);
+    this.rendermgr.transformCamera(cameraMatrix);
+
     this.initGroups();
     this.initGraphics();
 

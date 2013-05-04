@@ -53,6 +53,10 @@ Rubikjs.Twisty.FixedPiecePlace.prototype.endInit = function() {
         if(this.groups[i] instanceof Rubikjs.Twisty.FixedPiecePlace.Group) {
             this.groups[i].pieces = this.groups[i].pieces.map(function(piecesId) {
                 return piecesId.map(function(pieceId) {
+                    //If when we have two names for one group, it will be mapped two times, and his pieces will be undefined
+                    if(pieceId instanceof Rubikjs.Twisty.FixedPiecePlace.Piece) {
+                        return pieceId;
+                    }
                     return self.pieces[pieceId];
                 });
             });

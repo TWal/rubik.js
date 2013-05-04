@@ -11,6 +11,7 @@
         <script type="text/javascript" src="release/RubikjsTwisty.min.js"></script>
         <script type="text/javascript" src="Puzzles/ClassicRubiksCube.js"></script>
         <script type="text/javascript" src="Puzzles/PocketCube.js"></script>
+        <script type="text/javascript" src="Puzzles/BigCube.js"></script>
         <style>
             #options {
                 font-family: monospace;
@@ -24,6 +25,7 @@
             }
             fieldset {
                 display: inline-block;
+                vertical-align: top;
             }
         </style>
 
@@ -87,7 +89,8 @@
                         B: eval("[" + document.getElementById("colorB").value + "]")
                     },
                     plasticColor: eval("[" + document.getElementById("colorp").value + "]"),
-                    minimal: eval(document.getElementById("minimal").value)
+                    minimal: eval(document.getElementById("minimal").value),
+                    N: eval(document.getElementById("N").value),
                 };
                 backgroundColor = document.getElementById("bgcolor").value;
                 restart();
@@ -138,6 +141,11 @@
                 "2 P SD": "R U' R' U' F2 U' R U R' U R2 F2",
                 "2 P AS": "R U2 R' U' R U2 L' U R' U' L",
                 "2 P SA": "R2 U' R' U L' U2 R U' R' U2 x'",
+                "N Parity": "r2 B2 U2 l U2 r' U2 r U2 F2 r F2 l' B2 r2",
+                "N FastParity": "Rw2 B2 U2 Lw U2 Rw' U2 Rw U2 F2 Rw F2 Lw' B2 Rw2",
+                "N LucasParity": "Rw U2 x Rw U2 Rw U2 Rw' U2 Lw U2 Rw' U2 Rw U2 Rw' U2 Rw'",
+                "N WireHearts": "[MR2 MF2: WR2 U WR2 U2 WR2 U WR2] M2U2 [F2 R2: [WR2, WU]] [[MR2, NU2], y]",
+                "N FilledHearts": "[MR2 MF2: WR2 U WR2 U2 WR2 U WR2] M2U2 WR2 ND WR2 ND2 WR2 ND WR2",
             };
 
             function domoves() {
@@ -228,6 +236,35 @@
                 </tr>
             </table>
         </fieldset>
+        <fieldset>
+            <legend><input type="button" value="NNN" onclick="changePuzzle('BigCube')" /></legend>
+            <table>
+                <tr><td><input type="button" value="Parity" onclick="replaceAlg('N Parity')" /></td></tr>
+                <tr><td><input type="button" value="Fast Parity" onclick="replaceAlg('N FastParity')" /></td></tr>
+                <tr><td><input type="button" value="Lucas Parity (444)" onclick="replaceAlg('N LucasParity')" /></td></tr>
+                <tr><td><input type="button" value="Wire Heart (555)" onclick="replaceAlg('N WireHearts')" /></td></tr>
+                <tr><td><input type="button" value="Filled Heart (555)" onclick="replaceAlg('N FilledHearts')" /></td></tr>
+            </table>
+        </fieldset>
+        <fieldset>
+            <legend><input type="button" value="Change the cube's options!" onclick="applyOptions()" /></legend>
+            <div id="options">
+                var options = {<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;colorscheme = {<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;U: [<input type="text" id="colorU" size="12" value="1.0, 1.0, 1.0, 1.0" />],<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D: [<input type="text" id="colorD" size="12" value="1.0, 1.0, 0.0, 1.0" />],<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L: [<input type="text" id="colorL" size="12" value="0.0, 1.0, 0.0, 1.0" />],<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R: [<input type="text" id="colorR" size="12" value="0.0, 0.0, 1.0, 1.0" />],<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;F: [<input type="text" id="colorF" size="12" value="1.0, 0.0, 0.0, 1.0" />],<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B: [<input type="text" id="colorB" size="12" value="1.0, 0.5, 0.0, 1.0" />]<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;},<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;plasticColor: [<input type="text" id="colorp" size="12" value="0.0, 0.0, 0.0, 1.0" />],<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;minimal: <input type="text" id="minimal" size="2" value="false" /><br />
+                &nbsp;&nbsp;&nbsp;&nbsp;N: <input type="text" id="N" size="1" value="5" /><br />
+                };<br />
+                var background = <input type="text" id="bgcolor" size="6" value="#A0A0A0" />;<br />
+            </div>
+        </fieldset>
 
         <br /><br /><br />
         Notation:
@@ -238,24 +275,6 @@
             <li>And of course, you can combine them!</li>
             <li>Have fun!</li>
         </ul>
-
-        Change the cube's options!<br /> <br />
-        <div id="options">
-            var options = {<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;colorscheme = {<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;U: [<input type="text" id="colorU" size="12" value="1.0, 1.0, 1.0, 1.0" />],<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D: [<input type="text" id="colorD" size="12" value="1.0, 1.0, 0.0, 1.0" />],<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L: [<input type="text" id="colorL" size="12" value="0.0, 1.0, 0.0, 1.0" />],<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R: [<input type="text" id="colorR" size="12" value="0.0, 0.0, 1.0, 1.0" />],<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;F: [<input type="text" id="colorF" size="12" value="1.0, 0.0, 0.0, 1.0" />],<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B: [<input type="text" id="colorB" size="12" value="1.0, 0.5, 0.0, 1.0" />]<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;},<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;plasticColor: [<input type="text" id="colorp" size="12" value="0.0, 0.0, 0.0, 1.0" />],<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;minimal: <input type="text" id="minimal" size="2" value="false" /><br />
-            };<br />
-            var background = <input type="text" id="bgcolor" size="6" value="#A0A0A0" />;<br />
-        </div>
-        <input type="button" value="Apply" onclick="applyOptions()" />
 
         <br /><br />Logs: (<span style="background:#FF0000">error</span> <span style="background:#FFFF00">warning</span> <span style="background:#00FF00">info</span>)
         <div id="logs" style="border: 1px solid black"></div>

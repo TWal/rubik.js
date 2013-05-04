@@ -175,9 +175,6 @@ Rubikjs.Render.RenderManager = function(renderer) {
     } else {
         this.renderer = new Rubikjs.WebGL.Renderer(document.getElementById("cube"));
     }
-    mat4.translate(this.renderer.perspectiveMat, this.renderer.perspectiveMat, [0, 0, -15]);
-    mat4.rotateX(this.renderer.perspectiveMat, this.renderer.perspectiveMat, Math.PI/6);
-    mat4.rotateY(this.renderer.perspectiveMat, this.renderer.perspectiveMat, -Math.PI/6);
 };
 
 Rubikjs.Render.RenderManager.prototype.render = function() {
@@ -187,6 +184,10 @@ Rubikjs.Render.RenderManager.prototype.render = function() {
         self.renderer.render(mesh);
     });
     this.renderer.endFrame();
+};
+
+Rubikjs.Render.RenderManager.prototype.transformCamera = function(mat) {
+    mat4.multiply(this.renderer.perspectiveMat, this.renderer.perspectiveMat, mat);
 };
 
 /*
