@@ -59,9 +59,11 @@ Rubikjs.Puzzle.BigCube = function(renderManager, options) {
     }
 
     var cameraMatrix = mat4.create();
-    mat4.translate(cameraMatrix, cameraMatrix, [0, 0, -4*this.options.N]);
+    mat4.translate(cameraMatrix, cameraMatrix, [0, 0, -4]);
     mat4.rotateX(cameraMatrix, cameraMatrix, Math.PI/6);
     mat4.rotateY(cameraMatrix, cameraMatrix, -Math.PI/6);
+    var invN = 1.0 / this.options.N;
+    mat4.scale(cameraMatrix, cameraMatrix, [invN, invN, invN]);
     this.rendermgr.transformCamera(cameraMatrix);
 
     this.initGroups();
