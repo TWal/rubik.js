@@ -77,7 +77,7 @@ Rubikjs.Render.Canvas.Renderer.prototype.render = function(mesh) {
         var pt1 = vertexProj[mesh.indexBuffer.data[i+1]];
         var pt2 = vertexProj[mesh.indexBuffer.data[i+2]];
 
-        if(vec3.cross([], vec3.subtract([], pt1, pt0), vec3.subtract([], pt2, pt0))[2] < 0) {
+        if(vec3.cross([], vec3.subtract([], pt1, pt0), vec3.subtract([], pt2, pt0))[2] < 0 && pt0[2] < 1 && pt1[2] < 1 && pt2[2] < 1) {
             var colorId = mesh.indexBuffer.data[i]*4;
             var tri = {
                 pt0: pt0,
