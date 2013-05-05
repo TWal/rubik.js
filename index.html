@@ -90,6 +90,11 @@
                     },
                     plasticColor: eval("[" + document.getElementById("colorp").value + "]"),
                     minimal: eval(document.getElementById("minimal").value),
+                    stickerDist: eval(document.getElementById("stickerDist").value),
+                    stickerMargin: eval(document.getElementById("stickerMargin").value),
+                    backStickerEnabled: eval(document.getElementById("backStickerEnabled").value),
+                    backStickerDist: eval(document.getElementById("backStickerDist").value),
+                    backStickerMargin: eval(document.getElementById("backStickerMargin").value),
                     N: eval(document.getElementById("N").value),
                 };
                 backgroundColor = document.getElementById("bgcolor").value;
@@ -247,7 +252,7 @@
             </table>
         </fieldset>
         <fieldset>
-            <legend><input type="button" value="Change the cube's options!" onclick="applyOptions()" /></legend>
+            <legend><input type="button" value="Pimp my cube!" onclick="applyOptions()" /></legend>
             <div id="options">
                 var options = {<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;colorscheme = {<br />
@@ -259,7 +264,12 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B: [<input type="text" id="colorB" size="12" value="1.0, 0.5, 0.0, 1.0" />]<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;},<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;plasticColor: [<input type="text" id="colorp" size="12" value="0.0, 0.0, 0.0, 1.0" />],<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;minimal: <input type="text" id="minimal" size="2" value="false" /><br />
+                &nbsp;&nbsp;&nbsp;&nbsp;minimal: <input type="text" id="minimal" size="2" value="false" />,<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;stickerDist: <input type="text" id="stickerDist" size="2" value="0.01" />,<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;stickerMargin: <input type="text" id="stickerMargin" size="2" value="0.1" />,<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;backStickerEnabled: <input type="text" id="backStickerEnabled" size="2" value="false" />,<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;backStickerDist: <input type="text" id="backStickerDist" size="2" value="2" />,<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;backStickerMargin: <input type="text" id="backStickerMargin" size="2" value="0.1" />,<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;N: <input type="text" id="N" size="1" value="5" /><br />
                 };<br />
                 var background = <input type="text" id="bgcolor" size="6" value="#A0A0A0" />;<br />

@@ -45,7 +45,13 @@ Rubikjs.Puzzle.BigCube = function(renderManager, options) {
             B: [1.0, 0.5, 0.0, 1.0],
         },
         plasticColor: [0.0, 0.0, 0.0, 1.0],
-        minimal: false
+        minimal: false,
+        N: 5,
+        stickerDist: 0.01,
+        stickerMargin: 0.1,
+        backStickerEnabled: true,
+        backStickerDist: 2,
+        backStickerMargin: 0.1,
     };
     if(options) {
         for(var key in defaultOptions) {
@@ -56,6 +62,13 @@ Rubikjs.Puzzle.BigCube = function(renderManager, options) {
         }
     } else {
         this.options = defaultOptions;
+    }
+
+    if(this.options.N <= 1) {
+        Rubikjs.Core.Logger.log("BigCube", "N is too low (" + this.options.N + "), exiting", "error");
+        return;
+    } else if(this.options.N < 4) {
+        Rubikjs.Core.Logger.log("BigCube", "N is recommended to be under 4", "warn");
     }
 
     var cameraMatrix = mat4.create();
@@ -311,6 +324,10 @@ Rubikjs.Puzzle.BigCube.prototype.initGraphics = function() {
     var colorscheme = this.options.colorscheme;
     var pi = Math.PI;
     var pi2 = pi/2;
+    var stickerZ = 1 + this.options.stickerDist;
+    var stickerXY = 1 - this.options.stickerMargin;
+    var bStickerZ = 1 + this.options.backStickerDist;
+    var bStickerXY = 1 - this.options.backStickerMargin;
     var N = this.options.N;
     //c for "coordinate number". This number will be everywhere in the cubies coordinate
     var cn = N - 1;
@@ -320,20 +337,20 @@ Rubikjs.Puzzle.BigCube.prototype.initGraphics = function() {
     var cornerMesh = this.rendermgr.renderer.createMesh();
     cornerMesh.vertexBuffer.feed(cubie.vertexBuffer.data.concat([
         // F
-        -0.9, -0.9,  1.01,
-         0.9, -0.9,  1.01,
-         0.9,  0.9,  1.01,
-        -0.9,  0.9,  1.01,
+        -stickerXY, -stickerXY,  stickerZ,
+         stickerXY, -stickerXY,  stickerZ,
+         stickerXY,  stickerXY,  stickerZ,
+        -stickerXY,  stickerXY,  stickerZ,
         // U
-        -0.9,  1.01, -0.9,
-        -0.9,  1.01,  0.9,
-         0.9,  1.01,  0.9,
-         0.9,  1.01, -0.9,
+        -stickerXY,  stickerZ,  -stickerXY,
+        -stickerXY,  stickerZ,   stickerXY,
+         stickerXY,  stickerZ,   stickerXY,
+         stickerXY,  stickerZ,  -stickerXY,
         // R
-        1.01, -0.9, -0.9,
-        1.01,  0.9, -0.9,
-        1.01,  0.9,  0.9,
-        1.01, -0.9,  0.9
+         stickerZ,  -stickerXY, -stickerXY,
+         stickerZ,   stickerXY, -stickerXY,
+         stickerZ,   stickerXY,  stickerXY,
+         stickerZ,  -stickerXY,  stickerXY
     ]));
 
     cornerMesh.indexBuffer.feed(cubie.indexBuffer.data.concat([
@@ -356,6 +373,40 @@ Rubikjs.Puzzle.BigCube.prototype.initGraphics = function() {
         U: [0.5, 0.5, 0.5, 1.0],
         R: [0.5, 0.5, 0.5, 1.0]
     };
+
+    if(this.options.backStickerEnabled) {
+        cornerMesh.indexBuffer.feed(cornerMesh.indexBuffer.data.concat([
+            0, 2, 1,      0, 3, 2,    // F
+            4, 6, 5,      4, 7, 6,    // U
+            8, 10, 9,     8, 11, 10   // R
+        ].map(function(d) {
+            return d + cornerMesh.vertexBuffer.data.length/3;
+        })));
+
+        cornerMesh.vertexBuffer.feed(cornerMesh.vertexBuffer.data.concat([
+            // F
+            -bStickerXY, -bStickerXY,  bStickerZ,
+             bStickerXY, -bStickerXY,  bStickerZ,
+             bStickerXY,  bStickerXY,  bStickerZ,
+            -bStickerXY,  bStickerXY,  bStickerZ,
+            // U
+            -bStickerXY,  bStickerZ,  -bStickerXY,
+            -bStickerXY,  bStickerZ,   bStickerXY,
+             bStickerXY,  bStickerZ,   bStickerXY,
+             bStickerXY,  bStickerZ,  -bStickerXY,
+            // R
+             bStickerZ,  -bStickerXY, -bStickerXY,
+             bStickerZ,   bStickerXY, -bStickerXY,
+             bStickerZ,   bStickerXY,  bStickerXY,
+             bStickerZ,  -bStickerXY,  bStickerXY
+        ]));
+
+        cornerColors = cornerColors.concat([
+            "F", "F", "F", "F",
+            "U", "U", "U", "U",
+            "R", "R", "R", "R"
+        ]);
+    }
 
     var cornerFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, cornerMesh.vertexBuffer, cornerMesh.indexBuffer, cornerMesh.colorBuffer, cornerColors, cornerDefaultColors);
 
@@ -380,15 +431,15 @@ Rubikjs.Puzzle.BigCube.prototype.initGraphics = function() {
     var edgeMesh = this.rendermgr.renderer.createMesh();
     edgeMesh.vertexBuffer.feed(cubie.vertexBuffer.data.concat([
         // F
-        -0.9, -0.9,  1.01,
-         0.9, -0.9,  1.01,
-         0.9,  0.9,  1.01,
-        -0.9,  0.9,  1.01,
+        -stickerXY, -stickerXY, stickerZ,
+         stickerXY, -stickerXY, stickerZ,
+         stickerXY,  stickerXY, stickerZ,
+        -stickerXY,  stickerXY, stickerZ,
         // U
-        -0.9,  1.01, -0.9,
-        -0.9,  1.01,  0.9,
-         0.9,  1.01,  0.9,
-         0.9,  1.01, -0.9
+        -stickerXY,  stickerZ, -stickerXY,
+        -stickerXY,  stickerZ,  stickerXY,
+         stickerXY,  stickerZ,  stickerXY,
+         stickerXY,  stickerZ, -stickerXY
     ]));
 
     edgeMesh.indexBuffer.feed(cubie.indexBuffer.data.concat([
@@ -408,6 +459,33 @@ Rubikjs.Puzzle.BigCube.prototype.initGraphics = function() {
         F: [0.5, 0.5, 0.5, 1.0],
         U: [0.5, 0.5, 0.5, 1.0]
     };
+
+    if(this.options.backStickerEnabled) {
+        edgeMesh.indexBuffer.feed(edgeMesh.indexBuffer.data.concat([
+            0, 2, 1,      0, 3, 2,    // F
+            4, 6, 5,      4, 7, 6     // U
+        ].map(function(d) {
+            return d + edgeMesh.vertexBuffer.data.length/3;
+        })));
+
+        edgeMesh.vertexBuffer.feed(edgeMesh.vertexBuffer.data.concat([
+            // F
+            -bStickerXY, -bStickerXY, bStickerZ,
+             bStickerXY, -bStickerXY, bStickerZ,
+             bStickerXY,  bStickerXY, bStickerZ,
+            -bStickerXY,  bStickerXY, bStickerZ,
+            // U
+            -bStickerXY,  bStickerZ, -bStickerXY,
+            -bStickerXY,  bStickerZ,  bStickerXY,
+             bStickerXY,  bStickerZ,  bStickerXY,
+             bStickerXY,  bStickerZ, -bStickerXY
+        ]));
+
+        edgeColors = edgeColors.concat([
+            "F", "F", "F", "F",
+            "U", "U", "U", "U",
+        ]);
+    }
 
     var edgeFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, edgeMesh.vertexBuffer, edgeMesh.indexBuffer, edgeMesh.colorBuffer, edgeColors, edgeDefaultColors);
 
@@ -445,10 +523,10 @@ Rubikjs.Puzzle.BigCube.prototype.initGraphics = function() {
     var centerMesh = this.rendermgr.renderer.createMesh();
     centerMesh.vertexBuffer.feed(cubie.vertexBuffer.data.concat([
         // U
-        -0.9,  1.01, -0.9,
-        -0.9,  1.01,  0.9,
-         0.9,  1.01,  0.9,
-         0.9,  1.01, -0.9,
+        -stickerXY, stickerZ, -stickerXY,
+        -stickerXY, stickerZ,  stickerXY,
+         stickerXY, stickerZ,  stickerXY,
+         stickerXY, stickerZ, -stickerXY,
     ]));
 
     centerMesh.indexBuffer.feed(cubie.indexBuffer.data.concat([
@@ -465,6 +543,26 @@ Rubikjs.Puzzle.BigCube.prototype.initGraphics = function() {
         p: this.options.plasticColor,
         U: [0.5, 0.5, 0.5, 1.0],
     };
+
+    if(this.options.backStickerEnabled) {
+        centerMesh.indexBuffer.feed(centerMesh.indexBuffer.data.concat([
+            0, 2, 1,      0, 3, 2     // U
+        ].map(function(d) {
+            return d + centerMesh.vertexBuffer.data.length/3;
+        })));
+
+        centerMesh.vertexBuffer.feed(centerMesh.vertexBuffer.data.concat([
+            // U
+            -bStickerXY, bStickerZ, -bStickerXY,
+            -bStickerXY, bStickerZ,  bStickerXY,
+             bStickerXY, bStickerZ,  bStickerXY,
+             bStickerXY, bStickerZ, -bStickerXY,
+        ]));
+
+        var centerColors = centerColors.concat([
+            "U", "U", "U", "U"
+        ]);
+    }
 
     var centerFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, centerMesh.vertexBuffer, centerMesh.indexBuffer, centerMesh.colorBuffer, centerColors, centerDefaultColors);
 
