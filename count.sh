@@ -10,11 +10,12 @@ s/\/\/.*//
 s/\/\*\([^\*]\|\*[^k]\)*\*\?\*\///g
 t test'
 
-lineNumber=`find src -type f | grep -vE "^src/libs/.*$" | xargs cat | wc -l`
-lineNumberOnlyUseful=`find src -type f | grep -vE "^src/libs/.*$" | xargs cat | sed -e "$sedscript" | sed "/^\s*$/d" | wc -l`
+fullCode=`find . -name *.js | grep -vE "^./release/" | grep -vE "^./src/libs/" | xargs cat`
+lineNumber=`printf "%s" "$fullCode" | wc -l`
+lineNumberOnlyUseful=`printf "%s" "$fullCode" | sed -e "$sedscript" | sed "/^\s*$/d" | wc -l`
 
-charNumber=`find src -type f | grep -vE "^src/libs/.*$" | xargs cat | wc -m`
-charNumberOnlyUseful=`find src -type f | grep -vE "^src/libs/.*$" | xargs cat | sed -e "$sedscript" | sed "/^\s*$/d" | sed "s/^\s*//g" | sed "s/\s*$//g" | sed -r "s/\s+/ /g" | wc -m`
+charNumber=`printf "%s" "$fullCode" | wc -m`
+charNumberOnlyUseful=`printf "%s" "$fullCode" | sed -e "$sedscript" | sed "/^\s*$/d" | sed "s/^\s*//g" | sed "s/\s*$//g" | sed -r "s/\s+/ /g" | wc -m`
 
 echo "Line number: $lineNumber"
 echo "Line number without comments: $lineNumberOnlyUseful"
