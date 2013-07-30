@@ -53,16 +53,7 @@ Rubikjs.Puzzle.PocketCube = function(renderManager, options) {
         backStickerDist: 2,
         backStickerMargin: 0.1,
     };
-    if(options) {
-        for(var key in defaultOptions) {
-            this.options[key] = defaultOptions[key];
-        }
-        for(var key in options) {
-            this.options[key] = options[key];
-        }
-    } else {
-        this.options = defaultOptions;
-    }
+    this.options = Rubikjs.Core.Utils.makeOptions(defaultOptions, options);
 
     var cameraMatrix = mat4.create();
     mat4.translate(cameraMatrix, cameraMatrix, [0, 0, -8]);
@@ -81,35 +72,41 @@ Rubikjs.Puzzle.PocketCube.prototype.constructor = new Rubikjs.Puzzle.PocketCube;
 
 
 Rubikjs.Puzzle.PocketCube.prototype.initGroups = function() {
-    this.groups.U = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.U.pieces = [["UBL", "UBR", "UFR", "UFL"]];
-    this.groups.U.rotationAxis = [0, 1, 0];
-    this.groups.U.rotationCenter = [0, 2, 0];
+    this.groups.U = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["UBL", "UBR", "UFR", "UFL"]],
+        rotationAxis: [0, 1, 0],
+        rotationCenter: [0, 2, 0]
+    });
 
-    this.groups.L = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.L.pieces = [["UBL", "UFL", "DFL", "DBL"]];
-    this.groups.L.rotationAxis = [-1, 0, 0];
-    this.groups.L.rotationCenter = [-2, 0, 0];
+    this.groups.L = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["UBL", "UFL", "DFL", "DBL"]],
+        rotationAxis: [-1, 0, 0],
+        rotationCenter: [-2, 0, 0]
+    });
 
-    this.groups.F = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.F.pieces = [["UFR", "DFR", "DFL", "UFL"]];
-    this.groups.F.rotationAxis = [0, 0, 1];
-    this.groups.F.rotationCenter = [0, 0, 2];
+    this.groups.F = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["UFR", "DFR", "DFL", "UFL"]],
+        rotationAxis: [0, 0, 1],
+        rotationCenter: [0, 0, 2]
+    });
 
-    this.groups.R = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.R.pieces = [["UBR", "DBR", "DFR", "UFR"]];
-    this.groups.R.rotationAxis = [1, 0, 0];
-    this.groups.R.rotationCenter = [2, 0, 0];
+    this.groups.R = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["UBR", "DBR", "DFR", "UFR"]],
+        rotationAxis: [1, 0, 0],
+        rotationCenter: [2, 0, 0]
+    });
 
-    this.groups.B = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.B.pieces = [["UBR", "UBL", "DBL", "DBR"]];
-    this.groups.B.rotationAxis = [0, 0, -1];
-    this.groups.B.rotationCenter = [0, 0, -2];
+    this.groups.B = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["UBR", "UBL", "DBL", "DBR"]],
+        rotationAxis: [0, 0, -1],
+        rotationCenter: [0, 0, -2]
+    });
 
-    this.groups.D = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.D.pieces = [["DBL", "DFL", "DFR", "DBR"]];
-    this.groups.D.rotationAxis = [0, -1, 0];
-    this.groups.D.rotationCenter = [0, -2, 0];
+    this.groups.D = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["DBL", "DFL", "DFR", "DBR"]],
+        rotationAxis: [0, -1, 0],
+        rotationCenter: [0, -2, 0]
+    });
 
     this.groups.X = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["R", 1], ["L", -1]]);
     this.groups.Y = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["U", 1], ["D", -1]]);
@@ -122,24 +119,24 @@ Rubikjs.Puzzle.PocketCube.prototype.initGroups = function() {
 
 
 Rubikjs.Puzzle.PocketCube.prototype.initGraphics = function() {
-    var cubie = this.rendermgr.renderer.createMesh();
+    var mesh = this.rendermgr.renderer.createMesh();
     if(this.options.minimal) {
-        cubie.vertexBuffer.feed([]);
-        cubie.indexBuffer.feed([]);
+        mesh.vertexBuffer.feed([]);
+        mesh.indexBuffer.feed([]);
         var colors = [];
     } else {
-        cubie.vertexBuffer.feed([
-            -1.0, -1.0, -1.0, //0
-            -1.0, -1.0,  1.0, //1
-            -1.0,  1.0, -1.0, //2
-            -1.0,  1.0,  1.0, //3
-             1.0, -1.0, -1.0, //4
-             1.0, -1.0,  1.0, //5
-             1.0,  1.0, -1.0, //6
-             1.0,  1.0,  1.0, //7
+        mesh.vertexBuffer.feed([
+            -1.0, -1.0, -1.0,
+            -1.0, -1.0,  1.0,
+            -1.0,  1.0, -1.0,
+            -1.0,  1.0,  1.0,
+             1.0, -1.0, -1.0,
+             1.0, -1.0,  1.0,
+             1.0,  1.0, -1.0,
+             1.0,  1.0,  1.0,
         ]);
 
-        cubie.indexBuffer.feed([
+        mesh.indexBuffer.feed([
             1, 5, 7,    1, 7, 3, // F
             0, 2, 6,    0, 6, 4, // B
             2, 3, 7,    2, 7, 6, // U
@@ -154,45 +151,42 @@ Rubikjs.Puzzle.PocketCube.prototype.initGraphics = function() {
     var colorscheme = this.options.colorscheme;
     var pi = Math.PI;
     var pi2 = pi/2;
-    var stickerZ = 1 + this.options.stickerDist;
-    var stickerXY = 1 - this.options.stickerMargin;
-    var bStickerZ = 1 + this.options.backStickerDist;
-    var bStickerXY = 1 - this.options.backStickerMargin;
+    var stickerCreator = new Rubikjs.Render.StickerHelper(function(margin, distance) {
+        var stickerZ = 1 + distance;
+        var stickerXY = 1 - margin;
 
-    // ----- Corners -----
+        colors = colors.concat([
+            "F", "F", "F", "F",
+            "U", "U", "U", "U",
+            "R", "R", "R", "R"
+        ]);
 
-    var cornerMesh = this.rendermgr.renderer.createMesh();
-    cornerMesh.vertexBuffer.feed(cubie.vertexBuffer.data.concat([
-        // F
-        -stickerXY, -stickerXY,  stickerZ,
-         stickerXY, -stickerXY,  stickerZ,
-         stickerXY,  stickerXY,  stickerZ,
-        -stickerXY,  stickerXY,  stickerZ,
-        // U
-        -stickerXY,  stickerZ,  -stickerXY,
-        -stickerXY,  stickerZ,   stickerXY,
-         stickerXY,  stickerZ,   stickerXY,
-         stickerXY,  stickerZ,  -stickerXY,
-        // R
-         stickerZ,  -stickerXY, -stickerXY,
-         stickerZ,   stickerXY, -stickerXY,
-         stickerZ,   stickerXY,  stickerXY,
-         stickerZ,  -stickerXY,  stickerXY
-    ]));
+        return {
+            vertex: [
+                // F
+                -stickerXY, -stickerXY,  stickerZ,
+                 stickerXY, -stickerXY,  stickerZ,
+                 stickerXY,  stickerXY,  stickerZ,
+                -stickerXY,  stickerXY,  stickerZ,
+                // U
+                -stickerXY,  stickerZ,  -stickerXY,
+                -stickerXY,  stickerZ,   stickerXY,
+                 stickerXY,  stickerZ,   stickerXY,
+                 stickerXY,  stickerZ,  -stickerXY,
+                // R
+                 stickerZ,  -stickerXY, -stickerXY,
+                 stickerZ,   stickerXY, -stickerXY,
+                 stickerZ,   stickerXY,  stickerXY,
+                 stickerZ,  -stickerXY,  stickerXY
+            ], index: [
+                0, 1, 2,      0, 2, 3,    // F
+                4, 5, 6,      4, 6, 7,    // U
+                8, 9, 10,     8, 10, 11   // R
+            ]
+        };
+    });
 
-    cornerMesh.indexBuffer.feed(cubie.indexBuffer.data.concat([
-        0, 1, 2,      0, 2, 3,    // F
-        4, 5, 6,      4, 6, 7,    // U
-        8, 9, 10,     8, 10, 11   // R
-    ].map(function(d) {
-        return d + cubie.vertexBuffer.data.length/3;
-    })));
-
-    var cornerColors = colors.concat([
-        "F", "F", "F", "F",
-        "U", "U", "U", "U",
-        "R", "R", "R", "R"
-    ]);
+    stickerCreator.create(mesh, this.options.stickerMargin, this.options.stickerDist, false);
 
     var cornerDefaultColors = {
         p: this.options.plasticColor,
@@ -202,40 +196,10 @@ Rubikjs.Puzzle.PocketCube.prototype.initGraphics = function() {
     };
 
     if(this.options.backStickerEnabled) {
-        cornerMesh.indexBuffer.feed(cornerMesh.indexBuffer.data.concat([
-            0, 2, 1,      0, 3, 2,    // F
-            4, 6, 5,      4, 7, 6,    // U
-            8, 10, 9,     8, 11, 10   // R
-        ].map(function(d) {
-            return d + cornerMesh.vertexBuffer.data.length/3;
-        })));
-
-        cornerMesh.vertexBuffer.feed(cornerMesh.vertexBuffer.data.concat([
-            // F
-            -bStickerXY, -bStickerXY,  bStickerZ,
-             bStickerXY, -bStickerXY,  bStickerZ,
-             bStickerXY,  bStickerXY,  bStickerZ,
-            -bStickerXY,  bStickerXY,  bStickerZ,
-            // U
-            -bStickerXY,  bStickerZ,  -bStickerXY,
-            -bStickerXY,  bStickerZ,   bStickerXY,
-             bStickerXY,  bStickerZ,   bStickerXY,
-             bStickerXY,  bStickerZ,  -bStickerXY,
-            // R
-             bStickerZ,  -bStickerXY, -bStickerXY,
-             bStickerZ,   bStickerXY, -bStickerXY,
-             bStickerZ,   bStickerXY,  bStickerXY,
-             bStickerZ,  -bStickerXY,  bStickerXY
-        ]));
-
-        cornerColors = cornerColors.concat([
-            "F", "F", "F", "F",
-            "U", "U", "U", "U",
-            "R", "R", "R", "R"
-        ]);
+        stickerCreator.create(mesh, this.options.backStickerMargin, this.options.backStickerDist, true);
     }
 
-    var cornerFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, cornerMesh.vertexBuffer, cornerMesh.indexBuffer, cornerMesh.colorBuffer, cornerColors, cornerDefaultColors);
+    var cornerFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, mesh, colors, cornerDefaultColors);
 
     var corners = {
         UBL: [[-1,  1, -1], [0,    pi, 0], {U: colorscheme.U, F: colorscheme.B, R: colorscheme.L}],

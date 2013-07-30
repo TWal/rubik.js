@@ -12,6 +12,7 @@
         <script type="text/javascript" src="Puzzles/ClassicRubiksCube.js"></script>
         <script type="text/javascript" src="Puzzles/PocketCube.js"></script>
         <script type="text/javascript" src="Puzzles/BigCube.js"></script>
+        <script type="text/javascript" src="Puzzles/Dino.js"></script>
         <style>
             #options {
                 font-family: monospace;
@@ -151,6 +152,7 @@
                 "N LucasParity": "Rw U2 x Rw U2 Rw U2 Rw' U2 Lw U2 Rw' U2 Rw U2 Rw' U2 Rw'",
                 "N WireHearts": "[MR2 MF2: WR2 U WR2 U2 WR2 U WR2] M2U2 [F2 R2: [WR2, WU]] [[MR2, NU2], y]",
                 "N FilledHearts": "[MR2 MF2: WR2 U WR2 U2 WR2 U WR2] M2U2 WR2 ND WR2 ND2 WR2 ND WR2",
+                "Dino Mirror": "(DFL UBL UBR' DFR')2 DFL UBL",
             };
 
             function domoves() {
@@ -249,6 +251,12 @@
                 <tr><td><input type="button" value="Lucas Parity (444)" onclick="replaceAlg('N LucasParity')" /></td></tr>
                 <tr><td><input type="button" value="Wire Heart (555)" onclick="replaceAlg('N WireHearts')" /></td></tr>
                 <tr><td><input type="button" value="Filled Heart (555)" onclick="replaceAlg('N FilledHearts')" /></td></tr>
+            </table>
+        </fieldset>
+        <fieldset>
+            <legend><input type="button" value="Dino" onclick="changePuzzle('Dino')" /></legend>
+            <table>
+                <tr><td><input type="button" value="Mirror (change solved state)" onclick="replaceAlg('Dino Mirror')" /></td></tr>
             </table>
         </fieldset>
         <fieldset>

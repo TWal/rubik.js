@@ -81,50 +81,59 @@ Rubikjs.Puzzle.ClassicRubiksCube.prototype.constructor = new Rubikjs.Puzzle.Clas
 
 
 Rubikjs.Puzzle.ClassicRubiksCube.prototype.initGroups = function() {
-    this.groups.U = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.U.pieces = [["UBL", "UBR", "UFR", "UFL"], ["UB", "UR", "UF", "UL"], ["U"]];
-    this.groups.U.rotationAxis = [0, 1, 0];
-    this.groups.U.rotationCenter = [0, 2, 0];
+    this.groups.U = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["UBL", "UBR", "UFR", "UFL"], ["UB", "UR", "UF", "UL"], ["U"]],
+        rotationAxis: [0, 1, 0],
+        rotationCenter: [0, 2, 0]
+    });
 
-    this.groups.L = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.L.pieces = [["UBL", "UFL", "DFL", "DBL"], ["UL", "FL", "DL", "BL"], ["L"]];
-    this.groups.L.rotationAxis = [-1, 0, 0];
-    this.groups.L.rotationCenter = [-2, 0, 0];
+    this.groups.L = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["UBL", "UFL", "DFL", "DBL"], ["UL", "FL", "DL", "BL"], ["L"]],
+        rotationAxis: [-1, 0, 0],
+        rotationCenter: [-2, 0, 0]
+    });
 
-    this.groups.F = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.F.pieces = [["UFR", "DFR", "DFL", "UFL"], ["UF", "FR", "DF", "FL"], ["F"]];
-    this.groups.F.rotationAxis = [0, 0, 1];
-    this.groups.F.rotationCenter = [0, 0, 2];
+    this.groups.F = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["UFR", "DFR", "DFL", "UFL"], ["UF", "FR", "DF", "FL"], ["F"]],
+        rotationAxis: [0, 0, 1],
+        rotationCenter: [0, 0, 2]
+    });
 
-    this.groups.R = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.R.pieces = [["UBR", "DBR", "DFR", "UFR"], ["UR", "BR", "DR", "FR"], ["R"]];
-    this.groups.R.rotationAxis = [1, 0, 0];
-    this.groups.R.rotationCenter = [2, 0, 0];
+    this.groups.R = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["UBR", "DBR", "DFR", "UFR"], ["UR", "BR", "DR", "FR"], ["R"]],
+        rotationAxis: [1, 0, 0],
+        rotationCenter: [2, 0, 0]
+    });
 
-    this.groups.B = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.B.pieces = [["UBR", "UBL", "DBL", "DBR"], ["UB", "BL", "DB", "BR"], ["B"]];
-    this.groups.B.rotationAxis = [0, 0, -1];
-    this.groups.B.rotationCenter = [0, 0, -2];
+    this.groups.B = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["UBR", "UBL", "DBL", "DBR"], ["UB", "BL", "DB", "BR"], ["B"]],
+        rotationAxis: [0, 0, -1],
+        rotationCenter: [0, 0, -2]
+    });
 
-    this.groups.D = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.D.pieces = [["DBL", "DFL", "DFR", "DBR"], ["DF", "DR", "DB", "DL"], ["D"]];
-    this.groups.D.rotationAxis = [0, -1, 0];
-    this.groups.D.rotationCenter = [0, -2, 0];
+    this.groups.D = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["DBL", "DFL", "DFR", "DBR"], ["DF", "DR", "DB", "DL"], ["D"]],
+        rotationAxis: [0, -1, 0],
+        rotationCenter: [0, -2, 0]
+    });
 
-    this.groups.M = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.M.pieces = [["UF", "DF", "DB", "UB"], ["U", "F", "D", "B"]];
-    this.groups.M.rotationAxis = [-1, 0, 0];
-    this.groups.M.rotationCenter = [0, 0, 0];
+    this.groups.M = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["UF", "DF", "DB", "UB"], ["U", "F", "D", "B"]],
+        rotationAxis: [-1, 0, 0],
+        rotationCenter: [0, 0, 0]
+    });
 
-    this.groups.S = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.S.pieces = [["UL", "UR", "DR", "DL"], ["U", "R", "D", "L"]];
-    this.groups.S.rotationAxis = [0, 0, 1];
-    this.groups.S.rotationCenter = [0, 0, 0];
+    this.groups.S = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["UL", "UR", "DR", "DL"], ["U", "R", "D", "L"]],
+        rotationAxis: [0, 0, 1],
+        rotationCenter: [0, 0, 0]
+    });
 
-    this.groups.E = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.E.pieces = [["FL", "FR", "BR", "BL"], ["F", "R", "B", "L"]];
-    this.groups.E.rotationAxis = [0, -1, 0];
-    this.groups.E.rotationCenter = [0, 0, 0];
+    this.groups.E = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["FL", "FR", "BR", "BL"], ["F", "R", "B", "L"]],
+        rotationAxis: [0, -1, 0],
+        rotationCenter: [0, 0, 0]
+    });
 
     this.groups.u = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["U", 1], ["E", -1]]);
     this.groups.l = new Rubikjs.Twisty.FixedPiecePlace.Combined(this, [["L", 1], ["M",  1]]);
@@ -158,14 +167,14 @@ Rubikjs.Puzzle.ClassicRubiksCube.prototype.initGraphics = function() {
         var colors = [];
     } else {
         cubie.vertexBuffer.feed([
-            -1.0, -1.0, -1.0, //0
-            -1.0, -1.0,  1.0, //1
-            -1.0,  1.0, -1.0, //2
-            -1.0,  1.0,  1.0, //3
-             1.0, -1.0, -1.0, //4
-             1.0, -1.0,  1.0, //5
-             1.0,  1.0, -1.0, //6
-             1.0,  1.0,  1.0, //7
+            -1.0, -1.0, -1.0,
+            -1.0, -1.0,  1.0,
+            -1.0,  1.0, -1.0,
+            -1.0,  1.0,  1.0,
+             1.0, -1.0, -1.0,
+             1.0, -1.0,  1.0,
+             1.0,  1.0, -1.0,
+             1.0,  1.0,  1.0,
         ]);
 
         cubie.indexBuffer.feed([
@@ -183,88 +192,66 @@ Rubikjs.Puzzle.ClassicRubiksCube.prototype.initGraphics = function() {
     var colorscheme = this.options.colorscheme;
     var pi = Math.PI;
     var pi2 = pi/2;
-    var stickerZ = 1 + this.options.stickerDist;
-    var stickerXY = 1 - this.options.stickerMargin;
-    var bStickerZ = 1 + this.options.backStickerDist;
-    var bStickerXY = 1 - this.options.backStickerMargin;
 
-    // ----- Corners -----
+    var stickerGenerator = function(n) {
+        return function(margin, distance) {
+            var stickerZ = 1 + distance;
+            var stickerXY = 1 - margin;
 
-    var cornerMesh = this.rendermgr.renderer.createMesh();
-    cornerMesh.vertexBuffer.feed(cubie.vertexBuffer.data.concat([
-        // F
-        -stickerXY, -stickerXY,  stickerZ,
-         stickerXY, -stickerXY,  stickerZ,
-         stickerXY,  stickerXY,  stickerZ,
-        -stickerXY,  stickerXY,  stickerZ,
-        // U
-        -stickerXY,  stickerZ,  -stickerXY,
-        -stickerXY,  stickerZ,   stickerXY,
-         stickerXY,  stickerZ,   stickerXY,
-         stickerXY,  stickerZ,  -stickerXY,
-        // R
-         stickerZ,  -stickerXY, -stickerXY,
-         stickerZ,   stickerXY, -stickerXY,
-         stickerZ,   stickerXY,  stickerXY,
-         stickerZ,  -stickerXY,  stickerXY
-    ]));
+            return {
+                vertex: [
+                    // U
+                    -stickerXY,  stickerZ,  -stickerXY,
+                    -stickerXY,  stickerZ,   stickerXY,
+                     stickerXY,  stickerZ,   stickerXY,
+                     stickerXY,  stickerZ,  -stickerXY,
+                    // F
+                    -stickerXY, -stickerXY,  stickerZ,
+                     stickerXY, -stickerXY,  stickerZ,
+                     stickerXY,  stickerXY,  stickerZ,
+                    -stickerXY,  stickerXY,  stickerZ,
+                    // R
+                     stickerZ,  -stickerXY, -stickerXY,
+                     stickerZ,   stickerXY, -stickerXY,
+                     stickerZ,   stickerXY,  stickerXY,
+                     stickerZ,  -stickerXY,  stickerXY
+                ].slice(0, n*12),
+                index: [
+                    0, 1, 2,      0, 2, 3,    // U
+                    4, 5, 6,      4, 6, 7,    // F
+                    8, 9, 10,     8, 10, 11   // R
+                ].slice(0, n*6),
+                other: {
+                    colors: [
+                        "U", "U", "U", "U",
+                        "F", "F", "F", "F",
+                        "R", "R", "R", "R"
+                    ].slice(0, n*4)
+                }
+            };
+        };
+    };
 
-    cornerMesh.indexBuffer.feed(cubie.indexBuffer.data.concat([
-        0, 1, 2,      0, 2, 3,    // F
-        4, 5, 6,      4, 6, 7,    // U
-        8, 9, 10,     8, 10, 11   // R
-    ].map(function(d) {
-        return d + cubie.vertexBuffer.data.length/3;
-    })));
-
-    var cornerColors = colors.concat([
-        "F", "F", "F", "F",
-        "U", "U", "U", "U",
-        "R", "R", "R", "R"
-    ]);
-
-    var cornerDefaultColors = {
+    var defaultColors = {
         p: this.options.plasticColor,
         F: [0.5, 0.5, 0.5, 1.0],
         U: [0.5, 0.5, 0.5, 1.0],
         R: [0.5, 0.5, 0.5, 1.0]
     };
 
+
+    // ----- Corners -----
+
+    var cornerMesh = cubie.copy();
+    cornerMesh.colors = colors.slice(0);
+    var cornerStickerCreator = new Rubikjs.Render.StickerHelper(stickerGenerator(3));
+    cornerStickerCreator.create(cornerMesh, this.options.stickerMargin, this.options.stickerDist, false);
+
     if(this.options.backStickerEnabled) {
-        cornerMesh.indexBuffer.feed(cornerMesh.indexBuffer.data.concat([
-            0, 2, 1,      0, 3, 2,    // F
-            4, 6, 5,      4, 7, 6,    // U
-            8, 10, 9,     8, 11, 10   // R
-        ].map(function(d) {
-            return d + cornerMesh.vertexBuffer.data.length/3;
-        })));
-
-        cornerMesh.vertexBuffer.feed(cornerMesh.vertexBuffer.data.concat([
-            // F
-            -bStickerXY, -bStickerXY,  bStickerZ,
-             bStickerXY, -bStickerXY,  bStickerZ,
-             bStickerXY,  bStickerXY,  bStickerZ,
-            -bStickerXY,  bStickerXY,  bStickerZ,
-            // U
-            -bStickerXY,  bStickerZ,  -bStickerXY,
-            -bStickerXY,  bStickerZ,   bStickerXY,
-             bStickerXY,  bStickerZ,   bStickerXY,
-             bStickerXY,  bStickerZ,  -bStickerXY,
-            // R
-             bStickerZ,  -bStickerXY, -bStickerXY,
-             bStickerZ,   bStickerXY, -bStickerXY,
-             bStickerZ,   bStickerXY,  bStickerXY,
-             bStickerZ,  -bStickerXY,  bStickerXY
-        ]));
-
-        cornerColors = cornerColors.concat([
-            "F", "F", "F", "F",
-            "U", "U", "U", "U",
-            "R", "R", "R", "R"
-        ]);
+        cornerStickerCreator.create(cornerMesh, this.options.backStickerMargin, this.options.backStickerDist, true);
     }
 
-    var cornerFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, cornerMesh.vertexBuffer, cornerMesh.indexBuffer, cornerMesh.colorBuffer, cornerColors, cornerDefaultColors);
+    var cornerFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, cornerMesh, cornerMesh.colors, defaultColors);
 
     var corners = {
         UBL: [[-2,  2, -2], [0,    pi, 0], {U: colorscheme.U, F: colorscheme.B, R: colorscheme.L}],
@@ -284,66 +271,16 @@ Rubikjs.Puzzle.ClassicRubiksCube.prototype.initGraphics = function() {
 
     // ----- Edges -----
 
-    var edgeMesh = this.rendermgr.renderer.createMesh();
-    edgeMesh.vertexBuffer.feed(cubie.vertexBuffer.data.concat([
-        // F
-        -stickerXY, -stickerXY, stickerZ,
-         stickerXY, -stickerXY, stickerZ,
-         stickerXY,  stickerXY, stickerZ,
-        -stickerXY,  stickerXY, stickerZ,
-        // U
-        -stickerXY,  stickerZ, -stickerXY,
-        -stickerXY,  stickerZ,  stickerXY,
-         stickerXY,  stickerZ,  stickerXY,
-         stickerXY,  stickerZ, -stickerXY
-    ]));
-
-    edgeMesh.indexBuffer.feed(cubie.indexBuffer.data.concat([
-        0, 1, 2,      0, 2, 3,    // F
-        4, 5, 6,      4, 6, 7     // U
-    ].map(function(d) {
-        return d + cubie.vertexBuffer.data.length/3;
-    })));
-
-    var edgeColors = colors.concat([
-        "F", "F", "F", "F",
-        "U", "U", "U", "U"
-    ]);
-
-    var edgeDefaultColors = {
-        p: this.options.plasticColor,
-        F: [0.5, 0.5, 0.5, 1.0],
-        U: [0.5, 0.5, 0.5, 1.0]
-    };
+    var edgeMesh = cubie.copy();
+    edgeMesh.colors = colors.slice(0);
+    var edgeStickerCreator = new Rubikjs.Render.StickerHelper(stickerGenerator(2));
+    edgeStickerCreator.create(edgeMesh, this.options.stickerMargin, this.options.stickerDist, false);
 
     if(this.options.backStickerEnabled) {
-        edgeMesh.indexBuffer.feed(edgeMesh.indexBuffer.data.concat([
-            0, 2, 1,      0, 3, 2,    // F
-            4, 6, 5,      4, 7, 6     // U
-        ].map(function(d) {
-            return d + edgeMesh.vertexBuffer.data.length/3;
-        })));
-
-        edgeMesh.vertexBuffer.feed(edgeMesh.vertexBuffer.data.concat([
-            // F
-            -bStickerXY, -bStickerXY, bStickerZ,
-             bStickerXY, -bStickerXY, bStickerZ,
-             bStickerXY,  bStickerXY, bStickerZ,
-            -bStickerXY,  bStickerXY, bStickerZ,
-            // U
-            -bStickerXY,  bStickerZ, -bStickerXY,
-            -bStickerXY,  bStickerZ,  bStickerXY,
-             bStickerXY,  bStickerZ,  bStickerXY,
-             bStickerXY,  bStickerZ, -bStickerXY
-        ]));
-
-        edgeColors = edgeColors.concat([
-            "F", "F", "F", "F",
-            "U", "U", "U", "U",
-        ]);
+        edgeStickerCreator.create(edgeMesh, this.options.backStickerMargin, this.options.backStickerDist, true);
     }
 
-    var edgeFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, edgeMesh.vertexBuffer, edgeMesh.indexBuffer, edgeMesh.colorBuffer, edgeColors, edgeDefaultColors);
+    var edgeFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, edgeMesh, edgeMesh.colors, defaultColors);
 
     var edges = {
         UB: [[ 0,  2, -2], [0,   pi,    0], {U: colorscheme.U, F: colorscheme.B}],
@@ -368,51 +305,16 @@ Rubikjs.Puzzle.ClassicRubiksCube.prototype.initGraphics = function() {
 
     // ----- Centers -----
 
-    var centerMesh = this.rendermgr.renderer.createMesh();
-    centerMesh.vertexBuffer.feed(cubie.vertexBuffer.data.concat([
-        // U
-        -stickerXY, stickerZ, -stickerXY,
-        -stickerXY, stickerZ,  stickerXY,
-         stickerXY, stickerZ,  stickerXY,
-         stickerXY, stickerZ, -stickerXY,
-    ]));
-
-    centerMesh.indexBuffer.feed(cubie.indexBuffer.data.concat([
-        0, 1, 2,      0, 2, 3     // U
-    ].map(function(d) {
-        return d + cubie.vertexBuffer.data.length/3;
-    })));
-
-    var centerColors = colors.concat([
-        "U", "U", "U", "U"
-    ]);
-
-    var centerDefaultColors = {
-        p: this.options.plasticColor,
-        U: [0.5, 0.5, 0.5, 1.0],
-    };
+    var centerMesh = cubie.copy();
+    centerMesh.colors = colors.slice(0);
+    var centerStickerCreator = new Rubikjs.Render.StickerHelper(stickerGenerator(1));
+    centerStickerCreator.create(centerMesh, this.options.stickerMargin, this.options.stickerDist, false);
 
     if(this.options.backStickerEnabled) {
-        centerMesh.indexBuffer.feed(centerMesh.indexBuffer.data.concat([
-            0, 2, 1,      0, 3, 2     // U
-        ].map(function(d) {
-            return d + centerMesh.vertexBuffer.data.length/3;
-        })));
-
-        centerMesh.vertexBuffer.feed(centerMesh.vertexBuffer.data.concat([
-            // U
-            -bStickerXY, bStickerZ, -bStickerXY,
-            -bStickerXY, bStickerZ,  bStickerXY,
-             bStickerXY, bStickerZ,  bStickerXY,
-             bStickerXY, bStickerZ, -bStickerXY,
-        ]));
-
-        var centerColors = centerColors.concat([
-            "U", "U", "U", "U"
-        ]);
+        centerStickerCreator.create(centerMesh, this.options.backStickerMargin, this.options.backStickerDist, true);
     }
 
-    var centerFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, centerMesh.vertexBuffer, centerMesh.indexBuffer, centerMesh.colorBuffer, centerColors, centerDefaultColors);
+    var centerFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, centerMesh, centerMesh.colors, defaultColors);
 
     var centers = {
         U: [[ 0,  2,  0], [0,    0,    0], {U: colorscheme.U}],

@@ -35,7 +35,6 @@ Rubikjs.Puzzle.Dino = function(renderManager, options) {
     this.turnDegree = 120;
     this.notation = new Rubikjs.Twisty.FixedPiecePlace.DefaultNotation(this);
 
-    this.options = {};
     var defaultOptions = {
         colorscheme: {
             U: [1.0, 1.0, 1.0, 1.0],
@@ -47,22 +46,13 @@ Rubikjs.Puzzle.Dino = function(renderManager, options) {
         },
         plasticColor: [0.0, 0.0, 0.0, 1.0],
         minimal: false,
-        stickerDist: 0.01,
-        stickerMargin: 0.1,
+        stickerDist: 0.005,
+        stickerMargin: 0.05,
         backStickerEnabled: true,
-        backStickerDist: 2,
-        backStickerMargin: 0.1,
+        backStickerDist: 1.1,
+        backStickerMargin: 0.8,
     };
-    if(options) {
-        for(var key in defaultOptions) {
-            this.options[key] = defaultOptions[key];
-        }
-        for(var key in options) {
-            this.options[key] = options[key];
-        }
-    } else {
-        this.options = defaultOptions;
-    }
+    this.options = Rubikjs.Core.Utils.makeOptions(defaultOptions, options);
 
     var cameraMatrix = mat4.create();
     mat4.translate(cameraMatrix, cameraMatrix, [0, 0, -4]);
@@ -90,71 +80,105 @@ Rubikjs.Puzzle.Dino.prototype.initGroups = function() {
         self.groups[group[2] + group[1] + group[0]] = self.groups[group];
     }
 
-    this.groups.UFL = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.UFL.pieces = [["UL", "UF", "FL"]];
-    this.groups.UFL.rotationAxis = [-1, 1, 1];
-    this.groups.UFL.rotationCenter = [-1, 1, 1];
+    this.groups.UFL = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["UL", "UF", "FL"]],
+        rotationAxis: [-1, 1, 1],
+        rotationCenter: [-1, 1, 1]
+    });
     makePermutations("UFL");
 
-    this.groups.UFR = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.UFR.pieces = [["UF", "UR", "FR"]];
-    this.groups.UFR.rotationAxis = [1, 1, 1];
-    this.groups.UFR.rotationCenter = [1, 1, 1];
+    this.groups.UFR = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["UF", "UR", "FR"]],
+        rotationAxis: [1, 1, 1],
+        rotationCenter: [1, 1, 1]
+    });
     makePermutations("UFR");
 
-    this.groups.UBL = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.UBL.pieces = [["UB", "UL", "BL"]];
-    this.groups.UBL.rotationAxis = [-1, 1, -1];
-    this.groups.UBL.rotationCenter = [-1, 1, -1];
+    this.groups.UBL = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["UB", "UL", "BL"]],
+        rotationAxis: [-1, 1, -1],
+        rotationCenter: [-1, 1, -1]
+    });
     makePermutations("UBL");
 
-    this.groups.UBR = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.UBR.pieces = [["UR", "UB", "BR"]];
-    this.groups.UBR.rotationAxis = [1, 1, -1];
-    this.groups.UBR.rotationCenter = [1, 1, -1];
+    this.groups.UBR = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["UR", "UB", "BR"]],
+        rotationAxis: [1, 1, -1],
+        rotationCenter: [1, 1, -1]
+    });
     makePermutations("UBR");
 
-    this.groups.DFL = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.DFL.pieces = [["DF", "DL", "FL"]];
-    this.groups.DFL.rotationAxis = [-1, -1, 1];
-    this.groups.DFL.rotationCenter = [-1, -1, 1];
+    this.groups.DFL = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["DF", "DL", "FL"]],
+        rotationAxis: [-1, -1, 1],
+        rotationCenter: [-1, -1, 1]
+    });
     makePermutations("DFL");
 
-    this.groups.DFR = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.DFR.pieces = [["DR", "DF", "FR"]];
-    this.groups.DFR.rotationAxis = [1, -1, 1];
-    this.groups.DFR.rotationCenter = [1, -1, 1];
+    this.groups.DFR = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["DR", "DF", "FR"]],
+        rotationAxis: [1, -1, 1],
+        rotationCenter: [1, -1, 1]
+    });
     makePermutations("DFR");
 
-    this.groups.DBL = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.DBL.pieces = [["DL", "DB", "BL"]];
-    this.groups.DBL.rotationAxis = [-1, -1, -1];
-    this.groups.DBL.rotationCenter = [-1, -1, -1];
-    makePermutations("BDL");
+    this.groups.DBL = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["DL", "DB", "BL"]],
+        rotationAxis: [-1, -1, -1],
+        rotationCenter: [-1, -1, -1]
+    });
+    makePermutations("DBL");
 
-    this.groups.DBR = new Rubikjs.Twisty.FixedPiecePlace.Group(this);
-    this.groups.DBR.pieces = [["DB", "DR", "BR"]];
-    this.groups.DBR.rotationAxis = [1, -1, -1];
-    this.groups.DBR.rotationCenter = [1, -1, -1];
+    this.groups.DBR = new Rubikjs.Twisty.FixedPiecePlace.Group(this, {
+        pieces: [["DB", "DR", "BR"]],
+        rotationAxis: [1, -1, -1],
+        rotationCenter: [1, -1, -1]
+    });
     makePermutations("DBR");
+
+
+    this.groups.X = new Rubikjs.Twisty.FixedPiecePlace.FullRotation(this, {
+        groups: [["UFL", "UBL", "DBL", "DFL"], ["UFR", "UBR", "DBR", "DFR"]],
+        rotationAxis: [1, 0, 0],
+        rotationCenter: [0, 0, 0],
+        turnDegree: 90
+    });
+    this.groups.x = this.groups.X;
+
+    this.groups.Y = new Rubikjs.Twisty.FixedPiecePlace.FullRotation(this, {
+        groups: [["UFL", "UBL", "UBR", "UFR"], ["DFL", "DBL", "DBR", "DFR"]],
+        rotationAxis: [0, 1, 0],
+        rotationCenter: [0, 0, 0],
+        turnDegree: 90
+    });
+    this.groups.y = this.groups.Y;
+
+    this.groups.Z = new Rubikjs.Twisty.FixedPiecePlace.FullRotation(this, {
+        groups: [["UFL", "UFR", "DFR", "DFL"], ["UBL", "UBR", "DBR", "DBL"]],
+        rotationAxis: [0, 0, 1],
+        rotationCenter: [0, 0, 0],
+        turnDegree: 90
+    });
+    this.groups.z = this.groups.Z;
+
 };
 
 
 Rubikjs.Puzzle.Dino.prototype.initGraphics = function() {
-    var cubie = this.rendermgr.renderer.createMesh();
+    var edgeMesh = this.rendermgr.renderer.createMesh();
     if(this.options.minimal) {
-        cubie.vertexBuffer.feed([]);
-        cubie.indexBuffer.feed([]);
+        edgeMesh.vertexBuffer.feed([]);
+        edgeMesh.indexBuffer.feed([]);
         var colors = [];
     } else {
-        cubie.vertexBuffer.feed([
+        edgeMesh.vertexBuffer.feed([
              0.0,  0.0,  1.0,
             -1.0,  1.0,  1.0,
              1.0,  1.0,  1.0,
              0.0,  1.0,  0.0
         ]);
 
-        cubie.indexBuffer.feed([
+        edgeMesh.indexBuffer.feed([
             0, 2, 1,
             1, 2, 3,
             0, 3, 2,
@@ -164,57 +188,51 @@ Rubikjs.Puzzle.Dino.prototype.initGraphics = function() {
         var colors = ["p", "p", "p", "p"];
     }
 
+    var stickerCreator = new Rubikjs.Render.StickerHelper(function(margin, distance) {
+        var sqrt2 = Math.SQRT2;
+        var stickerZ = 1 + distance;
+        var stickerX = 1 - margin * (sqrt2 + 1);
+        var stickerY1 = 1 - margin;
+        var stickerY2 = margin * sqrt2;
+
+        colors = colors.concat([
+            "F", "F", "F",
+            "U", "U", "U",
+        ]);
+
+        return {
+            vertex: [
+                // F
+                 stickerX, stickerY1, stickerZ,
+                -stickerX, stickerY1, stickerZ,
+                        0, stickerY2, stickerZ,
+                // U
+                -stickerX,  stickerZ, stickerY1,
+                 stickerX,  stickerZ, stickerY1,
+                        0,  stickerZ, stickerY2
+            ], index: [
+                0, 1, 2, // F
+                3, 4, 5  // U
+            ]
+        };
+    });
+
+    stickerCreator.create(edgeMesh, this.options.stickerMargin, this.options.stickerDist, false);
+
+    if(this.options.backStickerEnabled) {
+        stickerCreator.create(edgeMesh, this.options.backStickerMargin, this.options.backStickerDist, true);
+    }
+
     var colorscheme = this.options.colorscheme;
     var pi = Math.PI;
     var pi2 = pi/2;
-    var sqrt2 = Math.SQRT2;
-    var stickerZ = 1 + this.options.stickerDist;
-    var stickerX = 1 - this.options.stickerMargin * (sqrt2 + 1);
-    var stickerY1 = 1 - this.options.stickerMargin;
-    var stickerY2 = this.options.stickerMargin * sqrt2;
-
-
-
-
-
-
-
-
-    var edgeMesh = this.rendermgr.renderer.createMesh();
-    edgeMesh.vertexBuffer.feed(cubie.vertexBuffer.data.concat([
-        // F
-         stickerX, stickerY1, stickerZ,
-        -stickerX, stickerY1, stickerZ,
-                0, stickerY2, stickerZ,
-        // U
-        -stickerX,  stickerZ, stickerY1,
-         stickerX,  stickerZ, stickerY1,
-                0,  stickerZ, stickerY2
-    ]));
-
-    edgeMesh.indexBuffer.feed(cubie.indexBuffer.data.concat([
-        0, 1, 2, // F
-        3, 4, 5  // U
-    ].map(function(d) {
-        return d + cubie.vertexBuffer.data.length/3;
-    })));
-
-    var edgeColors = colors.concat([
-        "F", "F", "F",
-        "U", "U", "U",
-    ]);
 
     var edgeDefaultColors = {
         p: this.options.plasticColor,
         F: [0.5, 0.5, 0.5, 1.0],
         U: [0.5, 0.5, 0.5, 1.0]
     };
-
-    if(this.options.backStickerEnabled) {
-        //TODO
-    }
-
-    var edgeFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, edgeMesh.vertexBuffer, edgeMesh.indexBuffer, edgeMesh.colorBuffer, edgeColors, edgeDefaultColors);
+    var edgeFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, edgeMesh, colors, edgeDefaultColors);
 
     var edges = {
         UB: [[0, 0, 0], [0,   pi,    0], {U: colorscheme.U, F: colorscheme.B}],
@@ -226,9 +244,9 @@ Rubikjs.Puzzle.Dino.prototype.initGraphics = function() {
         BR: [[0, 0, 0], [0,   pi,  pi2], {U: colorscheme.R, F: colorscheme.B}],
         BL: [[0, 0, 0], [0,   pi, -pi2], {U: colorscheme.L, F: colorscheme.B}],
         DF: [[0, 0, 0], [0,    0,   pi], {U: colorscheme.D, F: colorscheme.F}],
-        DR: [[0, 0, 0], [0,  pi2,    pi], {U: colorscheme.D, F: colorscheme.R}],
-        DB: [[0, 0, 0], [0,   pi,    pi], {U: colorscheme.D, F: colorscheme.B}],
-        DL: [[0, 0, 0], [0, -pi2,    pi], {U: colorscheme.D, F: colorscheme.L}]
+        DR: [[0, 0, 0], [0,  pi2,   pi], {U: colorscheme.D, F: colorscheme.R}],
+        DB: [[0, 0, 0], [0,   pi,   pi], {U: colorscheme.D, F: colorscheme.B}],
+        DL: [[0, 0, 0], [0, -pi2,   pi], {U: colorscheme.D, F: colorscheme.L}]
     };
 
     for(var i in edges) {

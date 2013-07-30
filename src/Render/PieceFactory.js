@@ -23,23 +23,15 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-Rubikjs.Render.PieceFactory = function(pieceConstructor, vertexBuffer, indexBuffer, colorBuffer, namedColorBuffer, defaultColors) {
+Rubikjs.Render.PieceFactory = function(pieceConstructor, baseMesh, namedColorBuffer, defaultColors) {
     this.pieceConstructor = pieceConstructor;
-    this.vertexBuffer = vertexBuffer;
-    this.indexBuffer = indexBuffer;
-    this.colorBuffer = colorBuffer;
+    this.baseMesh = baseMesh;
     this.namedColorBuffer = namedColorBuffer;
     this.defaultColors = defaultColors;
 };
 
 Rubikjs.Render.PieceFactory.prototype.create = function(translation, angle, colors) {
-    var newColors = {};
-    for(var i in this.defaultColors) {
-        newColors[i] = this.defaultColors[i];
-    }
-    for(var i in colors) {
-        newColors[i] = colors[i];
-    }
+    var newColors = Rubikjs.Core.Utils.makeOptions(this.defaultColors, colors);
 
     var colorBufferData = this.namedColorBuffer.map(function(color) {
         return newColors[color];
@@ -47,13 +39,8 @@ Rubikjs.Render.PieceFactory.prototype.create = function(translation, angle, colo
         return a.concat(b);
     }, []);
 
-    var newColorBuffer = this.colorBuffer.copy();
-    newColorBuffer.feed(colorBufferData);
-
-    var mesh = new Rubikjs.Render.Mesh();
-    mesh.vertexBuffer = this.vertexBuffer;
-    mesh.indexBuffer = this.indexBuffer;
-    mesh.colorBuffer = newColorBuffer;
+    var mesh = this.baseMesh.copy();
+    mesh.colorBuffer.feed(colorBufferData);
 
     mat4.translate(mesh.transform, mesh.transform, translation);
     mat4.rotateX(mesh.transform, mesh.transform, angle[0]);

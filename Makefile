@@ -1,8 +1,8 @@
-COREFILES=src/main.js src/Core/Logger.js
+COREFILES=src/main.js src/Core/Logger.js src/Core/Utils.js
 COREOUT=release/RubikjsCore.js
 COREMINOUT=release/RubikjsCore.min.js
 
-RENDERFILES=src/libs/gl-matrix-min.js src/Render/Buffer.js src/Render/Renderer.js src/Render/Mesh.js src/Render/RenderManager.js src/Render/PieceFactory.js
+RENDERFILES=src/libs/gl-matrix-min.js src/Render/Buffer.js src/Render/Renderer.js src/Render/Mesh.js src/Render/RenderManager.js src/Render/PieceFactory.js src/Render/StickerHelper.js
 RENDEROUT=release/RubikjsRender.js
 RENDERMINOUT=release/RubikjsRender.min.js
 

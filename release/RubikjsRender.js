@@ -142,6 +142,14 @@ Rubikjs.Render.Mesh = function() {
     this.indexBuffer = new Rubikjs.Render.Buffer();
 };
 
+Rubikjs.Render.Mesh.prototype.copy = function() {
+    var newMesh = new Rubikjs.Render.Mesh();
+    newMesh.transform = mat4.clone(this.transform);
+    newMesh.vertexBuffer = this.vertexBuffer.copy();
+    newMesh.colorBuffer = this.colorBuffer.copy();
+    newMesh.indexBuffer = this.indexBuffer.copy();
+    return newMesh;
+}
 
 /*
 Rubik.js
@@ -215,23 +223,15 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-Rubikjs.Render.PieceFactory = function(pieceConstructor, vertexBuffer, indexBuffer, colorBuffer, namedColorBuffer, defaultColors) {
+Rubikjs.Render.PieceFactory = function(pieceConstructor, baseMesh, namedColorBuffer, defaultColors) {
     this.pieceConstructor = pieceConstructor;
-    this.vertexBuffer = vertexBuffer;
-    this.indexBuffer = indexBuffer;
-    this.colorBuffer = colorBuffer;
+    this.baseMesh = baseMesh;
     this.namedColorBuffer = namedColorBuffer;
     this.defaultColors = defaultColors;
 };
 
 Rubikjs.Render.PieceFactory.prototype.create = function(translation, angle, colors) {
-    var newColors = {};
-    for(var i in this.defaultColors) {
-        newColors[i] = this.defaultColors[i];
-    }
-    for(var i in colors) {
-        newColors[i] = colors[i];
-    }
+    var newColors = Rubikjs.Core.Utils.makeOptions(this.defaultColors, colors);
 
     var colorBufferData = this.namedColorBuffer.map(function(color) {
         return newColors[color];
@@ -239,13 +239,8 @@ Rubikjs.Render.PieceFactory.prototype.create = function(translation, angle, colo
         return a.concat(b);
     }, []);
 
-    var newColorBuffer = this.colorBuffer.copy();
-    newColorBuffer.feed(colorBufferData);
-
-    var mesh = new Rubikjs.Render.Mesh();
-    mesh.vertexBuffer = this.vertexBuffer;
-    mesh.indexBuffer = this.indexBuffer;
-    mesh.colorBuffer = newColorBuffer;
+    var mesh = this.baseMesh.copy();
+    mesh.colorBuffer.feed(colorBufferData);
 
     mat4.translate(mesh.transform, mesh.transform, translation);
     mat4.rotateX(mesh.transform, mesh.transform, angle[0]);
@@ -253,4 +248,63 @@ Rubikjs.Render.PieceFactory.prototype.create = function(translation, angle, colo
     mat4.rotateZ(mesh.transform, mesh.transform, angle[2]);
 
     return new this.pieceConstructor(mesh);
+};
+/*
+Rubik.js
+
+Copyright (c) 2012 Théophile Wallez
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+    1. The origin of this software must not be misrepresented; you must not
+    claim that you wrote the original software. If you use this software
+    in a product, an acknowledgment in the product documentation would be
+    appreciated but is not required.
+
+    2. Altered source versions must be plainly marked as such, and must not be
+    misrepresented as being the original software.
+
+    3. This notice may not be removed or altered from any source
+    distribution.
+*/
+
+Rubikjs.Render.StickerHelper = function(generator) {
+    this.generator = generator;
+};
+
+Rubikjs.Render.StickerHelper.prototype.create = function(mesh, margin, distance, flip) {
+    flip = flip || false;
+    var result = this.generator(margin, distance);
+    if(result.index) {
+        if(flip) {
+            for(var i = 0; i < result.index.length; i+=3) {
+                var tmp = result.index[i+1];
+                result.index[i+1] = result.index[i+2];
+                result.index[i+2] = tmp;
+            }
+        }
+        mesh.indexBuffer.feed(mesh.indexBuffer.data.concat(result.index.map(function(d) {
+            return d + mesh.vertexBuffer.data.length/3;
+        })));
+    }
+
+    if(result.vertex) {
+        mesh.vertexBuffer.feed(mesh.vertexBuffer.data.concat(result.vertex));
+    }
+
+    if(result.color) {
+        mesh.colorBuffer.feed(mesh.colorBuffer.data.concat(result.color));
+    }
+
+    if(result.other) {
+        for(var key in result.other) {
+            mesh[key] = mesh[key].concat(result.other[key]);
+        }
+    }
 };

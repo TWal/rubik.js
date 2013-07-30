@@ -29,7 +29,7 @@ Rubikjs.Render.WebGL.Buffer = function(gl, data, type) {
     this.gl = gl;
     this.type = type || this.gl.ARRAY_BUFFER;
     this.buffer = this.gl.createBuffer();
-    if(data != undefined && data.length != 0) {
+    if(data != undefined) {
         this.feed(data);
     }
 };

@@ -23,19 +23,17 @@ freely, subject to the following restrictions:
     distribution.
 */
 
-Rubikjs.Render.Mesh = function() {
-    this.transform = mat4.create();
-    this.vertexBuffer = new Rubikjs.Render.Buffer();
-    this.colorBuffer = new Rubikjs.Render.Buffer();
-    this.indexBuffer = new Rubikjs.Render.Buffer();
-};
+Rubikjs.Core.Utils = {};
 
-Rubikjs.Render.Mesh.prototype.copy = function() {
-    var newMesh = new Rubikjs.Render.Mesh();
-    newMesh.transform = mat4.clone(this.transform);
-    newMesh.vertexBuffer = this.vertexBuffer.copy();
-    newMesh.colorBuffer = this.colorBuffer.copy();
-    newMesh.indexBuffer = this.indexBuffer.copy();
-    return newMesh;
+Rubikjs.Core.Utils.makeOptions = function(defaultOpts, opts, result) {
+    result = result || {};
+    for(var key in defaultOpts) {
+        result[key] = defaultOpts[key];
+    }
+    if(opts) {
+        for(var key in opts) {
+            result[key] = opts[key];
+        }
+    }
+    return result;
 }
-

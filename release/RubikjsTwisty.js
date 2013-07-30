@@ -157,11 +157,14 @@ Rubikjs.Twisty.FixedPiecePlace.Piece = function(mesh) {
 
 
 
-Rubikjs.Twisty.FixedPiecePlace.Group = function(twisty) {
-    this.twisty = twisty; //You should NOT change this
-    this.pieces = []; //This is an array of array of pieces
-    this.rotationAxis = [0, 1, 0];
-    this.rotationCenter = [0, 0, 0];
+Rubikjs.Twisty.FixedPiecePlace.Group = function(twisty, options) {
+    this.twisty = twisty;
+    Rubikjs.Core.Utils.makeOptions({
+        pieces: [], //This is an array of array of pieces
+        rotationAxis: [0, 1, 0],
+        rotationCenter: [0, 0, 0],
+        turnDegree: this.twisty.turnDegree
+    }, options, this);
 };
 
 Rubikjs.Twisty.FixedPiecePlace.Group.prototype.cycle = function(count) {
@@ -186,7 +189,7 @@ Rubikjs.Twisty.FixedPiecePlace.Group.prototype.cycle = function(count) {
 
 Rubikjs.Twisty.FixedPiecePlace.Group.prototype.getTurnFunction = function(count, stepNumber) {
     count = -count; //Clockwise -> trigonometric
-    var stepAngle = ((this.twisty.turnDegree * Math.PI / 180) * count) / stepNumber;
+    var stepAngle = ((this.turnDegree * Math.PI / 180) * count) / stepNumber;
     var self = this;
     var rotationMat = mat4.create();
     mat4.rotate(rotationMat, rotationMat, stepAngle, self.rotationAxis);
@@ -234,11 +237,14 @@ Rubikjs.Twisty.FixedPiecePlace.Group.prototype.getTurnFunction = function(count,
  * For example, in the classic Rubik's cube, "X" will be a combination of R, M', and L'
  */
 
-Rubikjs.Twisty.FixedPiecePlace.FullRotation = function(twisty) {
+Rubikjs.Twisty.FixedPiecePlace.FullRotation = function(twisty, options) {
     this.twisty = twisty;
-    this.groups = []; //This is an array of array of groups
-    this.rotationAxis = [0, 1, 0];
-    this.rotationCenter = [0, 0, 0];
+    Rubikjs.Core.Utils.makeOptions({
+        groups: [], //This is an array of array of groups
+        rotationAxis: [0, 1, 0],
+        rotationCenter: [0, 0, 0],
+        turnDegree: this.twisty.turnDegree
+    }, options, this);
 };
 
 Rubikjs.Twisty.FixedPiecePlace.FullRotation.prototype.cycle = function(count) {
@@ -261,7 +267,7 @@ Rubikjs.Twisty.FixedPiecePlace.FullRotation.prototype.cycle = function(count) {
 
 Rubikjs.Twisty.FixedPiecePlace.FullRotation.prototype.getTurnFunction = function(count, stepNumber) {
     count = -count; //Clockwise -> trigonometric
-    var stepAngle = ((this.twisty.turnDegree * Math.PI / 180) * count) / stepNumber;
+    var stepAngle = ((this.turnDegree * Math.PI / 180) * count) / stepNumber;
     var self = this;
     var rotationMat = mat4.create();
     mat4.rotate(rotationMat, rotationMat, stepAngle, self.rotationAxis);
