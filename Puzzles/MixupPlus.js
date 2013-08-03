@@ -45,30 +45,12 @@ Rubikjs.Puzzle.MixupPlus = function(renderManager, options) {
             F: [1.0, 0.0, 0.0, 1.0],
             B: [1.0, 0.5, 0.0, 1.0],
         },
-        plasticColor: [0.0, 0.0, 0.0, 1.0],
-        minimal: false,
-        stickerDist: 0.01,
+        stickerDistance: 0.01,
         stickerMargin: 0.1,
-        backStickerEnabled: true,
-        backStickerDist: 2,
         backStickerMargin: 0.1,
     };
-    if(options) {
-        for(var key in defaultOptions) {
-            this.options[key] = defaultOptions[key];
-        }
-        for(var key in options) {
-            this.options[key] = options[key];
-        }
-    } else {
-        this.options = defaultOptions;
-    }
 
-    var cameraMatrix = mat4.create();
-    mat4.translate(cameraMatrix, cameraMatrix, [0, 0, -11]);
-    mat4.rotateX(cameraMatrix, cameraMatrix, Math.PI/6);
-    mat4.rotateY(cameraMatrix, cameraMatrix, -Math.PI/6);
-    this.rendermgr.transformCamera(cameraMatrix);
+    this.makeOptions(defaultOptions, options, 5.5);
 
     this.initGroups();
     this.initGraphics();
@@ -174,12 +156,10 @@ Rubikjs.Puzzle.MixupPlus.Notation.prototype.parseToken = function(token) {
     var group = token.substr(0, groupLength);
 
     var count = this.getCount(token.substr(groupLength));
-    console.log(count);
 
     if(group == "M" || group == "E" || group == "S") {
         count *= 2;
     }
-    console.log(count);
 
     if(this.twisty.groups[group] != undefined) {
         return new Rubikjs.Notation.Move(this.twisty.groups[group], count);
@@ -298,10 +278,10 @@ Rubikjs.Puzzle.MixupPlus.prototype.initGraphics = function() {
 
 
         var stickerCreator = new Rubikjs.Render.StickerHelper(stickerGenerator);
-        stickerCreator.create(mesh, self.options.stickerMargin, self.options.stickerDist, false);
+        stickerCreator.create(mesh, self.options.stickerMargin, self.options.stickerDistance, false);
 
         if(self.options.backStickerEnabled) {
-            stickerCreator.create(mesh, self.options.backStickerMargin, self.options.backStickerDist, true);
+            stickerCreator.create(mesh, self.options.backStickerMargin, self.options.backStickerDistance, true);
         }
 
         var factory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, mesh, colors, defaultColors);
@@ -399,10 +379,10 @@ Rubikjs.Puzzle.MixupPlus.prototype.initGraphics = function() {
 
 
         var stickerCreator = new Rubikjs.Render.StickerHelper(stickerGenerator);
-        stickerCreator.create(mesh, self.options.stickerMargin, self.options.stickerDist, false);
+        stickerCreator.create(mesh, self.options.stickerMargin, self.options.stickerDistance, false);
 
         if(self.options.backStickerEnabled) {
-            stickerCreator.create(mesh, self.options.backStickerMargin, self.options.backStickerDist, true);
+            stickerCreator.create(mesh, self.options.backStickerMargin, self.options.backStickerDistance, true);
         }
 
         var factory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, mesh, colors, defaultColors);
@@ -491,10 +471,10 @@ Rubikjs.Puzzle.MixupPlus.prototype.initGraphics = function() {
 
 
         var stickerCreator = new Rubikjs.Render.StickerHelper(stickerGenerator);
-        stickerCreator.create(mesh, self.options.stickerMargin, self.options.stickerDist, false);
+        stickerCreator.create(mesh, self.options.stickerMargin, self.options.stickerDistance, false);
 
         if(self.options.backStickerEnabled) {
-            stickerCreator.create(mesh, self.options.backStickerMargin, self.options.backStickerDist, true);
+            stickerCreator.create(mesh, self.options.backStickerMargin, self.options.backStickerDistance, true);
         }
 
         var factory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, mesh, colors, defaultColors);
@@ -574,10 +554,10 @@ Rubikjs.Puzzle.MixupPlus.prototype.initGraphics = function() {
 
 
         var stickerCreator = new Rubikjs.Render.StickerHelper(stickerGenerator);
-        stickerCreator.create(mesh, self.options.stickerMargin, self.options.stickerDist, false);
+        stickerCreator.create(mesh, self.options.stickerMargin, self.options.stickerDistance, false);
 
         if(self.options.backStickerEnabled) {
-            stickerCreator.create(mesh, self.options.backStickerMargin, self.options.backStickerDist, true);
+            stickerCreator.create(mesh, self.options.backStickerMargin, self.options.backStickerDistance, true);
         }
 
         var factory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, mesh, colors, defaultColors);

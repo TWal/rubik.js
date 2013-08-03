@@ -44,25 +44,12 @@ Rubikjs.Puzzle.BigCube = function(renderManager, options) {
             F: [1.0, 0.0, 0.0, 1.0],
             B: [1.0, 0.5, 0.0, 1.0],
         },
-        plasticColor: [0.0, 0.0, 0.0, 1.0],
-        minimal: false,
         N: 5,
-        stickerDist: 0.01,
+        stickerDistance: 0.01,
         stickerMargin: 0.1,
-        backStickerEnabled: true,
-        backStickerDist: 2,
         backStickerMargin: 0.1,
     };
-    if(options) {
-        for(var key in defaultOptions) {
-            this.options[key] = defaultOptions[key];
-        }
-        for(var key in options) {
-            this.options[key] = options[key];
-        }
-    } else {
-        this.options = defaultOptions;
-    }
+    this.makeOptions(defaultOptions, options, 2*(options.N || defaultOptions.N));
 
     if(this.options.N <= 1) {
         Rubikjs.Core.Logger.log("BigCube", "N is too low (" + this.options.N + "), exiting", "error");
@@ -70,14 +57,6 @@ Rubikjs.Puzzle.BigCube = function(renderManager, options) {
     } else if(this.options.N < 4) {
         Rubikjs.Core.Logger.log("BigCube", "N is recommended to be under 4", "warn");
     }
-
-    var cameraMatrix = mat4.create();
-    mat4.translate(cameraMatrix, cameraMatrix, [0, 0, -4]);
-    mat4.rotateX(cameraMatrix, cameraMatrix, Math.PI/6);
-    mat4.rotateY(cameraMatrix, cameraMatrix, -Math.PI/6);
-    var invN = 1.0 / this.options.N;
-    mat4.scale(cameraMatrix, cameraMatrix, [invN, invN, invN]);
-    this.rendermgr.transformCamera(cameraMatrix);
 
     this.initGroups();
     this.initGraphics();
@@ -351,10 +330,10 @@ Rubikjs.Puzzle.BigCube.prototype.initGraphics = function() {
     var cornerMesh = cubie.copy();
     cornerMesh.colors = colors.slice(0);
     var cornerStickerCreator = new Rubikjs.Render.StickerHelper(stickerGenerator(3));
-    cornerStickerCreator.create(cornerMesh, this.options.stickerMargin, this.options.stickerDist, false);
+    cornerStickerCreator.create(cornerMesh, this.options.stickerMargin, this.options.stickerDistance, false);
 
     if(this.options.backStickerEnabled) {
-        cornerStickerCreator.create(cornerMesh, this.options.backStickerMargin, this.options.backStickerDist, true);
+        cornerStickerCreator.create(cornerMesh, this.options.backStickerMargin, this.options.backStickerDistance, true);
     }
 
     var cornerFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, cornerMesh, cornerMesh.colors, defaultColors);
@@ -380,10 +359,10 @@ Rubikjs.Puzzle.BigCube.prototype.initGraphics = function() {
     var edgeMesh = cubie.copy();
     edgeMesh.colors = colors.slice(0);
     var edgeStickerCreator = new Rubikjs.Render.StickerHelper(stickerGenerator(2));
-    edgeStickerCreator.create(edgeMesh, this.options.stickerMargin, this.options.stickerDist, false);
+    edgeStickerCreator.create(edgeMesh, this.options.stickerMargin, this.options.stickerDistance, false);
 
     if(this.options.backStickerEnabled) {
-        edgeStickerCreator.create(edgeMesh, this.options.backStickerMargin, this.options.backStickerDist, true);
+        edgeStickerCreator.create(edgeMesh, this.options.backStickerMargin, this.options.backStickerDistance, true);
     }
 
     var edgeFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, edgeMesh, edgeMesh.colors, defaultColors);
@@ -422,10 +401,10 @@ Rubikjs.Puzzle.BigCube.prototype.initGraphics = function() {
     var centerMesh = cubie.copy();
     centerMesh.colors = colors.slice(0);
     var centerStickerCreator = new Rubikjs.Render.StickerHelper(stickerGenerator(1));
-    centerStickerCreator.create(centerMesh, this.options.stickerMargin, this.options.stickerDist, false);
+    centerStickerCreator.create(centerMesh, this.options.stickerMargin, this.options.stickerDistance, false);
 
     if(this.options.backStickerEnabled) {
-        centerStickerCreator.create(centerMesh, this.options.backStickerMargin, this.options.backStickerDist, true);
+        centerStickerCreator.create(centerMesh, this.options.backStickerMargin, this.options.backStickerDistance, true);
     }
 
     var centerFactory = new Rubikjs.Render.PieceFactory(Rubikjs.Twisty.FixedPiecePlace.Piece, centerMesh, centerMesh.colors, defaultColors);

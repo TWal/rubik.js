@@ -44,21 +44,11 @@ Rubikjs.Puzzle.Dino = function(renderManager, options) {
             F: [1.0, 0.0, 0.0, 1.0],
             B: [1.0, 0.5, 0.0, 1.0],
         },
-        plasticColor: [0.0, 0.0, 0.0, 1.0],
-        minimal: false,
-        stickerDist: 0.005,
+        stickerDistance: 0.005,
         stickerMargin: 0.05,
-        backStickerEnabled: true,
-        backStickerDist: 1.1,
-        backStickerMargin: 0.8,
+        backStickerMargin: 0.05,
     };
-    this.options = Rubikjs.Core.Utils.makeOptions(defaultOptions, options);
-
-    var cameraMatrix = mat4.create();
-    mat4.translate(cameraMatrix, cameraMatrix, [0, 0, -4]);
-    mat4.rotateX(cameraMatrix, cameraMatrix, Math.PI/6);
-    mat4.rotateY(cameraMatrix, cameraMatrix, -Math.PI/6);
-    this.rendermgr.transformCamera(cameraMatrix);
+    this.makeOptions(defaultOptions, options, 2);
 
     this.initGroups();
     this.initGraphics();
@@ -217,10 +207,10 @@ Rubikjs.Puzzle.Dino.prototype.initGraphics = function() {
         };
     });
 
-    stickerCreator.create(edgeMesh, this.options.stickerMargin, this.options.stickerDist, false);
+    stickerCreator.create(edgeMesh, this.options.stickerMargin, this.options.stickerDistance, false);
 
     if(this.options.backStickerEnabled) {
-        stickerCreator.create(edgeMesh, this.options.backStickerMargin, this.options.backStickerDist, true);
+        stickerCreator.create(edgeMesh, this.options.backStickerMargin, this.options.backStickerDistance, true);
     }
 
     var colorscheme = this.options.colorscheme;

@@ -47,7 +47,25 @@ Rubikjs.Twisty.FixedPiecePlace = function() {
     this.rendermgr = null;
 };
 
+Rubikjs.Twisty.FixedPiecePlace.prototype.makeOptions = function(defaultOptions, options, cubeSize) {
+    var cameraMatrix = mat4.create();
+    mat4.translate(cameraMatrix, cameraMatrix, [0, 0, -2]);
+    mat4.rotateX(cameraMatrix, cameraMatrix, Math.PI/6);
+    mat4.rotateY(cameraMatrix, cameraMatrix, -Math.PI/6);
+    var invSize = 1.0 / cubeSize;
+    mat4.scale(cameraMatrix, cameraMatrix, [invSize, invSize, invSize]);
+    var defaultDefaultOptions = {
+        plasticColor: [0.0, 0.0, 0.0, 1.0],
+        minimal: Rubikjs.Render.Canvas.Renderer != undefined && this.rendermgr.renderer instanceof Rubikjs.Render.Canvas.Renderer,
+        backStickerEnabled: false,
+        backStickerDistance: cubeSize*0.3,
+        cameraMatrix: cameraMatrix
+    };
+    this.options = Rubikjs.Core.Utils.makeOptions(Rubikjs.Core.Utils.makeOptions(defaultDefaultOptions, defaultOptions), options);
+};
+
 Rubikjs.Twisty.FixedPiecePlace.prototype.endInit = function() {
+    this.rendermgr.transformCamera(this.options.cameraMatrix);
     var self = this;
     for(var i in this.groups) {
         if(this.groups[i] instanceof Rubikjs.Twisty.FixedPiecePlace.Group) {
