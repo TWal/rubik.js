@@ -81,24 +81,41 @@
             }
 
             function applyOptions() {
-                options = {
-                    colorscheme: {
+                options = {};
+                if(document.getElementById("colorschemeCheck").checked) {
+                    options.colorscheme = {
                         U: eval("[" + document.getElementById("colorU").value + "]"),
                         D: eval("[" + document.getElementById("colorD").value + "]"),
                         L: eval("[" + document.getElementById("colorL").value + "]"),
                         R: eval("[" + document.getElementById("colorR").value + "]"),
                         F: eval("[" + document.getElementById("colorF").value + "]"),
                         B: eval("[" + document.getElementById("colorB").value + "]")
-                    },
-                    plasticColor: eval("[" + document.getElementById("colorp").value + "]"),
-                    minimal: eval(document.getElementById("minimal").value),
-                    stickerDistance: eval(document.getElementById("stickerDistance").value),
-                    stickerMargin: eval(document.getElementById("stickerMargin").value),
-                    backStickerEnabled: eval(document.getElementById("backStickerEnabled").value),
-                    backStickerDistance: eval(document.getElementById("backStickerDistance").value),
-                    backStickerMargin: eval(document.getElementById("backStickerMargin").value),
-                    N: eval(document.getElementById("N").value),
-                };
+                    };
+                }
+                if(document.getElementById("colorpCheck").checked) {
+                    options.plasticColor = eval("[" + document.getElementById("colorp").value + "]");
+                }
+                if(document.getElementById("minimalCheck").checked) {
+                    options.minimal = eval(document.getElementById("minimal").value);
+                }
+                if(document.getElementById("stickerDistanceCheck").checked) {
+                    options.stickerDistance = eval(document.getElementById("stickerDistance").value);
+                }
+                if(document.getElementById("stickerMarginCheck").checked) {
+                    options.stickerMargin = eval(document.getElementById("stickerMargin").value);
+                }
+                if(document.getElementById("backStickerEnabledCheck").checked) {
+                    options.backStickerEnabled = eval(document.getElementById("backStickerEnabled").value);
+                }
+                if(document.getElementById("backStickerDistanceCheck").checked) {
+                    options.backStickerDistance = eval(document.getElementById("backStickerDistance").value);
+                }
+                if(document.getElementById("backStickerMarginCheck").checked) {
+                    options.backStickerMargin = eval(document.getElementById("backStickerMargin").value);
+                }
+                if(document.getElementById("NCheck").checked) {
+                    options.N = eval(document.getElementById("N").value);
+                }
                 backgroundColor = document.getElementById("bgcolor").value;
                 restart();
             }
@@ -288,22 +305,22 @@
             <legend><input type="button" value="Pimp my cube!" onclick="applyOptions()" /></legend>
             <div id="options">
                 var options = {<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;colorscheme: {<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;U: [<input type="text" id="colorU" size="12" value="1.0, 1.0, 1.0, 1.0" />],<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D: [<input type="text" id="colorD" size="12" value="1.0, 1.0, 0.0, 1.0" />],<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L: [<input type="text" id="colorL" size="12" value="0.0, 1.0, 0.0, 1.0" />],<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R: [<input type="text" id="colorR" size="12" value="0.0, 0.0, 1.0, 1.0" />],<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;F: [<input type="text" id="colorF" size="12" value="1.0, 0.0, 0.0, 1.0" />],<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B: [<input type="text" id="colorB" size="12" value="1.0, 0.5, 0.0, 1.0" />]<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;colorscheme: {<input type="checkbox" id="colorschemeCheck" /><br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;U: [<input type="text" id="colorU" size="12" value="1.0, 1.0, 1.0, 1.0" onchange="document.getElementById('colorschemeCheck').checked=true" />],<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D: [<input type="text" id="colorD" size="12" value="1.0, 1.0, 0.0, 1.0" onchange="document.getElementById('colorschemeCheck').checked=true" />],<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L: [<input type="text" id="colorL" size="12" value="0.0, 1.0, 0.0, 1.0" onchange="document.getElementById('colorschemeCheck').checked=true" />],<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R: [<input type="text" id="colorR" size="12" value="0.0, 0.0, 1.0, 1.0" onchange="document.getElementById('colorschemeCheck').checked=true" />],<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;F: [<input type="text" id="colorF" size="12" value="1.0, 0.0, 0.0, 1.0" onchange="document.getElementById('colorschemeCheck').checked=true" />],<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B: [<input type="text" id="colorB" size="12" value="1.0, 0.5, 0.0, 1.0" onchange="document.getElementById('colorschemeCheck').checked=true" />]<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;},<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;plasticColor: [<input type="text" id="colorp" size="12" value="0.0, 0.0, 0.0, 1.0" />],<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;minimal: <input type="text" id="minimal" size="2" value="false" />,<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;stickerDistance: <input type="text" id="stickerDistance" size="2" value="0.01" />,<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;stickerMargin: <input type="text" id="stickerMargin" size="2" value="0.1" />,<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;backStickerEnabled: <input type="text" id="backStickerEnabled" size="2" value="false" />,<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;backStickerDistance: <input type="text" id="backStickerDistance" size="2" value="2" />,<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;backStickerMargin: <input type="text" id="backStickerMargin" size="2" value="0.1" />,<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;N: <input type="text" id="N" size="1" value="5" /><br />
+                &nbsp;&nbsp;&nbsp;&nbsp;plasticColor: [<input type="text" id="colorp" size="12" value="0.0, 0.0, 0.0, 1.0" onchange="document.getElementById('colorpCheck').checked=true" />],<input type="checkbox" id="colorpCheck" /><br />
+                &nbsp;&nbsp;&nbsp;&nbsp;minimal: <input type="text" id="minimal" size="2" value="false" onchange="document.getElementById('minimalCheck').checked=true"/>,<input type="checkbox" id="minimalCheck" /><br />
+                &nbsp;&nbsp;&nbsp;&nbsp;stickerDistance: <input type="text" id="stickerDistance" size="2" value="0.01" onchange="document.getElementById('stickerDistanceCheck').checked=true" />,<input type="checkbox" id="stickerDistanceCheck" /><br />
+                &nbsp;&nbsp;&nbsp;&nbsp;stickerMargin: <input type="text" id="stickerMargin" size="2" value="0.1" onchange="document.getElementById('stickerMarginCheck').checked=true" />,<input type="checkbox" id="stickerMarginCheck" /><br />
+                &nbsp;&nbsp;&nbsp;&nbsp;backStickerEnabled: <input type="text" id="backStickerEnabled" size="2" value="false" onchange="document.getElementById('backStickerEnabledCheck').checked=true" />,<input type="checkbox" id="backStickerEnabledCheck" /><br />
+                &nbsp;&nbsp;&nbsp;&nbsp;backStickerDistance: <input type="text" id="backStickerDistance" size="2" value="2" onchange="document.getElementById('backStickerDistanceCheck').checked=true" />,<input type="checkbox" id="backStickerDistanceCheck" /><br />
+                &nbsp;&nbsp;&nbsp;&nbsp;backStickerMargin: <input type="text" id="backStickerMargin" size="2" value="0.1" onchange="document.getElementById('backStickerMarginCheck').checked=true" />,<input type="checkbox" id="backStickerMarginCheck" /><br />
+                &nbsp;&nbsp;&nbsp;&nbsp;N: <input type="text" id="N" size="1" value="5" onchange="document.getElementById('NCheck').checked=true" /><input type="checkbox" id="NCheck" checked/><br />
                 };<br />
                 var background = <input type="text" id="bgcolor" size="6" value="#A0A0A0" />;<br />
             </div>
