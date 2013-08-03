@@ -362,8 +362,8 @@ Rubikjs.Notation.Parser.prototype.conjugateInstructions = function(instructions1
     return result;
 };
 
-Rubikjs.Notation.Parser.prototype.groupNameLength = function(str) {
-    var countChars = "0123456789'";
+Rubikjs.Notation.Parser.prototype.groupNameLength = function(str, countChars) {
+    countChars = countChars || "0123456789'";
     var i = str.length;
     while(i--) {
         if(countChars.indexOf(str[i]) == -1) {

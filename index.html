@@ -13,6 +13,7 @@
         <script type="text/javascript" src="Puzzles/PocketCube.js"></script>
         <script type="text/javascript" src="Puzzles/BigCube.js"></script>
         <script type="text/javascript" src="Puzzles/Dino.js"></script>
+        <script type="text/javascript" src="Puzzles/MixupPlus.js"></script>
         <style>
             #options {
                 font-family: monospace;
@@ -153,6 +154,12 @@
                 "N WireHearts": "[MR2 MF2: WR2 U WR2 U2 WR2 U WR2] M2U2 [F2 R2: [WR2, WU]] [[MR2, NU2], y]",
                 "N FilledHearts": "[MR2 MF2: WR2 U WR2 U2 WR2 U WR2] M2U2 WR2 ND WR2 ND2 WR2 ND WR2",
                 "Dino Mirror": "(DFL UBL UBR' DFR')2 DFL UBL",
+                "MixupPlus parity1": "(M- U2 M+ E-)9",
+                "MixupPlus C parity1": "([M-: U2] E-)9",
+                "MixupPlus parity2": "M- (U R L U2 R' L')2 M+",
+                "MixupPlus C parity2": "[M-: (U [{R L}: U2])2]",
+                "MixupPlus orientinner": "M- D M+ U2 M- D' M+",
+                "MixupPlus C orientinner": "[[M-: D]: U2]",
             };
 
             function domoves() {
@@ -260,10 +267,28 @@
             </table>
         </fieldset>
         <fieldset>
+            <legend><input type="button" value="Mixup Plus" onclick="changePuzzle('MixupPlus')" /></legend>
+            <table>
+                <tr><td>Normal</td><td>Commutators</td></tr>
+                <tr>
+                    <td><input type="button" value="Parity 1" onclick="replaceAlg('MixupPlus parity1')" /></td>
+                    <td><input type="button" value="Parity 1" onclick="replaceAlg('MixupPlus C parity1')" /></td>
+                </tr>
+                <tr>
+                    <td><input type="button" value="Parity 2" onclick="replaceAlg('MixupPlus parity2')" /></td>
+                    <td><input type="button" value="Parity 2" onclick="replaceAlg('MixupPlus C parity2')" /></td>
+                </tr>
+                <tr>
+                    <td><input type="button" value="Orient inner" onclick="replaceAlg('MixupPlus orientinner')" /></td>
+                    <td><input type="button" value="Orient inner" onclick="replaceAlg('MixupPlus C orientinner')" /></td>
+                </tr>
+            </table>
+        </fieldset>
+        <fieldset>
             <legend><input type="button" value="Pimp my cube!" onclick="applyOptions()" /></legend>
             <div id="options">
                 var options = {<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;colorscheme = {<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;colorscheme: {<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;U: [<input type="text" id="colorU" size="12" value="1.0, 1.0, 1.0, 1.0" />],<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D: [<input type="text" id="colorD" size="12" value="1.0, 1.0, 0.0, 1.0" />],<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L: [<input type="text" id="colorL" size="12" value="0.0, 1.0, 0.0, 1.0" />],<br />
